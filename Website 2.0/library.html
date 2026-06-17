@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mindbloom — My Library</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Mulish:wght@300;400;500&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<script src="nav.js"></script>
+<script src="library.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #F8F7F4; --white: #FFFFFF;
+  --border: rgba(0,0,0,0.08); --border-m: rgba(0,0,0,0.13);
+  --text: #1A1A1A; --muted: #6B6B6B; --faint: #ABABAB;
+  --sage: #5A8050; --dusk: #6A64A0;
+  --sage-tint: #F0F4EE;
+  --serif: 'Playfair Display', Georgia, serif;
+  --serif-body: 'Lora', Georgia, serif;
+  --sans: 'Mulish', sans-serif;
+  --r: 16px; --r-sm: 10px;
+}
+body { background: var(--bg); color: var(--text); font-family: var(--sans); font-weight: 300; font-size: 15px; line-height: 1.75; -webkit-font-smoothing: antialiased; }
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; font-family: var(--sans); border: none; }
+
+/* ── Page layout ── */
+.lib-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 3rem 2.8rem 6rem;
+}
+
+/* ── Page header ── */
+.lib-page-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+.lib-page-heading {
+  font-family: var(--serif);
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 400;
+  margin-bottom: 5px;
+}
+.lib-page-sub {
+  font-family: var(--serif-body);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--muted);
+}
+.lib-saved-count {
+  font-size: 12px;
+  color: var(--faint);
+  padding-bottom: 4px;
+}
+
+/* ── Type filter nav ── */
+.lib-nav {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--border);
+}
+.lib-nav-btn {
+  padding: 0.6rem 1rem;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--sans);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color .18s, border-color .18s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.lib-nav-btn:hover:not(:disabled) { color: var(--text); }
+.lib-nav-btn.active { color: var(--text); border-bottom-color: var(--text); font-weight: 500; }
+.lib-nav-btn:disabled { opacity: .35; cursor: default; }
+.lib-soon {
+  font-size: 9px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--faint); background: var(--border); padding: 2px 5px; border-radius: 100px;
+}
+.lib-nav-count {
+  font-size: 10px; font-weight: 600;
+  background: var(--sage-tint); color: var(--sage);
+  padding: 2px 6px; border-radius: 100px;
+}
+
+/* ── Card grid ── */
+.lib-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+@media (max-width: 860px) { .lib-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .lib-grid { grid-template-columns: 1fr; } }
+
+.lib-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  display: flex;
+  flex-direction: column;
+  transition: border-color .18s, box-shadow .18s;
+}
+.lib-card:hover {
+  border-color: var(--border-m);
+  box-shadow: 0 2px 12px rgba(0,0,0,.06);
+}
+.lib-card-body {
+  flex: 1;
+  padding: 1.2rem 1.3rem .9rem;
+}
+.lib-card-text {
+  font-family: var(--serif-body);
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--text);
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.lib-card-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: .7rem 1.3rem .9rem;
+  border-top: 1px solid var(--border);
+  gap: .5rem;
+}
+.lib-card-meta { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.lib-card-source { font-size: 11.5px; color: var(--muted); font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lib-card-source a { color: var(--muted); transition: color .15s; }
+.lib-card-source a:hover { color: var(--text); }
+.lib-card-date { font-size: 10.5px; color: var(--faint); font-weight: 300; }
+.lib-card-remove {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: none; border: 1px solid var(--border); color: var(--faint);
+  font-size: 14px; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; flex-shrink: 0;
+  transition: border-color .18s, color .18s, background .18s;
+}
+.lib-card-remove:hover { border-color: rgba(180,60,60,.3); color: #c04040; background: rgba(180,60,60,.05); }
+
+/* ── Empty state ── */
+.lib-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 360px;
+  text-align: center;
+  gap: .6rem;
+}
+.lib-empty-icon { color: var(--faint); margin-bottom: .6rem; opacity: .4; }
+.lib-empty-title { font-family: var(--serif); font-size: 1.2rem; font-weight: 400; color: var(--muted); }
+.lib-empty-sub {
+  font-family: var(--serif-body); font-style: italic;
+  font-size: 13.5px; color: var(--faint);
+  max-width: 380px; line-height: 1.7;
+}
+.lib-empty-link {
+  margin-top: .8rem; font-size: 13px; color: var(--muted);
+  text-decoration: none; border-bottom: 1px solid var(--border-m); padding-bottom: 1px;
+  transition: color .18s, border-color .18s;
+}
+.lib-empty-link:hover { color: var(--text); border-color: var(--text); }
+</style>
+</head>
+<body>
+<div id="site-nav-placeholder"></div>
+
+<div class="lib-page">
+
+  <!-- Header -->
+  <div class="lib-page-header">
+    <div>
+      <h1 class="lib-page-heading">My Library</h1>
+      <p class="lib-page-sub">A personal collection of ideas worth keeping.</p>
+    </div>
+    <div class="lib-saved-count" id="libSavedCount"></div>
+  </div>
+
+  <!-- Type navigation -->
+  <nav class="lib-nav">
+    <button class="lib-nav-btn active" onclick="filterLibrary('all', this)">
+      All
+      <span class="lib-nav-count" id="libCountAll" style="display:none;">0</span>
+    </button>
+    <button class="lib-nav-btn" onclick="filterLibrary('insight', this)">
+      Insights
+      <span class="lib-nav-count" id="libCountInsight" style="display:none;">0</span>
+    </button>
+    <button class="lib-nav-btn" disabled>Cards <span class="lib-soon">soon</span></button>
+    <button class="lib-nav-btn" disabled>Tools <span class="lib-soon">soon</span></button>
+    <button class="lib-nav-btn" disabled>Prompts <span class="lib-soon">soon</span></button>
+    <button class="lib-nav-btn" disabled>Reflections <span class="lib-soon">soon</span></button>
+  </nav>
+
+  <!-- Card grid -->
+  <div class="lib-grid" id="libGrid"></div>
+
+  <!-- Empty state -->
+  <div class="lib-empty" id="libEmpty" style="display:none;">
+    <div class="lib-empty-icon">
+      <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+      </svg>
+    </div>
+    <p class="lib-empty-title">Your library is empty.</p>
+    <p class="lib-empty-sub">As you read and explore, save insights, frameworks, and ideas here — to revisit whenever you need them.</p>
+    <a class="lib-empty-link" href="topics.html">Browse topics →</a>
+  </div>
+
+</div>
+
+<script>
+let libCurrentFilter = 'all';
+
+function escapeHtml(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+function formatDate(iso) {
+  const d = new Date(iso);
+  const now = new Date();
+  const diff = Math.floor((now - d) / 1000);
+  if (diff < 60)        return 'Gerade eben';
+  if (diff < 3600)      return Math.floor(diff / 60) + ' Min.';
+  if (diff < 86400)     return Math.floor(diff / 3600) + ' Std.';
+  if (diff < 7 * 86400) return Math.floor(diff / 86400) + ' Tage';
+  return d.toLocaleDateString('de', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+function renderLibrary(filter) {
+  if (!window.MBLibrary) return;
+  libCurrentFilter = filter || libCurrentFilter;
+
+  const all   = MBLibrary.get();
+  const shown = libCurrentFilter === 'all' ? all : all.filter(i => i.type === libCurrentFilter);
+
+  const countAll = document.getElementById('libCountAll');
+  countAll.textContent = all.length;
+  countAll.style.display = all.length ? '' : 'none';
+
+  const insightN = all.filter(i => i.type === 'insight').length;
+  const countIns = document.getElementById('libCountInsight');
+  countIns.textContent = insightN;
+  countIns.style.display = insightN ? '' : 'none';
+
+  document.getElementById('libSavedCount').textContent =
+    all.length === 0 ? '' : all.length + (all.length === 1 ? ' gespeichert' : ' gespeichert');
+
+  const grid  = document.getElementById('libGrid');
+  const empty = document.getElementById('libEmpty');
+
+  if (shown.length === 0) {
+    grid.innerHTML = '';
+    empty.style.display = 'flex';
+    return;
+  }
+  empty.style.display = 'none';
+
+  grid.innerHTML = shown.map(item => {
+    const sourceLink = item.sourceUrl
+      ? `<a href="${item.sourceUrl}">${escapeHtml(item.source || 'Mindbloom')}</a>`
+      : escapeHtml(item.source || 'Mindbloom');
+    return `
+      <div class="lib-card" data-lib-id="${escapeHtml(item.id)}">
+        <div class="lib-card-body">
+          <p class="lib-card-text">${escapeHtml(item.text || item.title)}</p>
+        </div>
+        <div class="lib-card-foot">
+          <div class="lib-card-meta">
+            <span class="lib-card-source">${sourceLink}</span>
+            <span class="lib-card-date">${formatDate(item.savedAt)}</span>
+          </div>
+          <button class="lib-card-remove" title="Entfernen" onclick="removeItem('${escapeHtml(item.id)}')">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function filterLibrary(type, btn) {
+  document.querySelectorAll('.lib-nav-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderLibrary(type);
+}
+
+function removeItem(id) {
+  if (!window.MBLibrary) return;
+  MBLibrary.remove(id);
+  const card = document.querySelector(`.lib-card[data-lib-id="${CSS.escape(id)}"]`);
+  if (card) {
+    card.style.transition = 'opacity .2s, transform .2s';
+    card.style.opacity = '0';
+    card.style.transform = 'scale(.97)';
+    setTimeout(() => renderLibrary(), 200);
+  }
+}
+
+// Render on load (after MBLibrary is ready)
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', function() { renderLibrary('all'); });
+} else {
+  renderLibrary('all');
+}
+</script>
+</body>
+</html>

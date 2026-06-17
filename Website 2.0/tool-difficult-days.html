@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mindbloom — Difficult Days</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Mulish:wght@300;400;500&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#F8F7F4;--white:#FFFFFF;
+  --border:rgba(0,0,0,.08);--border-m:rgba(0,0,0,.13);
+  --text:#1A1A1A;--muted:#6B6B6B;--faint:#ABABAB;
+  --g-sage:linear-gradient(135deg,#C8D8C0,#8FAF88);
+  --g-dusk:linear-gradient(135deg,#C4C0DC,#8A84B8);
+  --g-blush:linear-gradient(135deg,#DEC9C4,#BF9690);
+  --g-slate:linear-gradient(135deg,#B8CCDA,#7A9DB5);
+  --g-amber:linear-gradient(135deg,#DDD0B0,#BCA870);
+  --g-night:linear-gradient(135deg,#C8C4D8,#8880A8);
+  --sage:#5A8050;--dusk:#6A64A0;--blush:#9A6A64;
+  --serif:'Playfair Display',Georgia,serif;
+  --lora:'Lora',Georgia,serif;
+  --sans:'Mulish',sans-serif;
+  --r:16px;
+}
+html,body{min-height:100%;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-weight:300;font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column;}
+a{text-decoration:none;color:inherit;}
+button{cursor:pointer;font-family:var(--sans);border:none;background:none;}
+textarea,input{font-family:var(--lora);}
+
+/* NAV */
+
+/* LAYOUT */
+.page{flex:1;display:flex;flex-direction:column;align-items:center;padding:0 1.2rem 5rem;}
+.card-wrap{width:100%;max-width:560px;padding-top:2rem;}
+
+/* PROGRESS */
+.prog-row{display:flex;align-items:center;gap:.7rem;margin-bottom:1.8rem;}
+.prog-bar-bg{flex:1;height:2px;background:var(--border-m);border-radius:10px;}
+.prog-bar-fill{height:100%;border-radius:10px;background:var(--text);transition:width .5s ease;}
+.prog-label{font-size:11px;color:var(--faint);white-space:nowrap;letter-spacing:.05em;}
+
+/* CARDS */
+.step-card{background:var(--white);border:1px solid var(--border);border-radius:22px;padding:2rem 2rem 1.6rem;animation:fadeUp .35s ease;}
+.step-tag{font-size:10px;font-weight:500;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);margin-bottom:.6rem;}
+.step-q{font-family:var(--serif);font-size:1.25rem;font-weight:400;line-height:1.35;margin-bottom:.4rem;}
+.step-sub{font-size:13.5px;color:var(--muted);margin-bottom:1.3rem;line-height:1.6;font-family:var(--lora);font-style:italic;}
+
+/* OPTIONS */
+.options{display:flex;flex-direction:column;gap:.45rem;margin-bottom:1.2rem;}
+.opt{text-align:left;padding:12px 16px;border-radius:13px;border:1px solid var(--border-m);background:var(--bg);font-size:14px;color:var(--muted);transition:all .14s;line-height:1.45;}
+.opt:hover{background:var(--white);color:var(--text);border-color:rgba(0,0,0,.2);transform:translateX(3px);}
+.opt.sel{background:var(--white);color:var(--text);border-color:rgba(0,0,0,.22);box-shadow:0 2px 12px rgba(0,0,0,.07);}
+
+/* CHIPS */
+.chips{display:flex;flex-wrap:wrap;gap:.45rem;margin-bottom:1.2rem;}
+.chip{padding:8px 14px;border-radius:100px;border:1px solid var(--border-m);background:var(--bg);font-size:13px;color:var(--muted);transition:all .14s;}
+.chip:hover{color:var(--text);border-color:rgba(0,0,0,.2);}
+.chip.sel{background:var(--white);color:var(--text);border-color:rgba(0,0,0,.22);box-shadow:0 2px 8px rgba(0,0,0,.07);}
+
+/* TEXTAREA */
+.ta{width:100%;min-height:80px;border:1px solid var(--border-m);border-radius:var(--r);padding:12px 15px;font-family:var(--lora);font-size:14.5px;font-style:italic;color:var(--text);background:var(--white);outline:none;resize:none;line-height:1.7;margin-bottom:1rem;}
+.ta::placeholder{color:var(--faint);}
+.ta:focus{box-shadow:0 2px 14px rgba(0,0,0,.06);}
+
+/* FOOTER */
+.step-footer{display:flex;align-items:center;justify-content:space-between;padding-top:1.2rem;border-top:1px solid var(--border);margin-top:.4rem;}
+.btn-next{display:inline-flex;align-items:center;gap:.5rem;background:var(--text);color:#fff;border-radius:100px;padding:11px 22px;font-size:13px;font-weight:500;letter-spacing:.04em;transition:opacity .18s,transform .1s;}
+.btn-next:hover{opacity:.85;transform:translateY(-1px);}
+.btn-next:disabled{opacity:.28;cursor:not-allowed;transform:none;}
+.btn-back{display:inline-flex;align-items:center;gap:.4rem;color:var(--muted);border:1px solid var(--border-m);border-radius:100px;padding:10px 18px;font-size:12.5px;transition:all .15s;}
+.btn-back:hover{color:var(--text);border-color:var(--text);}
+
+/* INTRO */
+.intro-card{background:var(--white);border:1px solid var(--border);border-radius:22px;padding:2.4rem 2rem;text-align:center;animation:fadeUp .4s ease;}
+.intro-orb{width:64px;height:64px;border-radius:50%;background:var(--g-night);margin:0 auto 1.2rem;display:flex;align-items:center;justify-content:center;}
+.intro-title{font-family:var(--serif);font-size:1.7rem;font-weight:400;line-height:1.2;margin-bottom:.6rem;}
+.intro-sub{font-family:var(--lora);font-style:italic;font-size:14px;color:var(--muted);line-height:1.75;max-width:360px;margin:0 auto 1.8rem;}
+
+/* EMOTIONAL FORECAST SLIDERS */
+.forecast-list{display:flex;flex-direction:column;gap:1.1rem;margin-bottom:1.4rem;}
+.forecast-row{}
+.forecast-label-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem;}
+.forecast-name{font-size:13.5px;font-weight:400;}
+.forecast-icon{font-size:1rem;}
+.forecast-track{width:100%;height:6px;background:var(--bg);border:1px solid var(--border-m);border-radius:10px;position:relative;cursor:pointer;}
+.forecast-fill{height:100%;border-radius:10px;transition:width .2s;}
+input.fslider{width:100%;-webkit-appearance:none;height:6px;border-radius:10px;background:transparent;outline:none;position:relative;z-index:2;}
+input.fslider::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--text);cursor:pointer;box-shadow:0 1px 6px rgba(0,0,0,.15);}
+.weather-badge{display:inline-flex;align-items:center;gap:.4rem;padding:5px 12px;border-radius:100px;background:var(--bg);border:1px solid var(--border-m);font-size:12px;color:var(--muted);margin-top:.4rem;}
+
+/* EXPECTATION ROWS */
+.exp-list{display:flex;flex-direction:column;gap:.7rem;margin-bottom:1rem;}
+.exp-row{background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:1rem 1.1rem;}
+.exp-row .lbl{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:.3rem;}
+.exp-ta{width:100%;border:none;background:none;outline:none;font-family:var(--lora);font-style:italic;font-size:14px;color:var(--text);resize:none;min-height:40px;line-height:1.6;}
+.exp-ta::placeholder{color:var(--faint);}
+.exp-control-row{display:flex;gap:.4rem;margin-top:.7rem;flex-wrap:wrap;}
+.exp-pill{padding:5px 12px;border-radius:100px;border:1px solid var(--border-m);font-size:12px;color:var(--muted);transition:all .14s;}
+.exp-pill:hover{border-color:rgba(0,0,0,.2);color:var(--text);}
+.exp-pill.yes{background:#F0F4EE;border-color:rgba(90,128,80,.3);color:#5A8050;}
+.exp-pill.no{background:#F9F2F0;border-color:rgba(154,106,100,.3);color:#9A6A64;}
+.add-btn{font-size:12.5px;color:var(--muted);border:1px dashed var(--border-m);border-radius:100px;padding:7px 16px;transition:all .15s;display:inline-flex;align-items:center;gap:.4rem;}
+.add-btn:hover{color:var(--text);border-color:var(--text);}
+
+/* ANCHOR */
+.anchor-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;margin-bottom:1.2rem;}
+.anchor-btn{display:flex;flex-direction:column;align-items:center;gap:.3rem;padding:.8rem .4rem;border-radius:14px;border:1px solid var(--border-m);background:var(--bg);font-size:12px;color:var(--muted);transition:all .15s;line-height:1.3;text-align:center;}
+.anchor-btn:hover{background:var(--white);color:var(--text);border-color:rgba(0,0,0,.2);}
+.anchor-btn.sel{background:var(--white);color:var(--text);border-color:rgba(0,0,0,.22);box-shadow:0 2px 10px rgba(0,0,0,.08);}
+.anchor-icon{font-size:1.3rem;}
+
+/* CANDLE / MEMORY */
+.candle-wrap{text-align:center;padding:1rem 0 .5rem;}
+.candle{font-size:2.5rem;animation:flicker 2.5s ease-in-out infinite;}
+@keyframes flicker{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.8;transform:scale(.97)}}
+.memory-intro{font-family:var(--lora);font-style:italic;font-size:14px;color:var(--muted);text-align:center;margin-bottom:1.2rem;line-height:1.7;}
+
+/* PLAN */
+.plan-card{background:var(--white);border:1px solid var(--border);border-radius:22px;padding:1.8rem 2rem;animation:fadeUp .4s ease;}
+.plan-title{font-family:var(--serif);font-size:1.5rem;font-weight:400;margin-bottom:.3rem;}
+.plan-date{font-size:12px;color:var(--faint);margin-bottom:1.6rem;}
+.plan-section{margin-bottom:1.3rem;}
+.plan-icon-row{display:flex;align-items:center;gap:.6rem;margin-bottom:.5rem;}
+.plan-emoji{font-size:1rem;}
+.plan-section-title{font-family:var(--serif);font-size:1rem;font-weight:400;}
+.plan-item{padding:8px 13px;background:var(--bg);border-radius:10px;font-size:13.5px;margin-bottom:.35rem;color:var(--text);font-family:var(--lora);font-style:italic;line-height:1.55;}
+.plan-anchor-display{font-family:var(--serif);font-size:2rem;font-weight:300;color:var(--text);margin:.3rem 0 .5rem;letter-spacing:.04em;}
+.plan-divider{height:1px;background:var(--border);margin:1.1rem 0;}
+.plan-closing{font-family:var(--lora);font-style:italic;font-size:14px;color:var(--muted);line-height:1.8;padding:1rem 1.2rem;background:var(--bg);border-radius:12px;border-left:3px solid var(--border-m);}
+.result-actions{display:flex;gap:.7rem;flex-wrap:wrap;margin-top:1.4rem;}
+
+/* WEATHER SUMMARY */
+.weather-summary{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.3rem;}
+.weather-pill{display:inline-flex;align-items:center;gap:.35rem;padding:5px 12px;border-radius:100px;background:var(--bg);border:1px solid var(--border);font-size:12.5px;color:var(--muted);}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+@media(max-width:520px){
+  .step-card,.intro-card,.plan-card{padding:1.5rem 1.3rem 1.3rem;}
+  .anchor-grid{grid-template-columns:repeat(4,1fr);}
+}
+</style>
+  <script src="nav.js"></script>
+</head>
+<body>
+  <div id="site-nav-placeholder"></div>
+  
+
+<div class="page">
+  <div class="card-wrap" id="root"></div>
+</div>
+
+<script>
+// ─── STATE ────────────────────────────────────────────────────────────────────
+const S = {
+  phase: 'intro',
+  day: null,
+  difficulties: [],
+  // forecast
+  forecast: { angst:30, traurigkeit:40, stress:30, einsamkeit:40, hoffnung:50 },
+  // survival kit
+  kit: { actions:[], persons:'' },
+  // expectations
+  expectations: [{ text:'', controllable:null, reframe:'' }],
+  // anchor
+  anchor: null,
+  // memory (optional)
+  memory: { whom:'', hard:'', remember:'', message:'' },
+  showMemory: false,
+};
+
+const DAYS = [
+  'Weihnachten','Silvester','Valentinstag','Muttertag','Vatertag',
+  'Geburtstag','Jahrestag einer Trennung','Todestag einer geliebten Person',
+  'Neuer Job','Umzug','Sonntagabend','Etwas anderes'
+];
+const DIFFICULTIES = [
+  'Einsamkeit','Trauer','Familienkonflikte','Trennung','Vermissen einer Person',
+  'Druck und Erwartungen','Vergleich mit anderen','Angst','Überforderung','Unsicherheit'
+];
+const KIT_ACTIONS = [
+  'Atemübung','Spaziergang','Musik','Journal schreiben','Freund:in kontaktieren',
+  'Ruhezeit einplanen','Früher gehen dürfen','Grenzen setzen','Selbstmitgefühl üben',
+  'Heißes Bad / Dusche','Film schauen','Kochen','Draußen sein'
+];
+const ANCHORS = [
+  {word:'Ruhe',icon:''},{word:'Mut',icon:''},{word:'Geduld',icon:''},
+  {word:'Hoffnung',icon:''},{word:'Selbstmitgefühl',icon:''},{word:'Verbindung',icon:''},
+  {word:'Vertrauen',icon:''},{word:'Gelassenheit',icon:''},
+];
+const MEMORY_TRIGGERS = ['Trauer','Trennung','Vermissen einer Person'];
+const FORECAST_FIELDS = [
+  {key:'angst',     label:'Angst',      low:'Gering',mid:'Mittel',high:'Hoch'},
+  {key:'traurigkeit',label:'Traurigkeit',low:'Gering',mid:'Mittel',high:'Hoch'},
+  {key:'stress',    label:'Stress',     low:'Gering',mid:'Mittel',high:'Hoch'},
+  {key:'einsamkeit',label:'Einsamkeit', low:'Gering',mid:'Mittel',high:'Hoch'},
+  {key:'hoffnung',  label:'Hoffnung',   low:'Gering',mid:'Mittel',high:'Viel'},
+];
+
+// ─── HELPERS ──────────────────────────────────────────────────────────────────
+function go(p){ S.phase=p; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+function toggleChip(arr,val,max=10){
+  const i=arr.indexOf(val);
+  if(i>-1) arr.splice(i,1);
+  else if(arr.length<max) arr.push(val);
+  render();
+}
+function arrowSVG(){ return `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`; }
+function foot(nextFn, backFn, nextLabel='Weiter', canNext=true){
+  const backHTML = backFn
+    ? `<button class="btn-back" onclick="${backFn}">${'← Zurück'}</button>`
+    : '<span></span>';
+  return `<div class="step-footer">${backHTML}
+    <button class="btn-next" onclick="${nextFn}" ${canNext?'':'disabled'}>${nextLabel} ${arrowSVG()}</button>
+  </div>`;
+}
+function progHTML(pct, label){
+  return `<div class="prog-row">
+    <div class="prog-bar-bg"><div class="prog-bar-fill" style="width:${pct}%"></div></div>
+    <div class="prog-label">${label}</div>
+  </div>`;
+}
+function weatherIcon(key, val){
+  const f = FORECAST_FIELDS.find(x=>x.key===key);
+  if(!f) return '';
+  if(key==='hoffnung') return val<30?f.low:val<70?f.mid:f.high;
+  return val<30?f.low:val<65?f.mid:f.high;
+}
+function weatherLabel(val, key){
+  if(key==='hoffnung'){
+    if(val>=70) return 'Viel Hoffnung';
+    if(val>=40) return 'Ein wenig Hoffnung';
+    return 'Hoffnung gering';
+  }
+  if(val<30) return 'Gering';
+  if(val<65) return 'Mittel';
+  return 'Hoch';
+}
+
+// ─── RENDER ───────────────────────────────────────────────────────────────────
+function render(){
+  const root = document.getElementById('root');
+  root.innerHTML = '';
+  ({
+    intro: renderIntro,
+    step1: renderStep1,
+    step2: renderStep2,
+    forecast: renderForecast,
+    kit: renderKit,
+    expectations: renderExpectations,
+    anchor: renderAnchor,
+    memory: renderMemory,
+    plan: renderPlan,
+  }[S.phase] || renderIntro)(root);
+}
+
+// ─── INTRO ────────────────────────────────────────────────────────────────────
+function renderIntro(root){
+  root.innerHTML = `<div class="intro-card">
+    <div class="intro-orb">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="1.4" stroke-linecap="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </div>
+    <div class="intro-title">Manche Tage sind schwerer als andere.</div>
+    <div class="intro-sub">Ob Feiertag, Jahrestag oder Lebensereignis — du musst schwierige Tage nicht allein bewältigen.</div>
+    <button class="btn-next" style="width:100%;justify-content:center;" onclick="go('step1')">
+      Ich bin bereit ${arrowSVG()}
+    </button>
+  </div>`;
+}
+
+// ─── STEP 1 ───────────────────────────────────────────────────────────────────
+function renderStep1(root){
+  root.innerHTML = progHTML(10,'Schritt 1 von 2') + `
+  <div class="step-card">
+    <div class="step-tag">Heute</div>
+    <div class="step-q">Welcher Tag beschäftigt dich?</div>
+    <div class="step-sub">Wähle das, was am nächsten dran ist.</div>
+    <div class="options">
+      ${DAYS.map(d=>`<button class="opt ${S.day===d?'sel':''}" onclick="S.day='${d}';render()">${d}</button>`).join('')}
+    </div>
+    ${foot("go('step2')","go('intro')","Weiter",!!S.day)}
+  </div>`;
+}
+
+// ─── STEP 2 ───────────────────────────────────────────────────────────────────
+function renderStep2(root){
+  root.innerHTML = progHTML(20,'Schritt 2 von 2') + `
+  <div class="step-card">
+    <div class="step-tag">Gefühle</div>
+    <div class="step-q">Was macht diesen Tag schwierig?</div>
+    <div class="step-sub">Mehreres ist okay.</div>
+    <div class="chips">
+      ${DIFFICULTIES.map(d=>`<button class="chip ${S.difficulties.includes(d)?'sel':''}" onclick="toggleChip(S.difficulties,'${d}')">${d}</button>`).join('')}
+    </div>
+    ${foot("startTools()","go('step1')","Weiter",S.difficulties.length>0)}
+  </div>`;
+}
+function startTools(){
+  S.showMemory = MEMORY_TRIGGERS.some(t=>S.difficulties.includes(t));
+  go('forecast');
+}
+
+// ─── FORECAST ─────────────────────────────────────────────────────────────────
+function renderForecast(root){
+  root.innerHTML = progHTML(35,'Emotionales Wetter') + `
+  <div class="step-card">
+    <div class="step-tag">Tool 1 — Emotional Forecast</div>
+    <div class="step-q">Wie fühlt sich dieser Tag gerade an?</div>
+    <div class="step-sub">Keine richtigen oder falschen Antworten. Schieb einfach, was sich stimmig anfühlt.</div>
+    <div class="forecast-list" id="fcList">
+      ${FORECAST_FIELDS.map(f=>`
+        <div class="forecast-row">
+          <div class="forecast-label-row">
+            <span class="forecast-name">${f.label}</span>
+            
+          </div>
+          <input class="fslider" type="range" min="0" max="100" value="${S.forecast[f.key]}"
+            oninput="S.forecast['${f.key}']=+this.value;document.getElementById('icon_${f.key}').textContent=weatherIcon('${f.key}',+this.value);document.getElementById('badge_${f.key}').textContent=weatherLabel(+this.value,'${f.key}')">
+          <div class="weather-badge" id="badge_${f.key}">${weatherLabel(S.forecast[f.key], f.key)}</div>
+        </div>`).join('')}
+    </div>
+    ${foot("go('kit')","go('step2')")}
+  </div>`;
+}
+
+// ─── SURVIVAL KIT ─────────────────────────────────────────────────────────────
+function renderKit(root){
+  root.innerHTML = progHTML(52,'Survival Kit') + `
+  <div class="step-card">
+    <div class="step-tag">Tool 2 — Survival Kit Builder</div>
+    <div class="step-q">Was könnte dir heute helfen?</div>
+    <div class="step-sub">Wähle, was sich richtig anfühlt — auch wenn du dir nicht sicher bist.</div>
+    <div class="chips">
+      ${KIT_ACTIONS.map(a=>`<button class="chip ${S.kit.actions.includes(a)?'sel':''}" onclick="toggleChip(S.kit.actions,'${a}')">${a}</button>`).join('')}
+    </div>
+    <div class="step-tag" style="margin-top:1rem;">Wer tut dir heute gut?</div>
+    <textarea class="ta" placeholder="z.B. Meine beste Freundin, mein Bruder, niemand — und das ist okay." oninput="S.kit.persons=this.value">${S.kit.persons}</textarea>
+    ${foot("go('expectations')","go('forecast')")}
+  </div>`;
+}
+
+// ─── EXPECTATIONS ─────────────────────────────────────────────────────────────
+function renderExpectations(root){
+  root.innerHTML = progHTML(68,'Erwartungen') + `
+  <div class="step-card">
+    <div class="step-tag">Tool 3 — Expectation Release</div>
+    <div class="step-q">Welche Erwartungen trägst du an diesen Tag?</div>
+    <div class="step-sub">Schreib auf, was du dir vorstellst — oder erhoffst.</div>
+    <div id="expList" class="exp-list">
+      ${S.expectations.map((e,i)=>`
+        <div class="exp-row">
+          <div class="lbl">Erwartung</div>
+          <textarea class="exp-ta" placeholder='z.B. Alle sollen glücklich sein.' oninput="S.expectations[${i}].text=this.value">${e.text}</textarea>
+          <div class="exp-control-row">
+            <span style="font-size:12px;color:var(--faint);align-self:center;">Kontrollierbar?</span>
+            <button class="exp-pill ${e.controllable===true?'yes':''}" onclick="S.expectations[${i}].controllable=true;render()">Ja</button>
+            <button class="exp-pill ${e.controllable===false?'no':''}" onclick="S.expectations[${i}].controllable=false;render()">Nein</button>
+          </div>
+          ${e.controllable===false?`
+            <div class="lbl" style="margin-top:.7rem;">Realistischerer Wunsch</div>
+            <textarea class="exp-ta" placeholder='z.B. Ich kann ruhig bleiben und meine Grenzen achten.' oninput="S.expectations[${i}].reframe=this.value">${e.reframe}</textarea>
+          `:''}
+        </div>`).join('')}
+    </div>
+    <button class="add-btn" onclick="S.expectations.push({text:'',controllable:null,reframe:''});render()">+ Weitere Erwartung</button>
+    ${foot("go('anchor')","go('kit')")}
+  </div>`;
+}
+
+// ─── ANCHOR ───────────────────────────────────────────────────────────────────
+function renderAnchor(root){
+  const next = S.showMemory ? "go('memory')" : "go('plan')";
+  root.innerHTML = progHTML(82,'Anker') + `
+  <div class="step-card">
+    <div class="step-tag">Tool 4 — Today's Anchor</div>
+    <div class="step-q">Was soll dich heute tragen?</div>
+    <div class="step-sub">Wähle ein Wort, das sich heute richtig anfühlt.</div>
+    <div class="anchor-grid">
+      ${ANCHORS.map(a=>`
+        <button class="anchor-btn ${S.anchor===a.word?'sel':''}" onclick="S.anchor='${a.word}';render()">
+          <span>${a.word}</span>
+        </button>`).join('')}
+    </div>
+    ${foot(next,"go('expectations')","Weiter",!!S.anchor)}
+  </div>`;
+}
+
+// ─── MEMORY ───────────────────────────────────────────────────────────────────
+function renderMemory(root){
+  root.innerHTML = progHTML(92,'Erinnerungsraum') + `
+  <div class="step-card">
+    <div class="step-tag">First Time Without Them</div>
+    <div class="step-q">Einen Moment für jemanden, den du vermisst.</div>
+    
+    <div class="memory-intro">Du musst nichts schreiben. Aber wenn du möchtest, ist hier Platz.</div>
+    <div class="step-tag">Wen vermisst du heute?</div>
+    <textarea class="ta" style="min-height:50px;" placeholder="Name oder Beschreibung …" oninput="S.memory.whom=this.value">${S.memory.whom}</textarea>
+    <div class="step-tag">Was wird heute besonders schwer?</div>
+    <textarea class="ta" placeholder="z.B. Das erste Mal ohne ihr Lachen am Tisch." oninput="S.memory.hard=this.value">${S.memory.hard}</textarea>
+    <div class="step-tag">Welche Erinnerung möchtest du bewahren?</div>
+    <textarea class="ta" placeholder="z.B. Wie sie immer zu früh anfing Weihnachtslieder zu singen." oninput="S.memory.remember=this.value">${S.memory.remember}</textarea>
+    <div class="step-tag">Eine Nachricht, ein Gedanke, ein Wort</div>
+    <textarea class="ta" placeholder="Für dich oder für sie/ihn." oninput="S.memory.message=this.value">${S.memory.message}</textarea>
+    ${foot("go('plan')","go('anchor')","Zum Plan")}
+  </div>`;
+}
+
+// ─── PLAN ─────────────────────────────────────────────────────────────────────
+function renderPlan(root){
+  const today = new Date().toLocaleDateString('de-DE',{day:'numeric',month:'long',year:'numeric'});
+
+  // weather summary
+  const weatherItems = FORECAST_FIELDS.map(f=>{
+    const v = S.forecast[f.key];
+    return `<span class="weather-pill">${f.label}: ${weatherLabel(v,f.key)}</span>`;
+  }).join('');
+
+  // expectations
+  const expItems = S.expectations.filter(e=>e.text).map(e=>{
+    if(e.controllable===false && e.reframe)
+      return `<div class="plan-item">"${e.text}" → ${e.reframe}</div>`;
+    return `<div class="plan-item">"${e.text}"${e.controllable===true?' ✓ (beeinflussbar)':''}</div>`;
+  }).join('');
+
+  let html = `
+    <div class="plan-title">Mein Begleiter für heute</div>
+    <div class="plan-date">${S.day ? S.day + ' · ' : ''}${today}</div>
+
+    <div class="plan-section">
+      <div class="plan-icon-row"><div class="plan-section-title">Emotionales Wetter</div></div>
+      <div class="weather-summary">${weatherItems}</div>
+    </div>
+    <div class="plan-divider"></div>`;
+
+  if(S.kit.actions.length || S.kit.persons){
+    html += `<div class="plan-section">
+      <div class="plan-icon-row"><div class="plan-section-title">Mein Survival Kit</div></div>
+      ${S.kit.actions.map(a=>`<div class="plan-item">${a}</div>`).join('')}
+      ${S.kit.persons?`<div class="plan-item">Heute gut tut mir: ${S.kit.persons}</div>`:''}
+    </div><div class="plan-divider"></div>`;
+  }
+
+  if(expItems){
+    html += `<div class="plan-section">
+      <div class="plan-icon-row"><div class="plan-section-title">Realistische Erwartungen</div></div>
+      ${expItems}
+    </div><div class="plan-divider"></div>`;
+  }
+
+  if(S.anchor){
+    html += `<div class="plan-section">
+      <div class="plan-icon-row"><div class="plan-section-title">Mein Anker</div></div>
+      <div class="plan-anchor-display">${S.anchor}</div>
+    </div>`;
+  }
+
+  if(S.showMemory && (S.memory.whom || S.memory.remember || S.memory.message)){
+    html += `<div class="plan-divider"></div>
+    <div class="plan-section">
+      <div class="plan-icon-row"><div class="plan-section-title">Im Herzen dabei</div></div>
+      ${S.memory.whom?`<div class="plan-item">${S.memory.whom}</div>`:''}
+      ${S.memory.remember?`<div class="plan-item">Erinnerung: ${S.memory.remember}</div>`:''}
+      ${S.memory.message?`<div class="plan-item" style="font-style:italic;">"${S.memory.message}"</div>`:''}
+    </div>`;
+  }
+
+  html += `<div class="plan-divider"></div>
+    <div class="plan-closing">
+      Du musst diesen Tag nicht perfekt bewältigen. Es reicht, freundlich mit dir selbst umzugehen — und Schritt für Schritt durch den Tag zu gehen.
+    </div>
+    <div class="result-actions">
+      <button class="btn-next" onclick="restart()">
+        Neuer Tag <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10M23 14l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+      </button>
+      <a href="tools.html" class="btn-back">← Alle Tools</a>
+    </div>`;
+
+  const card = document.createElement('div');
+  card.className = 'plan-card';
+  card.innerHTML = html;
+  root.appendChild(card);
+}
+
+// ─── RESTART ──────────────────────────────────────────────────────────────────
+function restart(){
+  Object.assign(S,{
+    phase:'intro', day:null, difficulties:[],
+    forecast:{angst:30,traurigkeit:40,stress:30,einsamkeit:40,hoffnung:50},
+    kit:{actions:[],persons:''},
+    expectations:[{text:'',controllable:null,reframe:''}],
+    anchor:null,
+    memory:{whom:'',hard:'',remember:'',message:''},
+    showMemory:false,
+  });
+  render();
+}
+
+render();
+</script>
+</body>
+</html>

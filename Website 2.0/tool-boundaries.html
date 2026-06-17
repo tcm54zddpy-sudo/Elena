@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mindbloom — Grenzen setzen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Mulish:wght@300;400;500&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg:#F8F7F4; --white:#FFFFFF;
+  --border:rgba(0,0,0,.08); --border-m:rgba(0,0,0,.13);
+  --text:#1A1A1A; --muted:#6B6B6B; --faint:#ABABAB;
+  --g-sage:  linear-gradient(135deg,#C8D8C0,#8FAF88);
+  --g-dusk:  linear-gradient(135deg,#C4C0DC,#8A84B8);
+  --g-blush: linear-gradient(135deg,#DEC9C4,#BF9690);
+  --g-slate: linear-gradient(135deg,#B8CCDA,#7A9DB5);
+  --g-amber: linear-gradient(135deg,#DDD0B0,#BCA870);
+  --sage:#5A8050; --dusk:#6A64A0; --blush:#9A6A64;
+  --serif:'Playfair Display',Georgia,serif;
+  --lora:'Lora',Georgia,serif;
+  --sans:'Mulish',sans-serif;
+  --r:16px;
+}
+html,body{height:100%;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-weight:300;font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column;min-height:100vh;}
+a{text-decoration:none;color:inherit;}
+button{cursor:pointer;font-family:var(--sans);border:none;background:none;}
+
+/* NAV */
+
+/* HERO */
+.hero{margin-bottom:2.5rem;}
+.hero-tag{font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:.5rem;}
+.hero h1{font-family:var(--serif);font-size:2rem;font-weight:400;line-height:1.2;margin-bottom:.6rem;}
+.hero p{color:var(--muted);font-size:14.5px;max-width:480px;}
+
+/* QUIZ PROGRESS */
+.progress-wrap{margin-bottom:2rem;}
+.progress-bar-bg{height:3px;background:var(--border-m);border-radius:10px;margin-bottom:.5rem;}
+.progress-bar-fill{height:100%;background:var(--text);border-radius:10px;transition:width .4s ease;}
+.progress-text{font-size:11px;color:var(--faint);letter-spacing:.06em;}
+
+/* QUIZ CARD */
+.quiz-card{background:var(--white);border:1px solid var(--border);border-radius:20px;padding:1.8rem;margin-bottom:1rem;animation:fadeUp .35s ease;}
+.quiz-q-num{font-size:10px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-bottom:.7rem;}
+.quiz-q-text{font-family:var(--serif);font-size:1.2rem;font-weight:400;line-height:1.45;margin-bottom:1.4rem;}
+.answer-grid{display:flex;flex-direction:column;gap:.5rem;}
+.answer-btn{
+  text-align:left;padding:12px 16px;border-radius:12px;border:1px solid var(--border-m);
+  background:var(--bg);font-size:14px;color:var(--muted);font-family:var(--sans);
+  transition:background .15s, border-color .15s, color .15s, transform .1s;
+  line-height:1.5;
+}
+.answer-btn:hover{background:var(--white);color:var(--text);border-color:rgba(0,0,0,.2);transform:translateX(3px);}
+.answer-btn.selected{background:var(--white);color:var(--text);border-color:rgba(0,0,0,.25);font-weight:400;box-shadow:0 2px 12px rgba(0,0,0,.07);}
+.answer-btn.never{border-color:rgba(90,128,80,.3);background:#F0F4EE;}
+.answer-btn.sometimes{border-color:rgba(188,168,112,.3);background:#F8F4EA;}
+.answer-btn.often{border-color:rgba(154,106,100,.3);background:#F9F2F0;}
+
+.q-footer{display:flex;align-items:center;justify-content:space-between;margin-top:1.2rem;padding-top:1.2rem;border-top:1px solid var(--border);}
+
+/* RESULT */
+.result-section{animation:fadeUp .4s ease;}
+.score-display{background:var(--white);border:1px solid var(--border);border-radius:20px;padding:2rem;margin-bottom:1.2rem;text-align:center;}
+.score-orb{width:80px;height:80px;border-radius:50%;margin:0 auto 1rem;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:1.5rem;font-weight:400;color:#fff;}
+.score-type{font-family:var(--serif);font-size:1.4rem;font-weight:400;margin-bottom:.4rem;}
+.score-sub{font-size:13.5px;color:var(--muted);max-width:400px;margin:0 auto;line-height:1.65;}
+
+/* INSIGHT AREAS */
+.insight-group{margin-bottom:1rem;}
+.insight-group-label{font-size:10px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-bottom:.7rem;}
+.insight-card{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:1.2rem 1.4rem;margin-bottom:.6rem;}
+.insight-card h4{font-family:var(--lora);font-weight:400;font-size:1rem;margin-bottom:.4rem;}
+.insight-card p{font-size:13.5px;color:var(--muted);line-height:1.65;}
+
+/* PHRASES */
+.phrases-card{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:1.4rem;margin-bottom:1rem;}
+.phrases-title{font-family:var(--serif);font-size:1rem;font-weight:400;margin-bottom:1rem;}
+.phrase-row{display:flex;gap:.7rem;align-items:flex-start;margin-bottom:.8rem;cursor:pointer;padding:.5rem;border-radius:10px;transition:background .15s;}
+.phrase-row:hover{background:var(--bg);}
+.phrase-tone{font-size:9.5px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:100px;white-space:nowrap;flex-shrink:0;margin-top:3px;}
+.tone-easy{background:#F0F4EE;color:#5A8050;}
+.tone-firm{background:#F9F2F0;color:#9A6A64;}
+.phrase-text{font-family:var(--lora);font-style:italic;font-size:14px;line-height:1.6;color:var(--text);}
+.copy-hint{font-size:10.5px;color:var(--faint);margin-top:-.3rem;margin-bottom:1rem;}
+
+/* BUTTONS */
+.btn-continue{display:inline-flex;align-items:center;gap:.5rem;background:var(--text);color:var(--white);border-radius:100px;padding:11px 22px;font-size:13px;font-weight:500;letter-spacing:.04em;cursor:pointer;transition:opacity .18s,transform .1s;}
+.btn-continue:hover{opacity:.85;transform:translateY(-1px);}
+.btn-continue:disabled{opacity:.3;cursor:not-allowed;transform:none;}
+.btn-secondary{display:inline-flex;align-items:center;gap:.4rem;color:var(--muted);border:1px solid var(--border-m);border-radius:100px;padding:10px 18px;font-size:12.5px;cursor:pointer;transition:color .18s,border-color .18s;background:none;}
+.btn-secondary:hover{color:var(--text);border-color:var(--text);}
+.result-actions{display:flex;gap:.7rem;flex-wrap:wrap;margin-top:1.5rem;}
+
+/* COPIED TOAST */
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--text);color:var(--white);font-size:12.5px;padding:8px 18px;border-radius:100px;opacity:0;transition:opacity .3s,transform .3s;pointer-events:none;z-index:999;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+@media(max-width:520px){
+  .hero h1{font-size:1.6rem;}
+  .page{padding:1.8rem 1rem 4rem;}
+  .answer-btn{font-size:13.5px;}
+}
+</style>
+  <script src="nav.js"></script>
+</head>
+<body>
+  <div id="site-nav-placeholder"></div>
+  
+
+<div class="page">
+  <div class="hero">
+    <div class="hero-tag">Grenzen · Beziehungen · Selbstschutz</div>
+    <h1>Grenzen setzen</h1>
+    <p>Finde heraus, wie es dir gerade mit deinen Grenzen geht — und hol dir konkrete Formulierungen, die du sofort nutzen kannst.</p>
+  </div>
+
+  <div id="toolContent"></div>
+</div>
+
+<div class="toast" id="toast">Kopiert ✓</div>
+
+<script>
+// ── QUIZ DATA ─────────────────────────────────────────────────────────────
+const QUESTIONS = [
+  {
+    text: 'Jemand fragt dich um einen Gefallen, obwohl du eigentlich gerade keine Kapazitäten hast. Was tust du?',
+    answers: [
+      { label: 'Ich sage klar, dass es mir gerade nicht möglich ist.', score: 0 },
+      { label: 'Ich sage zu, obwohl ich es eigentlich nicht kann.', score: 2 },
+      { label: 'Ich sage zu und ärgere mich danach innerlich über mich selbst.', score: 3 },
+    ]
+  },
+  {
+    text: 'Eine Person macht regelmäßig Kommentare über dein Aussehen oder deine Entscheidungen. Wie reagierst du?',
+    answers: [
+      { label: 'Ich spreche es direkt an und sage, dass mir das nicht gut tut.', score: 0 },
+      { label: 'Ich versuche es zu ignorieren und hoffe, es hört auf.', score: 2 },
+      { label: 'Ich lache mit, obwohl es mich verletzt.', score: 3 },
+    ]
+  },
+  {
+    text: 'Du hast klar Nein gesagt — und wirst trotzdem nochmals gefragt. Was passiert?',
+    answers: [
+      { label: 'Ich bleibe bei meinem Nein, auch wenn es unangenehm wird.', score: 0 },
+      { label: 'Ich erkläre mein Nein erneut und rechtfertige mich.', score: 2 },
+      { label: 'Ich gebe nach, weil mir der Druck zu viel wird.', score: 3 },
+    ]
+  },
+  {
+    text: 'Jemand meldet sich zu jeder Uhrzeit bei dir und erwartet sofortige Antworten. Wie gehst du damit um?',
+    answers: [
+      { label: 'Ich habe klar gemacht, wann ich erreichbar bin — und halte mich daran.', score: 0 },
+      { label: 'Ich antworte meistens, auch wenn ich eigentlich Pause brauche.', score: 2 },
+      { label: 'Ich antworte immer sofort, aus Angst zu enttäuschen.', score: 3 },
+    ]
+  },
+  {
+    text: 'Wie fühlst du dich, wenn du Nein sagst?',
+    answers: [
+      { label: 'In der Regel gut — Nein ist eine vollständige Antwort.', score: 0 },
+      { label: 'Ein bisschen schuldig, aber ich sage es trotzdem manchmal.', score: 1 },
+      { label: 'Sehr schlecht — ich fühle mich egoistisch oder unbequem.', score: 3 },
+    ]
+  },
+  {
+    text: 'Denkst du manchmal daran, was andere von dir denken, wenn du eine Grenze setzt?',
+    answers: [
+      { label: 'Selten — ich vertraue darauf, dass es okay ist, für mich einzustehen.', score: 0 },
+      { label: 'Manchmal, aber ich setze Grenzen trotzdem.', score: 1 },
+      { label: 'Oft — die Angst vor negativer Reaktion hält mich zurück.', score: 3 },
+    ]
+  },
+  {
+    text: 'Wie oft sagst du zu Dingen Ja, auf die du eigentlich keine Lust hast?',
+    answers: [
+      { label: 'Selten — ich achte darauf, was ich wirklich möchte.', score: 0 },
+      { label: 'Manchmal, wenn mir die Situation wichtig ist.', score: 1 },
+      { label: 'Öfter als mir lieb ist — ich fühle mich verpflichtet.', score: 3 },
+    ]
+  },
+];
+
+const RESULTS = [
+  {
+    range: [0, 5],
+    type: 'Gute Grundlage',
+    grad: 'var(--g-sage)', tint: '#F0F4EE', accent: '#5A8050',
+    desc: 'Du hast ein gesundes Gespür für deine Grenzen. Du weißt meistens, was du brauchst — und traust dich, dafür einzustehen. Das ist keine Selbstverständlichkeit.',
+    areas: [
+      { title: 'Was gut läuft', text: 'Du kannst Nein sagen ohne dich dabei vollständig zu erklären. Du erkennst, wenn deine Grenzen getestet werden.' },
+      { title: 'Was du weiter stärken kannst', text: 'Manchmal genügt es, Grenzen früher zu setzen — bevor Situationen eskalieren. Übe, deine Grenzen proaktiv zu kommunizieren, nicht erst wenn du schon erschöpft bist.' },
+    ],
+    context: 'friends',
+  },
+  {
+    range: [6, 12],
+    type: 'Lernend',
+    grad: 'var(--g-amber)', tint: '#F8F4EA', accent: '#907840',
+    desc: 'Du weißt, dass Grenzen wichtig sind — aber es fällt dir manchmal noch schwer, sie wirklich durchzuhalten. Das Schuldgefühl oder die Angst, jemanden zu enttäuschen, spielt eine Rolle.',
+    areas: [
+      { title: 'Was dich zurückhält', text: 'Wahrscheinlich hast du gelernt, dass dein Wert davon abhängt, verfügbar und hilfsbereit zu sein. Das ist keine Schwäche — aber es ist etwas, das du hinterfragen kannst.' },
+      { title: 'Ein erster Schritt', text: 'Fang mit kleinen Grenzen an, in sicheren Situationen. Übe, ein Nein zu sagen, ohne es zu erklären oder zu entschuldigen. Dein Nein ist vollständig.' },
+    ],
+    context: 'mixed',
+  },
+  {
+    range: [13, 21],
+    type: 'Grenzen kosten dich viel',
+    grad: 'var(--g-blush)', tint: '#F9F2F0', accent: '#9A6A64',
+    desc: 'Grenzen setzen fühlt sich für dich oft wie eine Bedrohung an — für Beziehungen, für dein Bild von dir selbst. Du gibst viel von dir, oft mehr als du hast. Das ist erschöpfend.',
+    areas: [
+      { title: 'Was das bedeutet', text: 'Du schützt andere vor Enttäuschung — aber vergisst dabei oft dich selbst. Deine Bedürfnisse sind genauso real und genauso wichtig wie die der anderen.' },
+      { title: 'Was helfen kann', text: 'Fang damit an, dir selbst gegenüber ehrlich zu sein: Wann habe ich zuletzt etwas für mich getan, ohne mich zu rechtfertigen? Grenzen sind kein Angriff auf andere — sie sind Selbstrespekt.' },
+    ],
+    context: 'guilt',
+  },
+];
+
+const PHRASES = {
+  friends: [
+    { tone:'easy', text:'Ich weiß, ich bedeute dir viel — und du mir auch. Aber da muss ich gerade allein durch.' },
+    { tone:'easy', text:'Ich würde gerne über ... sprechen, wenn es etwas zu besprechen gibt.' },
+    { tone:'firm', text:'Ich fühle mich unwohl, darüber zu sprechen.' },
+    { tone:'easy', text:'Ich würde dir gerne zuhören, aber ich habe gerade nicht die emotionalen Kapazitäten dazu.' },
+    { tone:'firm', text:'Du musst aufhören, mein Aussehen zu kommentieren.' },
+    { tone:'easy', text:'Ich respektiere deine Meinung, aber ich teile sie nicht.' },
+    { tone:'firm', text:'Du musst aufhören, mir deine Meinung aufzudrängen.' },
+  ],
+  mixed: [
+    { tone:'easy', text:'Nein danke. Ich habe mich dagegen entschieden.' },
+    { tone:'easy', text:'Ich weiß es zu schätzen — ich kann aber gerade nicht.' },
+    { tone:'easy', text:'Ich habe dafür gerade nicht die Energie.' },
+    { tone:'firm', text:'Ich habe bereits geantwortet. Meine Antwort lautet Nein.' },
+    { tone:'easy', text:'Ich merke, dass dir das wichtig ist. Ich werde meine Meinung trotzdem nicht ändern.' },
+    { tone:'firm', text:'Meine Grenze steht nicht zur Diskussion.' },
+    { tone:'easy', text:'Ich werde dir Bescheid sagen, falls ich meine Meinung ändere — frag mich bitte nicht nochmals.' },
+  ],
+  guilt: [
+    { tone:'easy', text:'Nein ist eine vollständige Antwort.' },
+    { tone:'easy', text:'Ich entscheide mich dagegen.' },
+    { tone:'firm', text:'Ich habe bereits Nein gesagt — ich finde es unangenehm, mich wiederholen zu müssen.' },
+    { tone:'easy', text:'Ich muss meine Entscheidungen nicht rechtfertigen.' },
+    { tone:'firm', text:'Du respektierst meine Grenze nicht.' },
+    { tone:'easy', text:'Ich verstehe, dass das nicht die Antwort ist, die du hören möchtest.' },
+    { tone:'firm', text:'Hör bitte auf mich zu fragen — die Antwort ist nein.' },
+  ],
+};
+
+// ── STATE ─────────────────────────────────────────────────────────────────
+let qIndex = 0;
+let scores = [];
+let selectedAnswer = null;
+
+// ── RENDER ────────────────────────────────────────────────────────────────
+function render() {
+  const c = document.getElementById('toolContent');
+  c.innerHTML = '';
+  if (qIndex < QUESTIONS.length) renderQuestion(c);
+  else renderResult(c);
+}
+
+function renderQuestion(c) {
+  const q = QUESTIONS[qIndex];
+  const pct = (qIndex / QUESTIONS.length) * 100;
+
+  const prog = document.createElement('div');
+  prog.className = 'progress-wrap';
+  prog.innerHTML = `<div class="progress-bar-bg"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
+    <div class="progress-text">Frage ${qIndex+1} von ${QUESTIONS.length}</div>`;
+  c.appendChild(prog);
+
+  const card = document.createElement('div');
+  card.className = 'quiz-card';
+  card.innerHTML = `
+    <div class="quiz-q-num">Frage ${qIndex+1}</div>
+    <div class="quiz-q-text">${q.text}</div>
+    <div class="answer-grid" id="ansGrid">
+      ${q.answers.map((a,i) => {
+        const cls = a.score===0?'never': a.score<=1?'sometimes':'often';
+        return `<button class="answer-btn ${cls} ${selectedAnswer===i?'selected':''}" onclick="selectAnswer(${i})">${a.label}</button>`;
+      }).join('')}
+    </div>
+    <div class="q-footer">
+      <button class="btn-secondary" onclick="goBack()" ${qIndex===0?'style="visibility:hidden"':''}>← Zurück</button>
+      <button class="btn-continue" id="nextBtn" onclick="nextQ()" ${selectedAnswer!==null?'':'disabled'}>
+        ${qIndex < QUESTIONS.length-1 ? 'Weiter' : 'Ergebnis zeigen'}
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>`;
+  c.appendChild(card);
+}
+
+function selectAnswer(i) {
+  selectedAnswer = i;
+  document.querySelectorAll('.answer-btn').forEach((b,idx) => {
+    b.classList.toggle('selected', idx===i);
+  });
+  document.getElementById('nextBtn').disabled = false;
+}
+
+function nextQ() {
+  if (selectedAnswer === null) return;
+  scores.push(QUESTIONS[qIndex].answers[selectedAnswer].score);
+  qIndex++;
+  selectedAnswer = null;
+  render();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function goBack() {
+  if (qIndex === 0) return;
+  qIndex--;
+  scores.pop();
+  selectedAnswer = null;
+  render();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ── RESULT ────────────────────────────────────────────────────────────────
+function renderResult(c) {
+  const total = scores.reduce((a,b)=>a+b, 0);
+  const result = RESULTS.find(r => total >= r.range[0] && total <= r.range[1]) || RESULTS[RESULTS.length-1];
+  const phrases = PHRASES[result.context];
+
+  const wrap = document.createElement('div');
+  wrap.className = 'result-section';
+
+  wrap.innerHTML = `
+    <div class="score-display">
+      <div class="score-orb" style="background:${result.grad};">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="1.5" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      <div class="score-type" style="color:${result.accent};">${result.type}</div>
+      <div class="score-sub">${result.desc}</div>
+    </div>
+
+    <div class="insight-group">
+      <div class="insight-group-label">Was das bedeutet</div>
+      ${result.areas.map(a => `
+        <div class="insight-card">
+          <h4>${a.title}</h4>
+          <p>${a.text}</p>
+        </div>`).join('')}
+    </div>
+
+    <div class="phrases-card">
+      <div class="phrases-title">Formulierungen, die du gerade nutzen kannst</div>
+      <div class="copy-hint">Tippe auf eine Formulierung, um sie zu kopieren.</div>
+      ${phrases.map(p => `
+        <div class="phrase-row" onclick="copyPhrase('${p.text.replace(/'/g,"\\'")}')">
+          <span class="phrase-tone ${p.tone==='easy'?'tone-easy':'tone-firm'}">${p.tone==='easy'?'Sanft':'Klar'}</span>
+          <span class="phrase-text">${p.text}</span>
+        </div>`).join('')}
+    </div>
+
+    <div class="result-actions">
+      <button class="btn-continue" onclick="restart()">
+        Nochmal
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10M23 14l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+      </button>
+      <a href="tools.html" class="btn-secondary">← Alle Tools</a>
+    </div>`;
+
+  c.appendChild(wrap);
+}
+
+function copyPhrase(text) {
+  navigator.clipboard.writeText(text).catch(()=>{});
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2000);
+}
+
+function restart() {
+  qIndex = 0; scores = []; selectedAnswer = null;
+  render(); window.scrollTo({top:0,behavior:'smooth'});
+}
+
+render();
+</script>
+</body>
+</html>

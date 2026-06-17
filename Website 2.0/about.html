@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mindbloom — Über uns</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Mulish:wght@300;400;500&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#F8F7F4;--white:#FFFFFF;
+  --border:rgba(0,0,0,.08);--border-m:rgba(0,0,0,.13);
+  --text:#1A1A1A;--muted:#6B6B6B;--faint:#ABABAB;
+  --g-sage:linear-gradient(135deg,#C8D8C0,#8FAF88);
+  --g-dusk:linear-gradient(135deg,#C4C0DC,#8A84B8);
+  --g-blush:linear-gradient(135deg,#DEC9C4,#BF9690);
+  --g-slate:linear-gradient(135deg,#B8CCDA,#7A9DB5);
+  --g-amber:linear-gradient(135deg,#DDD0B0,#BCA870);
+  --g-night:linear-gradient(135deg,#C8C4D8,#8880A8);
+  --serif:'Playfair Display',Georgia,serif;
+  --lora:'Lora',Georgia,serif;
+  --sans:'Mulish',sans-serif;
+  --r:16px;
+}
+html,body{min-height:100%;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-weight:300;font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased;}
+a{text-decoration:none;color:inherit;}
+button{cursor:pointer;font-family:var(--sans);border:none;background:none;}
+
+/* NAV */
+
+/* HERO */
+.hero{background:var(--white);border-bottom:1px solid var(--border);padding:72px 2.8rem 64px;text-align:center;}
+.hero-tag{font-size:10px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin-bottom:1rem;}
+.hero h1{font-family:var(--serif);font-size:clamp(2rem,5vw,3.2rem);font-weight:300;line-height:1.15;margin-bottom:1.2rem;max-width:640px;margin-left:auto;margin-right:auto;}
+.hero-sub{font-family:var(--lora);font-style:italic;font-size:16px;color:var(--muted);max-width:480px;margin:0 auto;line-height:1.8;}
+
+/* BODY */
+.body{max-width:720px;margin:0 auto;padding:5rem 2rem 8rem;}
+
+/* INTRO BLOCK */
+.intro-block{margin-bottom:4rem;}
+.intro-block p{font-family:var(--lora);font-size:16px;line-height:1.9;color:var(--text);margin-bottom:1.2rem;}
+.intro-block p:last-child{margin-bottom:0;}
+
+/* DIVIDER */
+.divider{height:1px;background:var(--border);margin:3.5rem 0;}
+
+/* BELIEF SECTION */
+.beliefs{display:flex;flex-direction:column;gap:3rem;margin-bottom:1rem;}
+.belief{}
+.belief-num{font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:.6rem;}
+.belief h2{font-family:var(--serif);font-size:1.5rem;font-weight:400;line-height:1.25;margin-bottom:.9rem;}
+.belief p{font-family:var(--lora);font-size:15px;line-height:1.85;color:var(--muted);}
+.belief-accent{width:32px;height:2px;border-radius:2px;margin-bottom:1rem;}
+
+/* CLOSING */
+.closing{margin-top:4rem;padding:2.4rem 2.4rem;background:var(--white);border:1px solid var(--border);border-radius:20px;}
+.closing p{font-family:var(--lora);font-style:italic;font-size:16px;line-height:1.9;color:var(--muted);}
+.closing p + p{margin-top:1rem;}
+
+/* CTA */
+.cta-row{display:flex;gap:.8rem;flex-wrap:wrap;margin-top:2.5rem;}
+.btn-primary{display:inline-flex;align-items:center;gap:.5rem;background:var(--text);color:#fff;border-radius:100px;padding:12px 24px;font-size:13px;font-weight:500;letter-spacing:.04em;transition:opacity .18s,transform .1s;}
+.btn-primary:hover{opacity:.85;transform:translateY(-1px);}
+.btn-secondary{display:inline-flex;align-items:center;gap:.4rem;color:var(--muted);border:1px solid var(--border-m);border-radius:100px;padding:11px 20px;font-size:13px;transition:all .15s;}
+.btn-secondary:hover{color:var(--text);border-color:var(--text);}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.hero{animation:fadeUp .5s ease;}
+.belief{animation:fadeUp .4s ease;}
+
+@media(max-width:600px){
+  .hero{padding:52px 1.4rem 48px;}
+  .body{padding:3.5rem 1.2rem 6rem;}
+  .closing{padding:1.6rem 1.4rem;}
+}
+</style>
+  <script src="nav.js"></script>
+</head>
+<body>
+  <div id="site-nav-placeholder"></div>
+  
+
+<div class="hero">
+  <div class="hero-tag">Über Mindbloom</div>
+  <h1>Nicht wie du auf andere wirkst.<br>Sondern wie es dir wirklich geht.</h1>
+  <p class="hero-sub">Eine Plattform für alle, die sich selbst besser verstehen möchten — ohne Diagnose, ohne Vergleich, ohne Druck.</p>
+</div>
+
+<div class="body">
+
+  <div class="intro-block">
+    <p>Mindbloom ist kein Blog. Kein Therapie-Angebot. Kein weiterer Ort, an dem du dich optimieren sollst.</p>
+    <p>Es ist ein Raum für Selbstreflexion — für Menschen, die spüren, dass etwas nicht stimmt, aber noch keine Worte dafür haben. Für Menschen, die funktionieren und trotzdem erschöpft sind. Für Menschen, die gut für andere sorgen, aber selten für sich selbst.</p>
+    <p>Mentale Gesundheit betrifft jeden. Und die Werkzeuge dafür sollten für jeden zugänglich sein.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="beliefs">
+
+    <div class="belief">
+      <div class="belief-num">01</div>
+      <div class="belief-accent" style="background:var(--g-slate);"></div>
+      <h2>Mentale Gesundheit betrifft jeden.</h2>
+      <p>Nicht nur Menschen in Therapie. Nicht nur Menschen in Krisen. Jeder Mensch erlebt Einsamkeit, Stress, Unsicherheit, Verlust, Selbstzweifel — irgendwann, in irgendeiner Form. Viele haben keinen Therapeuten. Viele merken erst spät, dass sie Unterstützung gebraucht hätten. Deshalb sollten Werkzeuge zur Selbstreflexion und emotionalen Orientierung offen zugänglich sein — nicht hinter Fachbegriffen versteckt, nicht teuer, nicht kompliziert.</p>
+    </div>
+
+    <div class="belief">
+      <div class="belief-num">02</div>
+      <div class="belief-accent" style="background:var(--g-sage);"></div>
+      <h2>Die Beziehung zu uns selbst beeinflusst alles andere.</h2>
+      <p>Viele Probleme beginnen nicht bei anderen Menschen. Sie beginnen bei uns selbst — bei dem, wie wir uns sehen, wie wir mit uns sprechen, was wir tolerieren oder einfordern. Wenn jemand seinen Selbstwert stärkt, seine Emotionen besser versteht und gesündere Grenzen setzt, verändert sich oft auch, wie er in Beziehungen, Freundschaften und seinem Umfeld agiert. Eine bessere Beziehung zu dir selbst führt oft zu besseren Beziehungen mit anderen.</p>
+    </div>
+
+    <div class="belief">
+      <div class="belief-num">03</div>
+      <div class="belief-accent" style="background:var(--g-amber);"></div>
+      <h2>Social Media löst nicht jedes Bedürfnis nach Verbindung.</h2>
+      <p>Die ursprüngliche Idee war gut: Menschen zusammenbringen, Gleichgesinnte finden, Verbindung schaffen. Aber viele verbringen heute mehr Zeit damit, andere zu beobachten, sich zu vergleichen und Meinungen zu konsumieren — als sich selbst zuzuhören. Das Ergebnis ist oft Vergleichsdruck, Unsicherheit und eine Ablenkung von den eigenen Bedürfnissen. Nicht weil Social Media per se schlecht ist, sondern weil es selten fragt: Wie geht es dir eigentlich?</p>
+    </div>
+
+    <div class="belief">
+      <div class="belief-num">04</div>
+      <div class="belief-accent" style="background:var(--g-blush);"></div>
+      <h2>Ein Raum für Selbstreflexion statt Vergleich.</h2>
+      <p>Mindbloom ist ein Gegenentwurf. Nicht: "Was machen alle anderen?" — Sondern: "Wie geht es mir?" Nicht: "Wie wirke ich?" — Sondern: "Was brauche ich gerade?" Hier gibt es keine Likes, keine Follower, keinen Vergleich. Nur dich, deine Gedanken und Werkzeuge, die dir helfen, sie besser zu verstehen.</p>
+    </div>
+
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="closing">
+    <p>Mindbloom ist noch im Aufbau. Vieles ist noch nicht fertig — und das ist in Ordnung.</p>
+    <p>Was bleibt, ist die Überzeugung dahinter: Selbstreflexion sollte keine Frage des Privilegs sein. Jeder Mensch verdient einen Raum, in dem er sich selbst besser verstehen kann.</p>
+  </div>
+
+  <div class="cta-row">
+    <a href="tools.html" class="btn-primary">
+      Zu den Tools
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+    <a href="community.html" class="btn-secondary">Community entdecken</a>
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mindbloom — Values Finder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Mulish:wght@300;400;500&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #F8F7F4;
+  --white:     #FFFFFF;
+  --border:    rgba(0,0,0,0.08);
+  --border-m:  rgba(0,0,0,0.13);
+  --text:      #1A1A1A;
+  --muted:     #6B6B6B;
+  --faint:     #ABABAB;
+
+  --g-sage:    linear-gradient(135deg, #C8D8C0 0%, #8FAF88 100%);
+  --g-dusk:    linear-gradient(135deg, #C4C0DC 0%, #8A84B8 100%);
+  --g-blush:   linear-gradient(135deg, #DEC9C4 0%, #BF9690 100%);
+  --g-slate:   linear-gradient(135deg, #B8CCDA 0%, #7A9DB5 100%);
+  --g-amber:   linear-gradient(135deg, #DDD0B0 0%, #BCA870 100%);
+  --g-rose:    linear-gradient(135deg, #D8BFCA 0%, #B890A5 100%);
+  --g-gold:    linear-gradient(135deg, #DDD0A8 0%, #B8A050 100%);
+
+  --sage-tint:  #F0F4EE;
+  --dusk-tint:  #EEEDF6;
+  --sage:   #5A8050;
+  --dusk:   #6A64A0;
+
+  --serif:      'Playfair Display', Georgia, serif;
+  --serif-body: 'Lora', Georgia, serif;
+  --sans:       'Mulish', sans-serif;
+  --r: 16px; --r-sm: 10px;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; font-family: var(--sans); border: none; }
+
+/* ── NAV ── */
+
+/* ── PROGRESS BAR ── */
+.progress-bar {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2.8rem;
+  display: flex; align-items: center;
+  gap: 0;
+}
+.progress-step {
+  flex: 1; padding: 14px 0;
+  font-size: 11px; font-weight: 500; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--faint);
+  display: flex; align-items: center; gap: 8px;
+  border-bottom: 2px solid transparent;
+}
+.progress-step.active { color: var(--text); border-bottom-color: var(--text); }
+.progress-step.done { color: var(--sage); }
+.progress-step.done .ps-num { background: var(--sage); color: #fff; }
+.ps-num {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--bg); border: 1px solid var(--border-m);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 600; flex-shrink: 0;
+}
+.progress-step.active .ps-num { background: var(--text); color: #fff; border-color: var(--text); }
+
+/* ── PAGE ── */
+.tool-page { display: none; }
+.tool-page.visible { display: block; }
+
+/* ── STEP 1: SELECT ── */
+.step1-hero {
+  text-align: center;
+  padding: 48px 2.8rem 32px;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+}
+.step1-hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(26px, 3.5vw, 40px);
+  font-weight: 400; margin-bottom: 10px;
+}
+.step1-hero p {
+  font-family: var(--serif-body); font-style: italic;
+  font-size: 15px; color: var(--muted);
+  max-width: 500px; margin: 0 auto;
+}
+.step1-hint {
+  margin-top: 16px;
+  font-size: 12px; color: var(--faint);
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.sel-counter {
+  font-size: 12px; font-weight: 500; color: var(--sage);
+  background: var(--sage-tint); padding: 3px 10px; border-radius: 100px;
+}
+
+/* Category sections */
+.values-body {
+  max-width: 1000px; margin: 0 auto;
+  padding: 2.5rem 2.8rem 8rem;
+}
+.val-category { margin-bottom: 2.5rem; }
+.val-cat-header {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 1rem;
+}
+.val-cat-orb { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.val-cat-name {
+  font-size: 10.5px; font-weight: 500; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--faint);
+}
+.val-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.val-pill {
+  padding: 8px 16px;
+  border-radius: 100px;
+  border: 1px solid var(--border);
+  background: var(--white);
+  font-size: 13px; font-weight: 400;
+  color: var(--text); cursor: pointer;
+  transition: all .18s;
+  user-select: none;
+}
+.val-pill:hover { border-color: var(--border-m); box-shadow: 0 2px 8px rgba(0,0,0,.06); }
+.val-pill.selected {
+  background: var(--text); color: #fff;
+  border-color: var(--text);
+}
+
+/* Sticky footer */
+.sticky-footer {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: rgba(248,247,244,.95);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid var(--border);
+  padding: 16px 2.8rem;
+  display: flex; align-items: center; justify-content: space-between;
+  z-index: 100;
+}
+.sf-left { display: flex; align-items: center; gap: 10px; }
+.sf-chips {
+  display: flex; gap: 5px; flex-wrap: nowrap; overflow: hidden; max-width: 600px;
+}
+.sf-chip {
+  font-size: 11.5px; font-weight: 500;
+  background: var(--text); color: #fff;
+  padding: 4px 10px; border-radius: 100px;
+  white-space: nowrap;
+}
+.sf-more { font-size: 11.5px; color: var(--faint); white-space: nowrap; }
+.btn-next {
+  padding: 0.6rem 1.6rem; border-radius: 100px;
+  background: var(--text); color: #fff;
+  font-size: 13px; font-weight: 500; border: none;
+  transition: opacity .18s;
+  white-space: nowrap; flex-shrink: 0;
+}
+.btn-next:hover { opacity: .8; }
+.btn-next:disabled { opacity: .3; cursor: not-allowed; }
+
+/* ── STEP 2: PRIORITISE ── */
+.step2-wrap {
+  max-width: 720px; margin: 0 auto;
+  padding: 3rem 2.8rem 6rem;
+}
+.step2-wrap h2 {
+  font-family: var(--serif); font-size: 1.6rem; font-weight: 400;
+  margin-bottom: 8px;
+}
+.step2-wrap .sub {
+  font-family: var(--serif-body); font-style: italic;
+  font-size: 14px; color: var(--muted); margin-bottom: 2rem;
+}
+.priority-list { display: flex; flex-direction: column; gap: 8px; }
+.priority-item {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 14px 18px;
+  display: flex; align-items: center; gap: 14px;
+  cursor: grab; transition: box-shadow .18s, border-color .18s;
+  user-select: none;
+}
+.priority-item:active { cursor: grabbing; box-shadow: 0 8px 24px rgba(0,0,0,.12); }
+.priority-item.top5 { border-color: var(--border-m); }
+.pi-rank {
+  font-family: var(--serif); font-size: 1.1rem; font-weight: 400;
+  color: var(--faint); width: 24px; text-align: right; flex-shrink: 0;
+}
+.pi-rank.highlight { color: var(--text); font-weight: 500; }
+.pi-name { flex: 1; font-size: 14.5px; font-weight: 400; }
+.pi-drag {
+  color: var(--faint); cursor: grab; flex-shrink: 0;
+  display: flex; flex-direction: column; gap: 3px;
+}
+.pi-drag span { display: block; width: 16px; height: 2px; background: var(--faint); border-radius: 1px; }
+.pi-remove {
+  background: none; border: none; color: var(--faint);
+  font-size: 16px; cursor: pointer; padding: 0 2px;
+  transition: color .15s; line-height: 1;
+}
+.pi-remove:hover { color: var(--text); }
+
+.top5-divider {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 10.5px; font-weight: 500; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--faint); margin: 4px 0;
+}
+.top5-divider::before, .top5-divider::after {
+  content: ''; flex: 1; height: 1px; background: var(--border);
+}
+
+.step2-actions {
+  display: flex; justify-content: space-between;
+  margin-top: 2rem; gap: 10px;
+}
+.btn-back {
+  padding: 0.55rem 1.2rem; border-radius: 100px;
+  border: 1px solid var(--border-m); background: none;
+  font-size: 13px; color: var(--muted);
+  transition: color .18s, border-color .18s;
+}
+.btn-back:hover { color: var(--text); border-color: var(--text); }
+
+/* ── STEP 3: WERTEKARTE ── */
+.step3-wrap {
+  max-width: 680px; margin: 0 auto;
+  padding: 3rem 2.8rem 6rem;
+}
+.step3-wrap h2 {
+  font-family: var(--serif); font-size: 1.5rem; font-weight: 400; margin-bottom: 6px;
+}
+.step3-wrap .sub {
+  font-family: var(--serif-body); font-style: italic;
+  font-size: 14px; color: var(--muted); margin-bottom: 2.5rem;
+}
+
+/* THE CARD */
+.values-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 2.5rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+.vc-bg-orb {
+  position: absolute; top: -40px; right: -40px;
+  width: 200px; height: 200px; border-radius: 50%;
+  opacity: .07; pointer-events: none;
+}
+.vc-eyebrow {
+  font-size: 10px; font-weight: 500; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--faint); margin-bottom: 6px;
+}
+.vc-title {
+  font-family: var(--serif); font-size: 1.3rem; font-weight: 400;
+  margin-bottom: 4px; position: relative; z-index: 1;
+}
+.vc-date {
+  font-size: 11.5px; color: var(--faint); margin-bottom: 2rem;
+}
+.vc-top5 {
+  display: flex; flex-direction: column; gap: 10px;
+  margin-bottom: 2rem;
+  position: relative; z-index: 1;
+}
+.vc-value-row {
+  display: flex; align-items: center; gap: 14px;
+}
+.vc-num {
+  font-family: var(--serif); font-size: 1.6rem; font-weight: 300;
+  color: var(--faint); width: 32px; text-align: right; flex-shrink: 0;
+  line-height: 1;
+}
+.vc-value-name {
+  font-family: var(--serif); font-size: 1.15rem; font-weight: 400;
+  flex: 1;
+}
+.vc-value-bar {
+  height: 4px; border-radius: 2px; flex: 0 0 auto;
+  transition: width .6s ease;
+}
+.vc-divider { height: 1px; background: var(--border); margin: 1.5rem 0; }
+.vc-more-label {
+  font-size: 10.5px; font-weight: 500; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--faint); margin-bottom: 10px;
+}
+.vc-more-pills {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  position: relative; z-index: 1;
+}
+.vc-pill {
+  font-size: 12px; font-weight: 400;
+  padding: 5px 13px; border-radius: 100px;
+  border: 1px solid var(--border); color: var(--muted);
+}
+.vc-footer {
+  margin-top: 2rem; display: flex; align-items: center; justify-content: space-between;
+  padding-top: 1rem; border-top: 1px solid var(--border);
+}
+.vc-footer-brand { font-family: var(--serif); font-size: 13px; color: var(--faint); letter-spacing: .06em; }
+.vc-footer-note { font-size: 11px; color: var(--faint); font-weight: 300; }
+
+/* Reflection prompts */
+.reflection-box {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 1.4rem 1.6rem;
+  margin-bottom: 1rem;
+}
+.rb-label {
+  font-size: 10px; font-weight: 500; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--faint); margin-bottom: 1rem;
+}
+.rb-prompts { display: flex; flex-direction: column; gap: 10px; }
+.rb-prompt {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 13.5px; color: var(--muted); font-weight: 300;
+  font-family: var(--serif-body); font-style: italic;
+  line-height: 1.6;
+}
+.rb-prompt::before {
+  content: '→'; color: var(--faint); flex-shrink: 0;
+  font-style: normal; font-family: var(--sans); margin-top: 1px;
+}
+
+/* Action buttons */
+.step3-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.btn-save {
+  padding: 0.6rem 1.4rem; border-radius: 100px;
+  background: var(--text); color: #fff;
+  font-size: 13px; font-weight: 500; border: none;
+  display: flex; align-items: center; gap: 6px;
+  transition: opacity .18s;
+}
+.btn-save:hover { opacity: .8; }
+.btn-restart {
+  padding: 0.6rem 1.4rem; border-radius: 100px;
+  border: 1px solid var(--border-m); background: none;
+  font-size: 13px; color: var(--muted);
+  transition: color .18s, border-color .18s;
+}
+.btn-restart:hover { color: var(--text); border-color: var(--text); }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.anim { animation: fadeUp .4s ease forwards; }
+.anim-delay-1 { animation-delay: .08s; opacity: 0; }
+.anim-delay-2 { animation-delay: .16s; opacity: 0; }
+.anim-delay-3 { animation-delay: .24s; opacity: 0; }
+.anim-delay-4 { animation-delay: .32s; opacity: 0; }
+.anim-delay-5 { animation-delay: .40s; opacity: 0; }
+</style>
+  <script src="nav.js"></script>
+</head>
+<body>
+  <div id="site-nav-placeholder"></div>
+
+<!-- NAV -->
+  
+
+<!-- PROGRESS -->
+<div class="progress-bar">
+  <div class="progress-step active" id="ps1">
+    <div class="ps-num">1</div> Werte entdecken
+  </div>
+  <div class="progress-step" id="ps2">
+    <div class="ps-num">2</div> Priorisieren
+  </div>
+  <div class="progress-step" id="ps3">
+    <div class="ps-num">3</div> Deine Wertekarte
+  </div>
+</div>
+
+<!-- ═══════════ STEP 1 ═══════════ -->
+<div class="tool-page visible" id="page1">
+  <div class="step1-hero">
+    <h1>Was ist dir wirklich wichtig?</h1>
+    <p>Wähle alle Werte aus, die sich für dich wahr anfühlen. Kein Richtig oder Falsch.</p>
+    <div class="step1-hint">
+      <span>Ausgewählt:</span>
+      <span class="sel-counter" id="selCounter">0</span>
+      <span style="color:var(--faint);">· Mindestens 5, empfohlen 10–20</span>
+    </div>
+  </div>
+
+  <div class="values-body" id="valuesBody"></div>
+
+  <div class="sticky-footer">
+    <div class="sf-left">
+      <div class="sf-chips" id="sfChips"></div>
+      <span class="sf-more" id="sfMore"></span>
+    </div>
+    <button class="btn-next" id="btnNext1" onclick="goStep2()" disabled>
+      Weiter → Priorisieren
+    </button>
+  </div>
+</div>
+
+<!-- ═══════════ STEP 2 ═══════════ -->
+<div class="tool-page" id="page2">
+  <div class="step2-wrap">
+    <h2>Bringe deine Werte in Reihenfolge</h2>
+    <p class="sub">Welche sind die wichtigsten? Ziehe sie in die richtige Reihenfolge — deine Top 5 werden deine Wertekarte.</p>
+    <div id="priorityList" class="priority-list"></div>
+    <div class="step2-actions">
+      <button class="btn-back" onclick="goStep1()">← Zurück</button>
+      <button class="btn-next" onclick="goStep3()">Wertekarte erstellen →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ STEP 3 ═══════════ -->
+<div class="tool-page" id="page3">
+  <div class="step3-wrap">
+    <h2>Deine persönliche Wertekarte</h2>
+    <p class="sub">Das bist du — in dem, was dir am meisten bedeutet.</p>
+
+    <div class="values-card" id="valuesCard">
+      <div class="vc-bg-orb" id="vcBgOrb"></div>
+      <div class="vc-eyebrow">Mindbloom · Values Finder</div>
+      <div class="vc-title" id="vcTitle">Meine Wertekarte</div>
+      <div class="vc-date" id="vcDate"></div>
+
+      <div class="vc-top5" id="vcTop5"></div>
+
+      <div class="vc-divider"></div>
+      <div class="vc-more-label">Weitere Werte</div>
+      <div class="vc-more-pills" id="vcMore"></div>
+
+      <div class="vc-footer">
+        <span class="vc-footer-brand">Mindbloom</span>
+        <span class="vc-footer-note">mindbloom.de · persönlich & vertraulich</span>
+      </div>
+    </div>
+
+    <div class="reflection-box">
+      <div class="rb-label">Reflexionsfragen zu deinen Werten</div>
+      <div class="rb-prompts" id="reflectionPrompts"></div>
+    </div>
+
+    <div class="step3-actions">
+      <button class="btn-save" onclick="saveCard()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        In Journal speichern
+      </button>
+      <button class="btn-save" onclick="window.print()" style="background:var(--bg);color:var(--text);border:1px solid var(--border-m);">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        Drucken / Speichern
+      </button>
+      <button class="btn-restart" onclick="restart()">Von vorne beginnen</button>
+      <button class="btn-back" onclick="goStep2()">← Bearbeiten</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────
+const CATEGORIES = [
+  {
+    name: 'Beziehungen & Verbundenheit',
+    color: 'var(--g-rose)',
+    dot: '#B890A5',
+    values: ['Liebe','Vertrauen','Loyalität','Freundschaft','Familie','Verbundenheit','Zugehörigkeit','Intimität','Fürsorge','Mitgefühl','Empathie','Offenheit','Wärme','Akzeptanz','Vergeben']
+  },
+  {
+    name: 'Charakter & Integrität',
+    color: 'var(--g-slate)',
+    dot: '#7A9DB5',
+    values: ['Ehrlichkeit','Authentizität','Integrität','Würde','Verlässlichkeit','Verantwortung','Respekt','Gerechtigkeit','Güte','Demut','Mut','Fairness','Transparenz']
+  },
+  {
+    name: 'Wachstum & Lernen',
+    color: 'var(--g-dusk)',
+    dot: '#8A84B8',
+    values: ['Neugier','Lernen','Entwicklung','Kreativität','Innovation','Ausdauer','Resilienz','Offenheit für Neues','Selbstreflexion','Intelligenz','Wissen','Meisterschaft']
+  },
+  {
+    name: 'Freiheit & Selbstbestimmung',
+    color: 'var(--g-amber)',
+    dot: '#BCA870',
+    values: ['Freiheit','Unabhängigkeit','Autonomie','Abenteuer','Spontanität','Flexibilität','Selbstbestimmung','Individualität','Mut zur Veränderung']
+  },
+  {
+    name: 'Leistung & Sinn',
+    color: 'var(--g-sage)',
+    dot: '#8FAF88',
+    values: ['Erfolg','Disziplin','Ambition','Exzellenz','Führung','Beitrag','Vermächtnis','Zweck','Wirksamkeit','Fokus','Produktivität','Einfluss']
+  },
+  {
+    name: 'Wohlbefinden & Ruhe',
+    color: 'var(--g-blush)',
+    dot: '#BF9690',
+    values: ['Gesundheit','Balance','Ruhe','Frieden','Sicherheit','Stabilität','Komfort','Achtsamkeit','Selbstfürsorge','Entspannung','Natur','Einfachheit']
+  },
+  {
+    name: 'Sinn & Spiritualität',
+    color: 'var(--g-gold)',
+    dot: '#B8A050',
+    values: ['Dankbarkeit','Hoffnung','Inspiration','Spiritualität','Sinn','Schönheit','Staunen','Glaube','Harmonie','Transzendenz','Mitgefühl für die Welt']
+  }
+];
+
+const REFLECTION_PROMPTS = {
+  'Liebe': 'Wie zeigt sich Liebe in deinem Alltag — im Kleinen?',
+  'Vertrauen': 'Wann hast du zuletzt jemandem wirklich vertraut — und wie hat sich das angefühlt?',
+  'Ehrlichkeit': 'Gibt es etwas, das du dir selbst noch nicht ehrlich gesagt hast?',
+  'Authentizität': 'In welchen Situationen bist du am meisten du selbst?',
+  'Freiheit': 'Was würdest du tun, wenn du keine Angst vor dem Urteil anderer hättest?',
+  'Neugier': 'Welches Thema fasziniert dich gerade — und warum gehst du ihm nicht mehr nach?',
+  'Mut': 'Was würdest du tun, wenn du weißt, dass du scheitern kannst — und es trotzdem tust?',
+  'Dankbarkeit': 'Was in deinem Leben übersähst du vielleicht gerade, wofür du eigentlich dankbar sein könntest?',
+  'Balance': 'Welcher Bereich deines Lebens braucht gerade mehr Aufmerksamkeit?',
+  'Beitrag': 'Wie möchtest du in zehn Jahren von anderen erinnert werden?',
+  'default': 'Lebst du diesen Wert gerade — oder ist er eher ein Wunsch, den du für die Zukunft hast?'
+};
+
+// ── STATE ──────────────────────────────────────────────────────────
+let selected = new Set();
+let ordered  = [];
+
+// ── STEP 1: RENDER VALUES ─────────────────────────────────────────
+function renderValues() {
+  const body = document.getElementById('valuesBody');
+  CATEGORIES.forEach(cat => {
+    const sec = document.createElement('div');
+    sec.className = 'val-category';
+    sec.innerHTML = `
+      <div class="val-cat-header">
+        <div class="val-cat-orb" style="background:${cat.color};"></div>
+        <span class="val-cat-name">${cat.name}</span>
+      </div>
+      <div class="val-grid">
+        ${cat.values.map(v => `<button class="val-pill" data-val="${v}" onclick="toggleVal(this,'${v}')">${v}</button>`).join('')}
+      </div>`;
+    body.appendChild(sec);
+  });
+}
+
+function toggleVal(btn, val) {
+  if (selected.has(val)) {
+    selected.delete(val);
+    btn.classList.remove('selected');
+  } else {
+    selected.add(val);
+    btn.classList.add('selected');
+  }
+  updateFooter();
+}
+
+function updateFooter() {
+  const arr = Array.from(selected);
+  document.getElementById('selCounter').textContent = arr.length;
+  document.getElementById('btnNext1').disabled = arr.length < 5;
+
+  const chips = document.getElementById('sfChips');
+  const more  = document.getElementById('sfMore');
+  chips.innerHTML = arr.slice(0, 5).map(v => `<div class="sf-chip">${v}</div>`).join('');
+  more.textContent = arr.length > 5 ? `+${arr.length - 5} weitere` : '';
+}
+
+// ── STEP 2: PRIORITISE ────────────────────────────────────────────
+function goStep2() {
+  ordered = Array.from(selected);
+  renderPriorityList();
+  setStep(2);
+  window.scrollTo(0, 0);
+}
+
+function renderPriorityList() {
+  const list = document.getElementById('priorityList');
+  list.innerHTML = '';
+
+  ordered.forEach((val, i) => {
+    // divider before item 6
+    if (i === 5) {
+      const div = document.createElement('div');
+      div.className = 'top5-divider';
+      div.textContent = 'Weitere Werte';
+      list.appendChild(div);
+    }
+
+    const item = document.createElement('div');
+    item.className = 'priority-item' + (i < 5 ? ' top5' : '');
+    item.dataset.val = val;
+    item.draggable = true;
+    item.innerHTML = `
+      <span class="pi-rank${i < 5 ? ' highlight' : ''}">${i + 1}</span>
+      <span class="pi-name">${val}</span>
+      <button class="pi-remove" onclick="removeFromList('${val}')" title="Entfernen">✕</button>
+      <div class="pi-drag"><span></span><span></span><span></span></div>`;
+
+    // drag events
+    item.addEventListener('dragstart', e => {
+      e.dataTransfer.setData('text/plain', i);
+      item.style.opacity = '.4';
+    });
+    item.addEventListener('dragend', () => item.style.opacity = '');
+    item.addEventListener('dragover', e => { e.preventDefault(); item.style.background = '#F0F4EE'; });
+    item.addEventListener('dragleave', () => item.style.background = '');
+    item.addEventListener('drop', e => {
+      e.preventDefault();
+      item.style.background = '';
+      const from = parseInt(e.dataTransfer.getData('text/plain'));
+      const to   = i;
+      if (from === to) return;
+      const tmp = ordered[from];
+      ordered.splice(from, 1);
+      ordered.splice(to, 0, tmp);
+      renderPriorityList();
+    });
+
+    list.appendChild(item);
+  });
+}
+
+function removeFromList(val) {
+  ordered = ordered.filter(v => v !== val);
+  selected.delete(val);
+  // also deselect in step 1
+  const btn = document.querySelector(`.val-pill[data-val="${val}"]`);
+  if (btn) btn.classList.remove('selected');
+  updateFooter();
+  renderPriorityList();
+}
+
+// ── STEP 3: CARD ──────────────────────────────────────────────────
+const GRADIENTS = ['var(--g-sage)','var(--g-dusk)','var(--g-blush)','var(--g-slate)','var(--g-amber)'];
+const WIDTHS    = ['100%','85%','72%','60%','50%'];
+
+function goStep3() {
+  const top5 = ordered.slice(0, 5);
+  const rest  = ordered.slice(5);
+
+  // bg orb colour matches #1 value category
+  const catColor = getCatColor(top5[0]) || 'var(--g-sage)';
+  document.getElementById('vcBgOrb').style.background = catColor;
+
+  // date
+  const now = new Date();
+  document.getElementById('vcDate').textContent =
+    now.toLocaleDateString('de-DE', { day:'numeric', month:'long', year:'numeric' });
+
+  // top 5
+  const top5El = document.getElementById('vcTop5');
+  top5El.innerHTML = '';
+  top5.forEach((val, i) => {
+    const row = document.createElement('div');
+    row.className = `vc-value-row anim anim-delay-${i+1}`;
+    row.innerHTML = `
+      <span class="vc-num">${i+1}</span>
+      <span class="vc-value-name">${val}</span>
+      <div class="vc-value-bar" style="background:${GRADIENTS[i]};width:${WIDTHS[i]};max-width:80px;"></div>`;
+    top5El.appendChild(row);
+  });
+
+  // rest
+  const moreEl = document.getElementById('vcMore');
+  moreEl.innerHTML = rest.map(v => `<div class="vc-pill">${v}</div>`).join('');
+  if (rest.length === 0) {
+    document.querySelector('.vc-more-label').style.display = 'none';
+    moreEl.style.display = 'none';
+    document.querySelector('.vc-divider').style.display = 'none';
+  }
+
+  // reflection prompts — pick 3 relevant ones
+  const prompts = document.getElementById('reflectionPrompts');
+  const picks = top5.slice(0,3).map(val =>
+    REFLECTION_PROMPTS[val] || REFLECTION_PROMPTS['default']
+  );
+  prompts.innerHTML = picks.map(p => `<div class="rb-prompt">${p}</div>`).join('');
+
+  setStep(3);
+  window.scrollTo(0, 0);
+}
+
+function getCatColor(val) {
+  for (const cat of CATEGORIES) {
+    if (cat.values.includes(val)) return cat.color;
+  }
+  return null;
+}
+
+function goStep1() { setStep(1); window.scrollTo(0,0); }
+
+function setStep(n) {
+  [1,2,3].forEach(i => {
+    document.getElementById('page' + i).classList.toggle('visible', i === n);
+    const ps = document.getElementById('ps' + i);
+    ps.classList.toggle('active', i === n);
+    ps.classList.toggle('done', i < n);
+  });
+}
+
+function restart() {
+  selected.clear();
+  ordered = [];
+  document.querySelectorAll('.val-pill').forEach(p => p.classList.remove('selected'));
+  updateFooter();
+  document.querySelector('.vc-more-label').style.display = '';
+  document.getElementById('vcMore').style.display = '';
+  document.querySelector('.vc-divider').style.display = '';
+  setStep(1);
+  window.scrollTo(0,0);
+}
+
+function saveCard() {
+  alert('In einer echten App würde die Wertekarte direkt in deinem Journal gespeichert werden.');
+}
+
+// ── INIT ──────────────────────────────────────────────────────────
+renderValues();
+</script>
+</body>
+</html>

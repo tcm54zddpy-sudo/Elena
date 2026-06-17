@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mindbloom — Circle of Control</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Mulish:wght@300;400;500&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg:#F8F7F4; --white:#FFFFFF;
+  --border:rgba(0,0,0,.08); --border-m:rgba(0,0,0,.13);
+  --text:#1A1A1A; --muted:#6B6B6B; --faint:#ABABAB;
+  --g-sage:linear-gradient(135deg,#C8D8C0,#8FAF88);
+  --g-dusk:linear-gradient(135deg,#C4C0DC,#8A84B8);
+  --sage-tint:#F0F4EE; --dusk-tint:#EEEDF6;
+  --sage:#5A8050; --dusk:#6A64A0;
+  --serif:'Playfair Display',Georgia,serif;
+  --lora:'Lora',Georgia,serif;
+  --sans:'Mulish',sans-serif;
+  --r:16px;
+}
+html { scroll-behavior:smooth; }
+body { background:var(--bg); color:var(--text); font-family:var(--sans); font-weight:300; font-size:15px; line-height:1.75; -webkit-font-smoothing:antialiased; min-height:100vh; }
+a { text-decoration:none; color:inherit; }
+button { cursor:pointer; font-family:var(--sans); border:none; }
+
+/* ── NAV ── */
+
+/* ══════════ PHASE 1: ADD ══════════ */
+#phaseAdd { max-width:680px; margin:0 auto; padding:2.5rem 1.6rem; }
+.add-hero { text-align:center; margin-bottom:2rem; }
+.add-hero h1 { font-family:var(--serif); font-size:clamp(22px,4vw,34px); font-weight:400; margin-bottom:10px; }
+.add-hero p { font-family:var(--lora); font-style:italic; font-size:14.5px; color:var(--muted); max-width:460px; margin:0 auto; line-height:1.7; }
+.input-row { display:flex; gap:8px; margin-bottom:1.2rem; }
+.thought-input { flex:1; border:1px solid var(--border-m); border-radius:100px; padding:11px 18px; font-family:var(--sans); font-size:14px; font-weight:300; color:var(--text); background:var(--white); outline:none; transition:box-shadow .18s; }
+.thought-input:focus { box-shadow:0 2px 12px rgba(0,0,0,.08); }
+.thought-input::placeholder { color:var(--faint); }
+.btn-add { padding:0 20px; height:46px; border-radius:100px; background:var(--text); color:#fff; font-size:13px; font-weight:500; border:none; display:flex; align-items:center; gap:6px; transition:opacity .18s; flex-shrink:0; }
+.btn-add:hover { opacity:.8; } .btn-add:disabled { opacity:.3; cursor:not-allowed; }
+.starter-label { font-size:10.5px; font-weight:500; letter-spacing:.1em; text-transform:uppercase; color:var(--faint); margin-bottom:.7rem; }
+.starter-chips { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:2rem; }
+.starter-chip { padding:5px 13px; border-radius:100px; border:1px solid var(--border); background:var(--white); font-size:12.5px; color:var(--muted); cursor:pointer; transition:all .15s; }
+.starter-chip:hover { border-color:var(--border-m); }
+.card-preview { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:2rem; min-height:44px; }
+.preview-card { background:var(--white); border:1px solid var(--border); border-radius:var(--r); padding:8px 14px; font-size:13.5px; display:flex; align-items:center; gap:8px; }
+.preview-remove { background:none; border:none; color:var(--faint); font-size:14px; cursor:pointer; line-height:1; padding:0; }
+.preview-remove:hover { color:var(--text); }
+.btn-sort { width:100%; padding:.7rem; border-radius:100px; background:var(--text); color:#fff; font-size:14px; font-weight:500; border:none; transition:opacity .18s; }
+.btn-sort:hover { opacity:.8; } .btn-sort:disabled { opacity:.3; cursor:not-allowed; }
+.btn-sort-note { text-align:center; font-size:12px; color:var(--faint); margin-top:8px; }
+
+/* ══════════ PHASE 2+3: CIRCLE VIEW ══════════ */
+#phaseCircle { display:none; }
+
+.circle-header { text-align:center; padding:1.2rem 1.6rem .6rem; }
+.circle-header p { font-size:13px; color:var(--muted); }
+.circle-header strong { font-weight:500; color:var(--text); }
+
+/* ── DIAGRAM ── */
+.diagram-wrap { display:flex; flex-direction:column; align-items:center; padding:.5rem 1rem; }
+
+.outer-circle {
+  position:relative;
+  width:560px; height:560px; border-radius:50%;
+  border:2px solid rgba(106,100,160,.35);
+  background:radial-gradient(ellipse at center,rgba(238,237,246,.5) 0%,rgba(238,237,246,.15) 60%,transparent 100%);
+  display:flex; align-items:center; justify-content:center;
+  transition:border-color .3s, background .3s;
+  cursor:crosshair;
+  flex-shrink:0;
+}
+.outer-circle.drag-over-outer {
+  border-color:rgba(106,100,160,.65);
+  background:radial-gradient(ellipse at center,rgba(238,237,246,.75) 0%,rgba(238,237,246,.35) 60%,transparent 100%);
+}
+.outer-label {
+  position:absolute; top:22px; left:50%; transform:translateX(-50%);
+  font-family:var(--serif); font-size:.95rem; font-weight:400;
+  color:rgba(106,100,160,.65); white-space:nowrap; pointer-events:none; z-index:2;
+}
+
+.inner-circle {
+  position:relative;
+  width:220px; height:220px; border-radius:50%;
+  border:2px solid rgba(90,128,80,.45);
+  background:radial-gradient(ellipse at center,rgba(240,244,238,.95) 0%,rgba(240,244,238,.6) 100%);
+  display:flex; align-items:center; justify-content:center;
+  z-index:5; flex-shrink:0;
+  transition:border-color .3s, background .3s;
+  cursor:crosshair;
+}
+.inner-circle.drag-over-inner {
+  border-color:rgba(90,128,80,.8);
+  background:radial-gradient(ellipse at center,rgba(200,216,192,.65) 0%,rgba(240,244,238,.85) 100%);
+}
+.inner-label {
+  position:absolute; top:16px; left:0; right:0;
+  text-align:center;
+  font-family:var(--serif); font-size:.82rem; font-weight:400;
+  color:rgba(90,128,80,.75); pointer-events:none; z-index:2; line-height:1.3;
+}
+
+/* cards inside inner circle */
+.inner-cards {
+  position:absolute; inset:0; border-radius:50%;
+  display:flex; flex-wrap:wrap; gap:5px;
+  align-content:center; justify-content:center;
+  padding:42px 14px 14px; overflow:hidden; z-index:3;
+}
+.zone-card {
+  font-size:11.5px; font-weight:400;
+  background:rgba(255,255,255,.92); border:1px solid rgba(90,128,80,.3);
+  border-radius:100px; padding:4px 11px; color:var(--text);
+  cursor:pointer; white-space:nowrap; max-width:100px;
+  overflow:hidden; text-overflow:ellipsis;
+  transition:background .15s, transform .15s;
+  position:relative;
+}
+.zone-card:hover { background:rgba(200,216,192,.4); }
+
+/* badge on zone-card */
+.zone-card .card-badge {
+  position:absolute; top:-5px; right:-4px;
+  width:14px; height:14px; border-radius:50%;
+  font-size:8px; display:flex; align-items:center; justify-content:center;
+  font-weight:700; pointer-events:none;
+}
+.zone-card .badge-ok  { background:var(--sage); color:#fff; }
+.zone-card .badge-mov { background:var(--dusk); color:#fff; }
+
+/* ring cards — positioned absolutely */
+.ring-cards-layer { position:absolute; inset:0; border-radius:50%; pointer-events:none; z-index:3; }
+.ring-card {
+  position:absolute; transform:translate(-50%,-50%);
+  font-size:11.5px; font-weight:400;
+  background:rgba(255,255,255,.9); border:1px solid rgba(106,100,160,.25);
+  border-radius:100px; padding:4px 11px; color:var(--text);
+  pointer-events:auto; cursor:pointer; white-space:nowrap;
+  max-width:120px; overflow:hidden; text-overflow:ellipsis;
+  transition:background .15s;
+  position:absolute;
+}
+.ring-card:hover { background:rgba(196,192,220,.25); }
+.ring-card .card-badge {
+  position:absolute; top:-5px; right:-4px;
+  width:14px; height:14px; border-radius:50%;
+  font-size:8px; display:flex; align-items:center; justify-content:center;
+  font-weight:700; pointer-events:none;
+}
+
+/* ── UNSORTED TRAY ── */
+.unsorted-tray-wrap { width:100%; max-width:580px; margin-top:1.2rem; }
+.unsorted-tray-label { text-align:center; font-size:10.5px; font-weight:500; letter-spacing:.1em; text-transform:uppercase; color:var(--faint); margin-bottom:.6rem; }
+.unsorted-tray { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; min-height:44px; }
+.unsorted-card { background:var(--white); border:1px solid var(--border-m); border-radius:100px; padding:8px 16px; font-size:13px; cursor:grab; user-select:none; transition:box-shadow .18s, transform .15s; display:flex; align-items:center; gap:6px; }
+.unsorted-card:hover { box-shadow:0 4px 14px rgba(0,0,0,.1); transform:translateY(-1px); }
+.unsorted-card:active { cursor:grabbing; }
+.unsorted-card.dragging { opacity:.3; }
+.tap-btns { display:none; flex-direction:column; gap:4px; margin-top:5px; }
+.tap-btn { padding:4px 12px; border-radius:100px; font-size:11px; font-weight:500; border:none; cursor:pointer; }
+.tap-btn.can    { background:var(--sage-tint); color:var(--sage); }
+.tap-btn.cannot { background:var(--dusk-tint); color:var(--dusk); }
+.click-hint { text-align:center; font-size:11.5px; color:var(--faint); margin-top:.6rem; font-style:italic; font-family:var(--lora); }
+
+/* ── FOOTER BUTTONS ── */
+.circle-foot { text-align:center; padding:.8rem 1.6rem 1.5rem; }
+.btn-reflect { padding:.6rem 2rem; border-radius:100px; background:var(--text); color:#fff; font-size:13px; font-weight:500; border:none; transition:opacity .18s; }
+.btn-reflect:hover { opacity:.8; } .btn-reflect:disabled { opacity:.3; cursor:not-allowed; }
+.foot-progress { font-size:12px; color:var(--faint); margin-top:6px; }
+
+/* ── INSIGHT PANEL — slides up from bottom ── */
+.insight-panel {
+  position:fixed; bottom:0; left:0; right:0; z-index:200;
+  background:var(--white);
+  border-top:1px solid var(--border);
+  border-radius:20px 20px 0 0;
+  box-shadow:0 -8px 40px rgba(0,0,0,.1);
+  transform:translateY(100%);
+  transition:transform .6s cubic-bezier(.4,0,.2,1);
+  max-height:60vh; overflow-y:auto;
+}
+.insight-panel.open { transform:translateY(0); }
+
+.ip-handle { display:flex; justify-content:center; padding:12px 0 0; cursor:pointer; }
+.ip-handle::before { content:''; width:36px; height:4px; border-radius:2px; background:var(--border-m); }
+.ip-inner { padding:0 1.6rem 2rem; }
+.ip-title { font-family:var(--serif); font-size:1.1rem; font-weight:400; margin-bottom:.3rem; }
+.ip-sub { font-family:var(--lora); font-style:italic; font-size:13px; color:var(--muted); margin-bottom:1.4rem; line-height:1.6; }
+
+.ip-cards { display:flex; flex-direction:column; gap:10px; margin-bottom:1.4rem; }
+.ip-card { border-radius:var(--r); padding:13px 15px; border:1px solid var(--border); }
+.ip-card.ip-can    { border-left:3px solid var(--sage); background:var(--white); }
+.ip-card.ip-cannot { border-left:3px solid var(--dusk); background:var(--white); }
+.ip-badge { display:inline-flex; align-items:center; gap:5px; font-size:10px; font-weight:500; letter-spacing:.05em; padding:2px 8px; border-radius:100px; margin-bottom:6px; }
+.ip-badge.ok  { background:var(--sage-tint); color:var(--sage); }
+.ip-badge.mov { background:var(--dusk-tint); color:var(--dusk); }
+.ip-name { font-size:14px; font-weight:400; margin-bottom:6px; }
+.ip-insight { font-family:var(--lora); font-style:italic; font-size:13px; color:var(--muted); line-height:1.6; border-top:1px solid var(--border); padding-top:8px; margin-top:2px; }
+.step-row { display:flex; align-items:center; gap:6px; margin-top:8px; }
+.step-label { font-size:11px; color:var(--faint); white-space:nowrap; flex-shrink:0; }
+.step-inp { flex:1; border:none; border-bottom:1px solid var(--border); background:transparent; outline:none; font-family:var(--sans); font-size:13px; font-weight:300; color:var(--text); padding:3px 0; transition:border-color .18s; }
+.step-inp:focus { border-bottom-color:var(--sage); }
+.step-inp::placeholder { color:var(--faint); }
+
+.ip-quote { background:linear-gradient(135deg,rgba(200,216,192,.12),rgba(196,192,220,.1)); border:1px solid var(--border); border-radius:var(--r); padding:1.2rem 1.4rem; margin-bottom:1.2rem; }
+.ip-quote-text { font-family:var(--lora); font-style:italic; font-size:14px; color:var(--muted); line-height:1.75; text-align:center; }
+.ip-actions { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+.btn-primary { padding:.6rem 1.4rem; border-radius:100px; background:var(--text); color:#fff; font-size:13px; font-weight:500; border:none; transition:opacity .18s; }
+.btn-primary:hover { opacity:.8; }
+.btn-secondary { padding:.55rem 1.2rem; border-radius:100px; border:1px solid var(--border-m); background:none; font-size:13px; color:var(--muted); transition:color .18s,border-color .18s; }
+.btn-secondary:hover { color:var(--text); border-color:var(--text); }
+
+/* ── FLYING CARD ── */
+.flying-card {
+  position:fixed; z-index:9999; pointer-events:none;
+  border-radius:100px; padding:6px 14px; font-size:12.5px;
+  box-shadow:0 10px 32px rgba(0,0,0,.18);
+  white-space:nowrap;
+}
+.flying-card.fc-can    { background:var(--sage-tint); border:1px solid rgba(90,128,80,.4); color:var(--text); }
+.flying-card.fc-cannot { background:var(--dusk-tint); border:1px solid rgba(106,100,160,.3); color:var(--text); }
+
+/* ── INSIGHT TOOLTIP on circle ── */
+.circle-insight {
+  position:absolute; z-index:20;
+  background:rgba(26,26,26,.88); color:#fff;
+  font-family:var(--lora); font-style:italic;
+  font-size:12px; line-height:1.55;
+  padding:10px 14px; border-radius:10px;
+  max-width:220px; pointer-events:none;
+  opacity:0; transition:opacity .4s;
+  left:50%; transform:translateX(-50%);
+  bottom:18px;
+  text-align:center;
+}
+.circle-insight.visible { opacity:1; }
+.circle-insight::after {
+  content:''; position:absolute; top:100%; left:50%; transform:translateX(-50%);
+  border:6px solid transparent; border-top-color:rgba(26,26,26,.88);
+}
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+.anim { animation:fadeUp .35s ease forwards; }
+
+/* ── RESPONSIVE ── */
+@media(max-width:620px) {
+  .outer-circle { width:320px; height:320px; }
+  .inner-circle { width:130px; height:130px; }
+  .outer-label  { font-size:.75rem; top:14px; }
+  .inner-label  { font-size:.68rem; top:10px; }
+  .zone-card    { font-size:9.5px; padding:3px 8px; max-width:64px; }
+  .ring-card    { font-size:9.5px; padding:3px 8px; max-width:80px; }
+  .tap-btns     { display:flex; }
+  .insight-panel { max-height:70vh; }
+}
+</style>
+  <script src="nav.js"></script>
+</head>
+<body>
+  <div id="site-nav-placeholder"></div>
+
+<!-- NAV -->
+  
+
+<!-- ══════════ PHASE 1: ADD ══════════ -->
+<div id="phaseAdd">
+  <div class="add-hero">
+    <h1>Circle of Control</h1>
+    <p>Was beschäftigt dich gerade? Schreib alles auf — dann sortieren wir es gemeinsam in die Kreise.</p>
+  </div>
+  <div class="input-row">
+    <input class="thought-input" id="addInput" maxlength="55"
+      placeholder="z.B. meine Prüfung, was andere denken …"
+      oninput="onAddInput(this.value)"
+      onkeydown="if(event.key==='Enter')addCard()">
+    <button class="btn-add" id="addBtn" onclick="addCard()" disabled>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+      Hinzufügen
+    </button>
+  </div>
+  <div class="starter-label">Oder wähle einen Vorschlag</div>
+  <div class="starter-chips" id="starterChips"></div>
+  <div class="card-preview" id="cardPreview"></div>
+  <button class="btn-sort" id="btnSort" onclick="goCircle()" disabled>Jetzt einsortieren →</button>
+  <div class="btn-sort-note">Mindestens 1 Gedanke — danach ziehst du die Karten in die Kreise</div>
+</div>
+
+<!-- ══════════ PHASE 2+3: CIRCLES ══════════ -->
+<div id="phaseCircle">
+  <div class="circle-header">
+    <p id="circleHeaderText">Ziehe jede Karte in den richtigen Kreis. <strong>Vertrau deiner ersten Intuition.</strong></p>
+  </div>
+
+  <div class="diagram-wrap">
+    <div class="outer-circle" id="outerCircle"
+      ondragover="onDragOverOuter(event)" ondragleave="onDragLeaveOuter(event)" ondrop="onDropOuter(event)">
+
+      <div class="outer-label">Nicht in meiner Kontrolle</div>
+      <div class="ring-cards-layer" id="ringCardsLayer"></div>
+
+      <!-- Insight tooltip shown in center during reflection -->
+      <div class="circle-insight" id="circleInsight"></div>
+
+      <div class="inner-circle" id="innerCircle"
+        ondragover="onDragOverInner(event)" ondragleave="onDragLeaveInner(event)" ondrop="onDropInner(event)">
+        <div class="inner-label">In meiner<br>Kontrolle</div>
+        <div class="inner-cards" id="innerCards"></div>
+      </div>
+    </div>
+
+    <!-- Unsorted tray -->
+    <div class="unsorted-tray-wrap" id="unsortedWrap">
+      <div class="unsorted-tray-label" id="unsortedLabel">Noch einsortieren</div>
+      <div class="unsorted-tray" id="unsortedTray"></div>
+      <div class="click-hint" id="clickHint" style="display:none;">Karte im Kreis anklicken → zurück ins Tablett</div>
+    </div>
+  </div>
+
+  <div class="circle-foot" id="circleFoot">
+    <button class="btn-reflect" id="btnReflect" onclick="startReflection()" disabled>Reflexion starten →</button>
+    <div class="foot-progress" id="footProgress"></div>
+  </div>
+</div>
+
+<!-- ══════════ INSIGHT PANEL (slides up) ══════════ -->
+<div class="insight-panel" id="insightPanel">
+  <div class="ip-handle" onclick="togglePanel()"></div>
+  <div class="ip-inner">
+    <div class="ip-title">Das hast du gerade sortiert.</div>
+    <div class="ip-sub">Einige Karten haben sich leise verschoben — schau, was der Kreis dir zeigt.</div>
+    <div class="ip-cards" id="ipCards"></div>
+    <div class="ip-quote">
+      <div class="ip-quote-text">„Energie ist oft am besten investiert in Dinge, die wir beeinflussen können. Nicht alles liegt in unserer Hand — und das ist in Ordnung."</div>
+    </div>
+    <div class="ip-actions">
+      <button class="btn-primary" onclick="restart()">Von vorne beginnen</button>
+      <a href="tools.html" class="btn-secondary">← Zurück zu den Tools</a>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+// KNOWLEDGE BASE
+// ═══════════════════════════════════════════════════════════════════
+const KB = [
+  { kw:['vergangenheit','vergangen','damals','früher','was war','passiert ist'], correct:'cannot',
+    insight_cannot:'Die Vergangenheit kann nicht verändert werden. Du kannst jedoch beeinflussen, welche Bedeutung du ihr heute gibst.',
+    insight_wrong:'Die Vergangenheit liegt außerhalb unserer Kontrolle. Beeinflussbar bleibt deine heutige Reaktion darauf.' },
+  { kw:['andere menschen','andere leute','was andere','wie andere','wie mein chef','wie meine eltern','wie mein partner','wie meine freunde'], correct:'cannot',
+    insight_cannot:'Das Verhalten anderer Menschen liegt außerhalb deiner Kontrolle. Du kannst beeinflussen, wie du kommunizierst und reagierst.',
+    insight_wrong:'Andere Menschen können wir nicht kontrollieren. Beeinflussbar bleibt, wie du auf sie reagierst.' },
+  { kw:['mein ex','ob er zurück','ob sie zurück','zurückkommt','zurück will'], correct:'cannot',
+    insight_cannot:'Die Entscheidungen anderer liegen außerhalb deiner Kontrolle. Beeinflussbar ist, wie du für dich sorgst.',
+    insight_wrong:'Die Entscheidungen eines Ex-Partners können wir nicht kontrollieren.' },
+  { kw:['meinung','was andere denken','wie andere mich','ob alle mich mögen','gemocht werden','gerede','kritik anderer'], correct:'cannot',
+    insight_cannot:'Du kannst dein Verhalten beeinflussen, aber nicht die Gedanken oder Gefühle anderer Menschen.',
+    insight_wrong:'Die Meinung anderer liegt außerhalb unserer Kontrolle. Beeinflussbar ist, wie authentisch du bist.' },
+  { kw:['wetter','regen','sonne','sturm'], correct:'cannot',
+    insight_cannot:'Das Wetter können wir nicht kontrollieren. Wir können uns aber darauf einstellen.',
+    insight_wrong:'Das Wetter liegt definitiv außerhalb deiner Kontrolle.' },
+  { kw:['politik','nachrichten','wirtschaft','krise','krieg','inflation','regierung'], correct:'cannot',
+    insight_cannot:'Große gesellschaftliche Entwicklungen liegen außerhalb deiner direkten Kontrolle.',
+    insight_wrong:'Diese Dinge liegen außerhalb deiner direkten Kontrolle. Beeinflussbar bleibt, wie du damit umgehst.' },
+  { kw:['zufall','glück','pech','unfall','unerwartete','schicksal'], correct:'cannot',
+    insight_cannot:'Zufällige Ereignisse liegen per Definition außerhalb unserer Kontrolle.',
+    insight_wrong:'Unerwartete Ereignisse können wir nicht vorhersehen. Beeinflussbar bleibt unsere Reaktion.' },
+  { kw:['ob mein chef','ob meine chefin','ob sie mich einstellen','ob ich die stelle bekomme','absage','zusage'], correct:'cannot',
+    insight_cannot:'Die Entscheidung liegt beim Unternehmen. Beeinflussbar ist, wie gut du dich vorbereitest.',
+    insight_wrong:'Ob du eingestellt wirst, entscheiden andere. Was du beeinflussen kannst: die Qualität deiner Vorbereitung.' },
+  { kw:['meine reaktion','wie ich reagiere','mein verhalten','meine einstellung','mein umgang'], correct:'can',
+    insight_can:'Deine Reaktionen und dein Verhalten liegen vollständig in deiner Hand — auch wenn es sich manchmal nicht so anfühlt.',
+    insight_wrong:'Tatsächlich hast du hier mehr Einfluss als du vielleicht denkst. Deine Reaktionen sind beeinflussbar.' },
+  { kw:['lernzeit','lernplan','wie ich lerne','wann ich lerne','vorbereitung','lernen','studieren'], correct:'can',
+    insight_can:'Du kannst beeinflussen, wie sorgfältig und regelmäßig du lernst, wann du anfängst und welche Methoden du verwendest.',
+    insight_wrong:'Wann und wie du lernst, liegt tatsächlich in deiner Hand.' },
+  { kw:['mein bewerbungsschreiben','bewerbung','lebenslauf'], correct:'can',
+    insight_can:'Du kannst beeinflussen, wie sorgfältig und authentisch du dich bewirbst.',
+    insight_wrong:'Wie du dich vorbereitest und bewirbst, liegt vollständig in deiner Hand.' },
+  { kw:['meine gewohnheiten','routine','schlafen','schlaf','ernährung','sport','bewegung','meditation'], correct:'can',
+    insight_can:'Gewohnheiten entstehen durch bewusste Entscheidungen, die sich wiederholen. Du hast hier echten Einfluss.',
+    insight_wrong:'Deine Gewohnheiten sind beeinflussbar. Kleine, regelmäßige Schritte wirken auf Dauer.' },
+  { kw:['meine entscheidungen','was ich wähle','meine wahl'], correct:'can',
+    insight_can:'Entscheidungen — auch schwierige — liegen in deiner Hand. Du kannst sie bewusst treffen.',
+    insight_wrong:'Deine eigenen Entscheidungen sind ein Kernbereich deiner Kontrolle.' },
+  { kw:['wie ich kommuniziere','was ich sage','grenzen setzen','nein sagen'], correct:'can',
+    insight_can:'Wie du kommunizierst und wie du Grenzen setzt — das liegt in deiner Hand und ist übbar.',
+    insight_wrong:'Deine Kommunikation und wie du Grenzen setzt, sind beeinflussbar.' },
+  { kw:['meine prüfung bestehen','ob ich bestehe','prüfungsergebnis'], correct:'cannot',
+    insight_cannot:'Das konkrete Ergebnis hängt von vielen Faktoren ab. Was du beeinflussen kannst: wie gründlich du dich vorbereitest.',
+    insight_wrong:'Das Ergebnis liegt nicht vollständig in deiner Hand. Deine Vorbereitung schon.' },
+  { kw:['die zukunft','was kommt','was passieren wird'], correct:'cannot',
+    insight_cannot:'Die Zukunft ist ungewiss. Du kannst sie vorbereiten, aber nicht kontrollieren.',
+    insight_wrong:'Die Zukunft liegt außerhalb unserer Kontrolle. Beeinflussbar sind deine heutigen Entscheidungen.' },
+];
+
+const STARTERS = ['Meine Prüfung','Was andere denken','Meine Lernzeit','Die Vergangenheit','Meine Gewohnheiten','Das Wetter','Meine Reaktionen','Mein Ex-Partner','Wie ich kommuniziere','Unerwartete Ereignisse','Meine Entscheidungen','Die Meinung meines Chefs','Wie ich mit Stress umgehe','Nachrichten & Politik'];
+const STEP_PROMPTS = ['Was ist ein kleiner Schritt, den du heute tun kannst?','Was wäre der kleinste nächste Schritt?','Welche Aktion ist heute möglich?'];
+
+function classify(text) {
+  const l = text.toLowerCase();
+  for (const e of KB) { if (e.kw.some(k => l.includes(k))) return e; }
+  const cno = ['andere','jemand',' ob ','alle','niemand','ob er','ob sie','ob mein','ob meine'];
+  const cya = ['meine ','mein ','ich ','wie ich','was ich','ob ich'];
+  const ns = cno.filter(h => l.includes(h)).length;
+  const ys = cya.filter(h => l.includes(h)).length;
+  if (ns > ys) return { correct:'cannot', insight_cannot:'Das liegt wahrscheinlich außerhalb deiner direkten Kontrolle.', insight_wrong:'Dieser Gedanke betrifft möglicherweise etwas außerhalb deiner Kontrolle.' };
+  if (ys > 0)  return { correct:'can',    insight_can:'Du hast hier echten Einfluss. Was wäre ein konkreter nächster Schritt?', insight_wrong:'Das scheint tatsächlich beeinflussbar zu sein.' };
+  return null;
+}
+
+// ── STATE ────────────────────────────────────────────────────────────
+let cards = [];
+let cardIdCounter = 0;
+let usedStarters = new Set();
+let dragId = null;
+let reflectionActive = false;
+
+// Ring slot positions: spread evenly, avoiding top (where label is) and center
+const RING_SLOTS = [];
+for (let i = 0; i < 20; i++) {
+  const angle = (i / 20) * 2 * Math.PI + 0.4; // offset so top slot avoids label
+  const r = 38 + (i % 4) * 3.5; // 38–49.5% radius
+  RING_SLOTS.push({ x: 50 + r * Math.cos(angle), y: 50 + r * Math.sin(angle) });
+}
+
+// ── PHASE 1 ──────────────────────────────────────────────────────────
+function renderStarters() {
+  const wrap = document.getElementById('starterChips');
+  STARTERS.forEach(s => {
+    const btn = document.createElement('button');
+    btn.className = 'starter-chip'; btn.textContent = s;
+    btn.onclick = () => {
+      if (usedStarters.has(s)) return;
+      usedStarters.add(s); btn.style.opacity = '.35'; btn.style.pointerEvents = 'none';
+      pushCard(s);
+    };
+    wrap.appendChild(btn);
+  });
+}
+function onAddInput(val) { document.getElementById('addBtn').disabled = !val.trim(); }
+function addCard() {
+  const inp = document.getElementById('addInput');
+  const text = inp.value.trim(); if (!text) return;
+  pushCard(text); inp.value = ''; inp.focus();
+  document.getElementById('addBtn').disabled = true;
+}
+function pushCard(text) { cards.push({ id:++cardIdCounter, text, zone:null, slotIdx:null }); renderPreview(); updateSortBtn(); }
+function removeCard(id) { cards = cards.filter(c => c.id !== id); renderPreview(); updateSortBtn(); }
+function renderPreview() {
+  const wrap = document.getElementById('cardPreview'); wrap.innerHTML = '';
+  cards.forEach(c => {
+    const el = document.createElement('div');
+    el.className = 'preview-card';
+    el.innerHTML = `<span>${c.text}</span><button class="preview-remove" onclick="removeCard(${c.id})">✕</button>`;
+    wrap.appendChild(el);
+  });
+}
+function updateSortBtn() { document.getElementById('btnSort').disabled = cards.length < 1; }
+
+function goCircle() {
+  document.getElementById('phaseAdd').style.display = 'none';
+  document.getElementById('phaseCircle').style.display = 'block';
+  cards.forEach(c => { c.zone = null; c.slotIdx = null; });
+  renderCircle(); window.scrollTo(0, 0);
+}
+
+// ── PHASE 2: RENDER CIRCLES ──────────────────────────────────────────
+function renderCircle() {
+  renderUnsorted(); renderInnerCards(); renderRingCards(); updateReflectBtn();
+}
+
+function renderUnsorted() {
+  if (reflectionActive) return;
+  const tray = document.getElementById('unsortedTray'); tray.innerHTML = '';
+  const unsorted = cards.filter(c => !c.zone);
+  document.getElementById('unsortedLabel').style.display = unsorted.length ? '' : 'none';
+  document.getElementById('clickHint').style.display = cards.some(c => c.zone) ? '' : 'none';
+  unsorted.forEach(c => {
+    const el = document.createElement('div');
+    el.className = 'unsorted-card'; el.draggable = true; el.dataset.id = c.id;
+    el.innerHTML = `<span>${c.text}</span><div class="tap-btns"><button class="tap-btn can" onclick="tapSort(${c.id},'can')">↑ Beeinflussbar</button><button class="tap-btn cannot" onclick="tapSort(${c.id},'cannot')">↑ Nicht kontrollierbar</button></div>`;
+    el.addEventListener('dragstart', e => { dragId = c.id; el.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; });
+    el.addEventListener('dragend', () => { dragId = null; el.classList.remove('dragging'); });
+    tray.appendChild(el);
+  });
+}
+
+function renderInnerCards(evaluations) {
+  const container = document.getElementById('innerCards'); container.innerHTML = '';
+  cards.filter(c => c.zone === 'can').forEach(c => {
+    const el = document.createElement('div'); el.className = 'zone-card';
+    if (!reflectionActive) { el.title = 'Klicken zum Zurücklegen'; el.onclick = () => { c.zone = null; c.slotIdx = null; renderCircle(); }; }
+    el.dataset.id = c.id;
+    el.textContent = c.text;
+    // badge during reflection
+    if (reflectionActive && evaluations) {
+      const ev = evaluations.find(e => e.card.id === c.id);
+      if (ev) {
+        const badge = document.createElement('span');
+        badge.className = 'card-badge ' + (ev.wasInWrong ? 'badge-mov' : 'badge-ok');
+        badge.textContent = ev.wasInWrong ? '→' : '✓';
+        el.appendChild(badge);
+      }
+    }
+    container.appendChild(el);
+  });
+}
+
+function renderRingCards(evaluations) {
+  const layer = document.getElementById('ringCardsLayer'); layer.innerHTML = '';
+  const ringCards = cards.filter(c => c.zone === 'cannot');
+  const usedSlots = new Set(ringCards.filter(c => c.slotIdx !== null).map(c => c.slotIdx));
+  ringCards.forEach(c => {
+    if (c.slotIdx === null) {
+      for (let i = 0; i < RING_SLOTS.length; i++) {
+        if (!usedSlots.has(i)) { c.slotIdx = i; usedSlots.add(i); break; }
+      }
+      if (c.slotIdx === null) c.slotIdx = ringCards.indexOf(c) % RING_SLOTS.length;
+    }
+    const slot = RING_SLOTS[c.slotIdx];
+    const el = document.createElement('div'); el.className = 'ring-card'; el.dataset.id = c.id;
+    el.style.left = slot.x + '%'; el.style.top = slot.y + '%';
+    if (!reflectionActive) { el.title = 'Klicken zum Zurücklegen'; el.onclick = () => { c.zone = null; c.slotIdx = null; renderCircle(); }; }
+    el.textContent = c.text;
+    if (reflectionActive && evaluations) {
+      const ev = evaluations.find(e => e.card.id === c.id);
+      if (ev) {
+        const badge = document.createElement('span');
+        badge.className = 'card-badge ' + (ev.wasInWrong ? 'badge-mov' : 'badge-ok');
+        badge.textContent = ev.wasInWrong ? '→' : '✓';
+        el.appendChild(badge);
+      }
+    }
+    layer.appendChild(el);
+  });
+}
+
+// drag & drop
+function onDragOverOuter(e) { e.preventDefault(); document.getElementById('outerCircle').classList.add('drag-over-outer'); }
+function onDragLeaveOuter(e) { if (!document.getElementById('outerCircle').contains(e.relatedTarget)) document.getElementById('outerCircle').classList.remove('drag-over-outer'); }
+function onDropOuter(e) {
+  e.preventDefault();
+  document.getElementById('outerCircle').classList.remove('drag-over-outer');
+  if (!dragId) return;
+  const card = cards.find(c => c.id === dragId);
+  if (card && card.zone !== 'cannot') { card.zone = 'cannot'; card.slotIdx = null; renderCircle(); updateReflectBtn(); }
+}
+function onDragOverInner(e) { e.preventDefault(); e.stopPropagation(); document.getElementById('innerCircle').classList.add('drag-over-inner'); document.getElementById('outerCircle').classList.remove('drag-over-outer'); }
+function onDragLeaveInner(e) { if (!document.getElementById('innerCircle').contains(e.relatedTarget)) document.getElementById('innerCircle').classList.remove('drag-over-inner'); }
+function onDropInner(e) {
+  e.preventDefault(); e.stopPropagation();
+  document.getElementById('innerCircle').classList.remove('drag-over-inner');
+  if (!dragId) return;
+  const card = cards.find(c => c.id === dragId);
+  if (card && card.zone !== 'can') { card.zone = 'can'; card.slotIdx = null; renderCircle(); updateReflectBtn(); }
+}
+function tapSort(id, zone) { const c = cards.find(x => x.id === id); if (c) { c.zone = zone; c.slotIdx = null; renderCircle(); updateReflectBtn(); } }
+
+function updateReflectBtn() {
+  const unsorted = cards.filter(c => !c.zone).length;
+  document.getElementById('btnReflect').disabled = unsorted > 0;
+  const done = cards.length - unsorted;
+  document.getElementById('footProgress').textContent = unsorted > 0
+    ? `${done} von ${cards.length} einsortiert`
+    : `Alle ${cards.length} einsortiert — bereit`;
+}
+
+// ── PHASE 3: REFLECTION (IN SAME CIRCLES) ────────────────────────────
+async function startReflection() {
+  reflectionActive = true;
+
+  // Update header
+  document.getElementById('circleHeaderText').innerHTML = 'Der Kreis analysiert deine Einordnung. <strong>Einige Karten verschieben sich leise.</strong>';
+
+  // Hide tray & button
+  document.getElementById('unsortedWrap').style.display = 'none';
+  document.getElementById('circleFoot').style.display = 'none';
+
+  // Evaluate
+  const evals = cards.map(c => {
+    const kb = classify(c.text);
+    const correct = !kb || kb.correct === c.zone;
+    return { card:c, kb, correct, finalZone: correct ? c.zone : kb.correct, wasInWrong:!correct && !!kb };
+  });
+
+  // Process each card with delay
+  const toMove = evals.filter(e => e.wasInWrong);
+  const toKeep = evals.filter(e => !e.wasInWrong);
+
+  // First: mark correct cards
+  await sleep(500);
+  for (const ev of toKeep) {
+    markCard(ev.card, true);
+    await sleep(120);
+  }
+
+  // Then: animate moved cards one by one
+  for (const ev of toMove) {
+    await sleep(400);
+    await animateCardMove(ev);
+  }
+
+  // After all animations: render final state with badges
+  await sleep(500);
+  renderInnerCards(evals);
+  renderRingCards(evals);
+
+  // Build insight panel
+  buildInsightPanel(evals);
+
+  // Slide up panel
+  await sleep(600);
+  document.getElementById('insightPanel').classList.add('open');
+}
+
+function markCard(card, isCorrect) {
+  // Find the card element in either zone and add a ✓ badge
+  const el = document.querySelector(`[data-id="${card.id}"]`);
+  if (!el) return;
+  const existing = el.querySelector('.card-badge');
+  if (!existing) {
+    const badge = document.createElement('span');
+    badge.className = 'card-badge badge-ok';
+    badge.textContent = '✓';
+    el.appendChild(badge);
+  }
+}
+
+async function animateCardMove(ev) {
+  const { card, finalZone } = ev;
+
+  // Get source card element & its position
+  const srcEl = document.querySelector(`[data-id="${card.id}"]`);
+  if (!srcEl) { card.zone = finalZone; card.slotIdx = null; return; }
+
+  const srcRect = srcEl.getBoundingClientRect();
+
+  // Calculate destination position
+  // For inner circle → use center of inner circle
+  // For ring → assign a slot and calculate pixel position
+  let destX, destY;
+  if (finalZone === 'can') {
+    const inner = document.getElementById('innerCircle').getBoundingClientRect();
+    destX = inner.left + inner.width / 2 - 40;
+    destY = inner.top  + inner.height / 2;
+  } else {
+    // Assign ring slot
+    const usedSlots = new Set(cards.filter(c => c.zone === 'cannot' && c.slotIdx !== null && c.id !== card.id).map(c => c.slotIdx));
+    let slot = null;
+    for (let i = 0; i < RING_SLOTS.length; i++) {
+      if (!usedSlots.has(i)) { card.slotIdx = i; slot = RING_SLOTS[i]; break; }
+    }
+    if (!slot) { card.slotIdx = 0; slot = RING_SLOTS[0]; }
+    const outer = document.getElementById('outerCircle').getBoundingClientRect();
+    destX = outer.left + (slot.x / 100) * outer.width - 40;
+    destY = outer.top  + (slot.y / 100) * outer.height;
+  }
+
+  // Show tooltip in circle
+  const tooltip = document.getElementById('circleInsight');
+  const kb = ev.kb;
+  const insightText = finalZone === 'cannot'
+    ? (kb?.insight_cannot || kb?.insight_wrong || '')
+    : (kb?.insight_can    || kb?.insight_wrong || '');
+  tooltip.textContent = insightText;
+  tooltip.classList.add('visible');
+
+  // Create flying ghost
+  const ghost = document.createElement('div');
+  ghost.className = `flying-card fc-${finalZone}`;
+  ghost.textContent = card.text;
+  ghost.style.left = srcRect.left + 'px';
+  ghost.style.top  = srcRect.top  + 'px';
+  ghost.style.opacity = '0';
+  ghost.style.transition = 'left 0.85s cubic-bezier(.4,0,.2,1), top 0.85s cubic-bezier(.4,0,.2,1), opacity 0.25s ease';
+  document.body.appendChild(ghost);
+
+  // Hide source
+  srcEl.style.opacity = '0';
+  srcEl.style.transition = 'opacity 0.2s';
+
+  // Start animation
+  await sleep(30);
+  ghost.style.opacity = '1';
+  await sleep(60);
+  ghost.style.left = destX + 'px';
+  ghost.style.top  = destY + 'px';
+
+  await sleep(950); // wait for animation to finish
+
+  // Update data
+  card.zone = finalZone;
+
+  // Remove ghost, show card in new position
+  ghost.style.opacity = '0';
+  await sleep(250);
+  ghost.remove();
+
+  // Re-render the two card layers so card appears in new zone
+  renderInnerCards();
+  renderRingCards();
+
+  // Hide tooltip after a moment
+  await sleep(1400);
+  tooltip.classList.remove('visible');
+}
+
+// ── BUILD INSIGHT PANEL ──────────────────────────────────────────────
+function buildInsightPanel(evals) {
+  const container = document.getElementById('ipCards'); container.innerHTML = '';
+  const stepPrompts = STEP_PROMPTS.concat(STEP_PROMPTS);
+
+  let canIdx = 0;
+  evals.forEach(ev => {
+    const { card, kb, finalZone, wasInWrong } = ev;
+    const item = document.createElement('div');
+    item.className = `ip-card ip-${finalZone}`;
+
+    let insight = '';
+    if (kb) {
+      insight = wasInWrong
+        ? (finalZone === 'cannot' ? kb.insight_cannot : kb.insight_can) || kb.insight_wrong || ''
+        : (finalZone === 'can'    ? kb.insight_can    : kb.insight_cannot) || '';
+    } else {
+      insight = finalZone === 'can'
+        ? 'Du siehst hier Einfluss — ein guter Ansatzpunkt. Was könnte ein kleiner nächster Schritt sein?'
+        : 'Du ordnest das außerhalb deiner Kontrolle ein — manchmal ist das die gesündeste Einschätzung.';
+    }
+
+    const stepHTML = finalZone === 'can'
+      ? `<div class="step-row"><span class="step-label">→ Nächster Schritt:</span><input class="step-inp" placeholder="${stepPrompts[canIdx++]}"></div>` : '';
+
+    item.innerHTML = `
+      <div class="ip-badge ${wasInWrong ? 'mov' : 'ok'}">${wasInWrong ? '→ Leise verschoben' : '✓ Gut eingeordnet'}</div>
+      <div class="ip-name">${card.text}</div>
+      ${insight ? `<div class="ip-insight">${insight}</div>` : ''}
+      ${stepHTML}`;
+    container.appendChild(item);
+  });
+}
+
+function togglePanel() {
+  document.getElementById('insightPanel').classList.toggle('open');
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+function restart() {
+  reflectionActive = false;
+  cards = []; cardIdCounter = 0; usedStarters.clear();
+  document.querySelectorAll('.starter-chip').forEach(c => { c.style.opacity = ''; c.style.pointerEvents = ''; });
+  document.getElementById('cardPreview').innerHTML = '';
+  document.getElementById('addInput').value = '';
+  document.getElementById('addBtn').disabled = true;
+  document.getElementById('btnSort').disabled = true;
+  document.getElementById('insightPanel').classList.remove('open');
+  document.getElementById('innerCards').innerHTML = '';
+  document.getElementById('ringCardsLayer').innerHTML = '';
+  document.getElementById('unsortedTray').innerHTML = '';
+  document.getElementById('unsortedWrap').style.display = '';
+  document.getElementById('circleFoot').style.display = '';
+  document.getElementById('circleInsight').classList.remove('visible');
+  document.getElementById('phaseCircle').style.display = 'none';
+  document.getElementById('phaseAdd').style.display = 'block';
+  window.scrollTo(0, 0);
+}
+
+renderStarters();
+</script>
+</body>
+</html>

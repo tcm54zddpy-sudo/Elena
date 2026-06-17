@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mindbloom — Learn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Mulish:wght@300;400;500&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<script src="nav.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #F8F7F4; --white: #FFFFFF;
+  --border: rgba(0,0,0,0.08); --border-m: rgba(0,0,0,0.13);
+  --text: #1A1A1A; --muted: #6B6B6B; --faint: #ABABAB;
+  --g-sage:  linear-gradient(135deg, #C8D8C0, #8FAF88);
+  --g-dusk:  linear-gradient(135deg, #C4C0DC, #8A84B8);
+  --g-blush: linear-gradient(135deg, #DEC9C4, #BF9690);
+  --g-slate: linear-gradient(135deg, #B8CCDA, #7A9DB5);
+  --g-amber: linear-gradient(135deg, #DDD0B0, #BCA870);
+  --g-rose:  linear-gradient(135deg, #D8BFCA, #B890A5);
+  --g-lilac: linear-gradient(135deg, #D0C8E0, #9080C0);
+  --sage: #5A8050; --dusk: #6A64A0;
+  --serif: "Playfair Display", Georgia, serif;
+  --serif-body: "Lora", Georgia, serif;
+  --sans: "Mulish", sans-serif;
+  --r: 16px; --r-sm: 10px;
+}
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: var(--sans); font-weight: 300; font-size: 15px; line-height: 1.75; -webkit-font-smoothing: antialiased; }
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; font-family: var(--sans); border: none; }
+
+.page-hero { background: var(--white); border-bottom: 1px solid var(--border); padding: 52px 2.8rem 48px; text-align: center; }
+.page-hero h1 { font-family: var(--serif); font-size: clamp(28px, 4vw, 46px); font-weight: 400; margin-bottom: 12px; }
+.page-hero p { font-family: var(--serif-body); font-size: 16px; font-style: italic; color: var(--muted); max-width: 520px; margin: 0 auto; line-height: 1.7; }
+
+.page-body { max-width: 1100px; margin: 0 auto; padding: 3.5rem 2.8rem 6rem; }
+
+.cat-section { margin-bottom: 3.5rem; }
+.cat-header { display: flex; align-items: center; gap: 14px; margin-bottom: 1.4rem; }
+.cat-orb { width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0; }
+.cat-title { font-family: var(--serif); font-size: 1.15rem; font-weight: 400; }
+.cat-desc { font-size: 12px; color: var(--faint); margin-top: 1px; }
+
+.articles-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+
+.article-card {
+  background: var(--white); border: 1px solid var(--border); border-radius: var(--r);
+  padding: 1.5rem 1.6rem; cursor: pointer;
+  transition: border-color .2s, box-shadow .2s, transform .18s;
+  display: flex; flex-direction: column; gap: 10px;
+  position: relative; overflow: hidden;
+}
+.article-card:hover { border-color: var(--border-m); box-shadow: 0 6px 24px rgba(0,0,0,.08); transform: translateY(-2px); }
+.article-card__accent { position: absolute; top: 0; left: 0; right: 0; height: 3px; opacity: 0; transition: opacity .2s; }
+.article-card:hover .article-card__accent { opacity: 1; }
+.article-card__tag { font-size: 10px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--faint); }
+.article-card__title { font-family: var(--serif); font-size: 1.05rem; font-weight: 400; line-height: 1.4; }
+.article-card__excerpt { font-size: 13px; color: var(--muted); line-height: 1.65; }
+.article-card__read { margin-top: auto; padding-top: 10px; font-size: 11px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); display: flex; align-items: center; gap: 6px; transition: color .18s; }
+.article-card:hover .article-card__read { color: var(--text); }
+
+.panel-overlay { position: fixed; inset: 0; background: rgba(26,26,26,.45); backdrop-filter: blur(3px); z-index: 500; opacity: 0; pointer-events: none; transition: opacity .3s; }
+.panel-overlay.open { opacity: 1; pointer-events: all; }
+.article-panel { position: fixed; top: 0; right: 0; bottom: 0; width: min(700px, 100vw); background: var(--white); z-index: 501; transform: translateX(100%); transition: transform .35s cubic-bezier(.22,.68,0,1.2); display: flex; flex-direction: column; overflow: hidden; }
+.article-panel.open { transform: translateX(0); }
+.panel-header { display: flex; align-items: center; justify-content: space-between; padding: 1.4rem 2rem; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.panel-cat { font-size: 10px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); }
+.panel-close { width: 32px; height: 32px; border-radius: 50%; background: var(--bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background .18s; }
+.panel-close:hover { background: rgba(0,0,0,.08); }
+.panel-body { flex: 1; overflow-y: auto; padding: 2.5rem 2rem 4rem; }
+
+.panel-body h1 { font-family: var(--serif); font-size: clamp(20px, 2.8vw, 28px); font-weight: 400; line-height: 1.3; margin-bottom: 6px; }
+.panel-body .subtitle { font-family: var(--serif-body); font-style: italic; font-size: 15px; color: var(--muted); margin-bottom: 2rem; display: block; }
+.panel-body hr { border: none; border-top: 1px solid var(--border); margin: 1.8rem 0; }
+.panel-body blockquote { border-left: 3px solid var(--border-m); padding-left: 1.2rem; font-family: var(--serif-body); font-style: italic; font-size: 15px; color: var(--muted); margin: 1.5rem 0; line-height: 1.75; }
+.panel-body h2 { font-family: var(--serif); font-size: 1.05rem; font-weight: 400; margin: 2rem 0 .6rem; }
+.panel-body p { font-family: var(--serif-body); font-size: 15px; line-height: 1.85; margin-bottom: 1.1rem; color: #2A2A2A; }
+.panel-body strong { font-weight: 500; color: var(--text); }
+.panel-body ul, .panel-body ol { padding-left: 1.4rem; margin-bottom: 1.1rem; }
+.panel-body li { font-family: var(--serif-body); font-size: 15px; line-height: 1.85; margin-bottom: .4rem; color: #2A2A2A; }
+
+.script-box { background: #f5f4f0; border: 1px solid var(--border-m); border-radius: var(--r-sm); padding: 1.4rem 1.6rem; margin: 1.5rem 0; }
+.script-box .box-label { font-size: 10px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); display: block; margin-bottom: .9rem; }
+.script-box p { font-size: 14px; margin-bottom: .7rem; }
+.script-box p:last-child { margin-bottom: 0; }
+
+.journal-box { background: #f0f4ee; border: 1px solid rgba(90,128,80,.18); border-radius: var(--r-sm); padding: 1.4rem 1.6rem; margin: 1.5rem 0; }
+.journal-box .box-label { font-size: 10px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--sage); display: block; margin-bottom: .9rem; }
+.journal-box li { font-size: 14px; color: #3A5030; }
+
+.tip-box { background: #eeedf6; border: 1px solid rgba(106,100,160,.18); border-radius: var(--r-sm); padding: 1rem 1.4rem; margin: 1.5rem 0; }
+.tip-box p { font-size: 13px; color: var(--dusk); margin: 0; font-style: italic; }
+</style>
+</head>
+<body>
+<div id="site-nav-placeholder"></div>
+
+<div class="page-hero">
+  <h1>Learn</h1>
+  <p>Fundierte Texte zu mentaler Gesundheit und persönlichem Wachstum – geschrieben für echte Menschen, nicht Lehrbücher.</p>
+</div>
+
+<div class="page-body" id="learnBody"></div>
+
+<div class="panel-overlay" id="overlay" onclick="closePanel()"></div>
+<div class="article-panel" id="articlePanel">
+  <div class="panel-header">
+    <span class="panel-cat" id="panelCat"></span>
+    <button class="panel-close" onclick="closePanel()">
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div class="panel-body" id="panelBody"></div>
+</div>
+
+<script>
+const ARTICLES = [
+  {
+    cat: "Anxiety & Overthinking", grad: "var(--g-dusk)",
+    accent: "linear-gradient(90deg,#8A84B8,#C4C0DC)",
+    title: "Get out of your head",
+    subtitle: "So stoppst du aufdringliche Gedanken und das Gedankenkarussell",
+    excerpt: "Aufdringliche Gedanken sind normal – aber sie m\u00fcssen dich nicht \u00fcberw\u00e4ltigen. F\u00fcnf Strategien, die wirklich helfen.",
+    html: `<h1>Get out of your head</h1><span class="subtitle">So stoppst du aufdringliche Gedanken und das Gedankenkarussell</span><hr><p>Pl\u00f6tzlich geht es dir gut \u2013 und im n\u00e4chsten Moment erinnert dich dein Gehirn an einen Fehler von vor drei Jahren. Aufdringliche, negative Gedanken tauchen oft v\u00f6llig ungefragt auf. Sie k\u00f6nnen zur echten Belastung werden, wenn wir ihnen zu viel Raum geben.</p><hr><blockquote>\u201eSortiere deine \u00c4ngste in Fakten (Sachbuch) und Vermutungen (Fiktion). Bleib im Sachbuch-Bereich.\u201c</blockquote><hr><h2>1. Catch, Check, Change</h2><p>Wenn eine negative Emotion aufkommt, halte inne. Fange den Gedanken ein. \u00dcberpr\u00fcfe ihn objektiv: Ist er hilfreich? Ist er wirklich wahr? Ver\u00e4ndere ihn so, dass er realistischer wird.</p><h2>2. Plane dir feste \u201eSorgenzeiten\u201c ein</h2><p>Vereinbare t\u00e4glich 15\u201330 Minuten mit dir selbst, in denen du dich aktiv mit deinen \u00c4ngsten besch\u00e4ftigst. Wenn tagsüber ein belastender Gedanke auftaucht, schreibe ihn auf und schiebe ihn bewusst auf diese Zeit.</p><h2>3. Raus aus dem Kopf, rein in den K\u00f6rper</h2><p>Die <strong>5-4-3-2-1-Technik</strong>: Benenne f\u00fcnf Dinge, die du sehen kannst \u2013 vier, die du f\u00fchlen kannst \u2013 drei, die du h\u00f6rst \u2013 zwei, die du riechst \u2013 und eines, das du schmeckst.</p><h2>4. Der Sorgenkreis</h2><p>Zeichne einen Kreis. In das Innere schreibst du alles, worauf du tats\u00e4chlich Einfluss hast. Au\u00dferhalb landet alles, wor\u00fcber du keine Kontrolle hast. Was au\u00dferhalb steht, darf losgelassen werden.</p><h2>5. Werde zum Freund deines inneren Kritikers</h2><p>Stelle ein Foto von dir als Kind auf. Wenn dein innerer Kritiker laut wird, schau auf dieses Bild und frage dich, was du diesem Kind sagen w\u00fcrdest.</p><div class="script-box"><span class="box-label">Skript-Box</span><p><strong>Statt:</strong> \u201eIch schaffe das nicht.\u201c<br><strong>Sag dir:</strong> \u201eIch habe schon schwerere Situationen \u00fcberstanden. Was ist der n\u00e4chste konkrete Schritt?\u201c</p><p><strong>Statt:</strong> \u201eIch bin so dumm, das h\u00e4tte ich nie tun sollen.\u201c<br><strong>Sag dir:</strong> \u201eIch habe mit dem gemacht, was ich in dem Moment wusste. Das reicht.\u201c</p></div><div class="journal-box"><span class="box-label">Journaling-Fragen</span><ul><li>Welcher Gedanke kehrt bei mir besonders h\u00e4ufig wieder? Was steckt wirklich dahinter?</li><li>Was w\u00fcrde ich einem guten Freund sagen, der mir genau das erz\u00e4hlt, was mein innerer Kritiker mir gerade sagt?</li><li>Welche Situationen l\u00f6sen bei mir das Gedankenkarussell aus \u2013 und was brauche ich in diesen Momenten wirklich?</li></ul></div>`
+  },
+  {
+    cat: "Anxiety & Overthinking", grad: "var(--g-dusk)",
+    accent: "linear-gradient(90deg,#8A84B8,#C4C0DC)",
+    title: "Wie man jemandem mit Angstzu\u00e4nden wirklich hilft",
+    subtitle: "Ein Guide f\u00fcr Angeh\u00f6rige",
+    excerpt: "\u201eBeruhig dich einfach\u201c hilft nicht. Was stattdessen funktioniert \u2013 f\u00fcr alle, die jemandem wirklich beistehen wollen.",
+    html: `<h1>Wie man jemandem mit Angstzust\u00e4nden wirklich hilft</h1><span class="subtitle">Ein Guide f\u00fcr Angeh\u00f6rige</span><hr><p>Wenn ein Mensch, der uns wichtig ist, in einer Spirale aus \u00e4ngstlichen Gedanken feststeckt, f\u00fchlen wir uns oft hilflos. Gut gemeinte Aussagen wie \u201eBeruhig dich einfach\u201c helfen in diesen Momenten nicht nur nicht \u2013 sie k\u00f6nnen dazu f\u00fchren, dass sich die betroffene Person noch unverstandener f\u00fchlt.</p><hr><blockquote>\u201eIch h\u00f6re dich. Es ist schwer. Ich bin hier.\u201c</blockquote><hr><h2>1. \u00dcbe reflektiertes Zuh\u00f6ren</h2><p>Das Wirksamste ist echtes, ungeteiltes Zuh\u00f6ren. Fasse das, was die Person sagt, in eigenen Worten zusammen und zeige, dass du ihre Emotionen nachvollziehen kannst.</p><h2>2. Vermeide toxische Positivit\u00e4t</h2><p>\u201eSchau auf das Positive!\u201c, \u201eAlles wird gut\u201c \u2013 diese S\u00e4tze tun negative Emotionen einfach ab, anstatt sie anzuerkennen.</p><h2>3. Hilf dabei, Katastrophengedanken zu erden</h2><p>Eine sehr wirksame Frage: \u201eErinnerst du dich an eine andere Zeit, als du dich genauso intensiv um etwas gesorgt hast \u2013 und was ist daraus geworden?\u201c</p><h2>4. Beruhige die Energie durch sanfte Ablenkung</h2><p>Biete an, gemeinsam ein paar tiefe Atemz\u00fcge zu nehmen. Falls das Atmen gerade zu schwer f\u00e4llt, kann aktive Ablenkung helfen \u2013 ein Spaziergang, eine Grounding-\u00dcbung.</p><h2>5. Geht gemeinsam kleine Schritte</h2><p>Wenn \u00c4ngste vor der Zukunft l\u00e4hmend wirken, kann ein klarer, kleiner n\u00e4chster Schritt enorm entlasten.</p><h2>6. Unterst\u00fctze bei der Suche nach professioneller Hilfe</h2><p>Als Angeh\u00f6riger kannst du nicht und solltest nicht die Rolle eines Therapeuten \u00fcbernehmen. Wenn die \u00c4ngste \u00fcberhand nehmen, ist es ein Zeichen von F\u00fcrsorge, behutsam professionelle Unterst\u00fctzung ins Gespr\u00e4ch zu bringen.</p><div class="script-box"><span class="box-label">Skript-Box</span><p><strong>Statt:</strong> \u201eBeruhig dich doch einfach.\u201c<br><strong>Sag lieber:</strong> \u201eIch sehe, dass es gerade schwer ist. Ich bin hier.\u201c</p><p><strong>Statt:</strong> \u201eDas wird schon alles gut werden.\u201c<br><strong>Sag lieber:</strong> \u201eIch wei\u00df nicht, wie es ausgeht \u2013 aber ich wei\u00df, dass wir es gemeinsam herausfinden werden.\u201c</p></div><div class="journal-box"><span class="box-label">Journaling-Fragen</span><ul><li>Wie reagiere ich instinktiv, wenn jemand Angst zeigt \u2013 und was steckt dahinter?</li><li>Wo ist die Grenze zwischen echtem Unterst\u00fctzen und dem unbewussten \u00dcbernehmen der emotionalen Last des anderen?</li><li>Was brauche ich selbst, um f\u00fcr jemanden da sein zu k\u00f6nnen, ohne dabei auszubrennen?</li></ul></div>`
+  },
+  {
+    cat: "Boundaries & Relationships", grad: "var(--g-rose)",
+    accent: "linear-gradient(90deg,#B890A5,#D8BFCA)",
+    title: "Grenzen ziehen ohne Schuldgef\u00fchle",
+    subtitle: "Ein \u201eNein\u201c ist eine vollst\u00e4ndige Antwort",
+    excerpt: "Warum f\u00e4llt es uns so schwer, Nein zu sagen \u2013 und wie lernt man es, ohne sich danach schlecht zu f\u00fchlen?",
+    html: `<h1>Grenzen ziehen ohne Schuldgef\u00fchle</h1><span class="subtitle">Ein \u201eNein\u201c ist eine vollst\u00e4ndige Antwort</span><hr><p>Ein \u201eNein\u201c ist genauso vollwertig wie ein \u201eJa\u201c. Wenn du lernst, Nein zu sagen, sch\u00fctzt du nicht nur dich \u2013 du schaffst auch mehr Raum f\u00fcr die Dinge und Menschen, denen du wirklich von Herzen \u201eJa\u201c sagen kannst.</p><hr><blockquote>\u201eDu lehrst Menschen, wie sie dich behandeln sollen, durch das, was du tolerierst.\u201c</blockquote><hr><h2>1. Lass den Drang los, Gef\u00fchle anderer reparieren zu m\u00fcssen</h2><p>Es ist nicht deine Aufgabe, die Menschen, die du liebst, von schweren Emotionen zu befreien. Du bist nicht f\u00fcr ihre Gef\u00fchle verantwortlich.</p><h2>2. Erkenne, was du bisher toleriert hast</h2><p>Was toleriere ich gerade, was ich eigentlich nicht m\u00f6chte? Nicht um jemanden zu verurteilen, sondern um ehrlich mit dir selbst zu sein.</p><h2>3. Grenzen kommunizieren \u2013 klar und ohne Entschuldigung</h2><p>Eine Grenze braucht keine ausf\u00fchrliche Begr\u00fcndung. Klare, wertsch\u00e4tzende Formulierungen reichen.</p><div class="script-box"><span class="box-label">Skript-Box</span><p>\u201eIch wei\u00df es zu sch\u00e4tzen, ich kann aber leider nicht.\u201c<br>\u201eIch habe daf\u00fcr gerade nicht die Energie.\u201c<br>\u201eIch habe bereits geantwortet. Meine Antwort lautet nein.\u201c<br>\u201eIch liebe dich und ich will nicht streiten. K\u00f6nnen wir uns setzen und dar\u00fcber sprechen, was zwischen uns steht?\u201c</p></div><div class="journal-box"><span class="box-label">Journaling-Fragen</span><ul><li>Was habe ich in der Vergangenheit toleriert, was ich heute nicht mehr tolerieren m\u00f6chte?</li><li>Wem gegen\u00fcber f\u00e4llt es mir besonders schwer, Grenzen zu setzen \u2013 und warum?</li><li>Wenn ich an eine Grenze denke, die ich setzen m\u00f6chte: Was genau hindert mich daran?</li></ul></div>`
+  },
+  {
+    cat: "Boundaries & Relationships", grad: "var(--g-rose)",
+    accent: "linear-gradient(90deg,#B890A5,#D8BFCA)",
+    title: "Bewusste Partnerschaft",
+    subtitle: "Toxische Beziehungsmuster erkennen und durchbrechen",
+    excerpt: "Ungesunde Muster schleichen sich oft leise ein. Was bewusste Partnerschaft bedeutet \u2013 und wie du anders zu reagieren anfängst.",
+    html: `<h1>Bewusste Partnerschaft</h1><span class="subtitle">Toxische Beziehungsmuster erkennen und durchbrechen</span><hr><p>Ein gesundes Beziehungsleben erfordert st\u00e4ndige Reflexion. Muster, die wir in der Kindheit gelernt haben, laufen oft vollkommen unbewusst ab.</p><hr><blockquote>\u201eDein Partner ist auch nur ein Mensch. Sei nachsichtig \u2013 mit ihm und mit dir.\u201c</blockquote><hr><h2>1. Erkenne ungesunde Muster bei dir selbst</h2><p>Konflikte konsequent zu vermeiden, nur um den Frieden zu wahren. Immer positives Feedback zu geben, obwohl man die Dinge eigentlich anders sieht. Das sind typische toxische Muster.</p><h2>2. Erkenne Selbstsabotage in Beziehungen</h2><p>Du suchst st\u00e4ndig nach etwas, das nicht stimmt. Du erwartest, dass dein Partner genau so denkt wie du. Diese Muster entstehen oft aus tief verwurzelten \u00c4ngsten.</p><h2>3. Was bewusste Partnerschaft bedeutet</h2><p>Ein bewusster Partner wird neugierig statt defensiv. Er h\u00f6rt mit dem Herzen zu, nicht nur mit dem Kopf. Er l\u00e4sst den Drang los, in jedem Konflikt Recht haben zu m\u00fcssen.</p><div class="script-box"><span class="box-label">Skript-Box</span><p>\u201eIch liebe dich und ich will nicht streiten. Kannst du mir helfen zu verstehen, was zwischen uns steht?\u201c</p><p>Wenn du merkst, dass du defensiv wirst: Pause machen. Einen Atemzug nehmen. Fragen: \u201eWas genau hat das in mir ausgel\u00f6st?\u201c</p></div><div class="journal-box"><span class="box-label">Journaling-Fragen</span><ul><li>Welche Muster aus meiner Vergangenheit erkenne ich in meinen aktuellen Beziehungen?</li><li>Vermeide ich Konflikte, um Frieden zu wahren \u2013 und was zahle ich daf\u00fcr?</li><li>Wie w\u00fcrde die Version von mir, die ich sein m\u00f6chte, in Konflikten reagieren?</li></ul></div>`
+  },
+  {
+    cat: "Self-Worth & Shadow Work", grad: "var(--g-amber)",
+    accent: "linear-gradient(90deg,#BCA870,#DDD0B0)",
+    title: "Die Illusion der Perfektion",
+    subtitle: "Das Gesetz der Umkehrung und warum Loslassen die eigentliche Arbeit ist",
+    excerpt: "Je mehr wir nach Perfektion streben, desto unzufriedener werden wir. Warum das so ist \u2013 und was wirklich hilft.",
+    html: `<h1>Die Illusion der Perfektion</h1><span class="subtitle">Das Gesetz der Umkehrung und warum Loslassen die eigentliche Arbeit ist</span><hr><p>Je mehr wir danach streben, uns st\u00e4ndig besser zu f\u00fchlen, desto unzufriedener werden wir \u2013 weil dieses Streben immer nur die Tatsache verst\u00e4rkt, dass uns gerade etwas fehlt.</p><hr><blockquote>\u201eDas Streben nach positiven Erfahrungen ist eine negative Erfahrung. Das Akzeptieren von negativen Erfahrungen ist eine positive Erfahrung.\u201c</blockquote><hr><h2>1. Perfektion als erlernte Angst</h2><p>Das st\u00e4ndige Streben nach Perfektion ist selten eine reine Charaktereigenschaft \u2013 es ist meist eine Reaktion auf Erfahrungen, die wir gesammelt haben.</p><h2>2. Loslassen ist das Gegenteil von Arbeit</h2><p>Echtes Loslassen bedeutet, aufzuh\u00f6ren, Dinge pers\u00f6nlich zu nehmen. Den Drang abzulegen, st\u00e4ndig kontrollieren zu m\u00fcssen, was andere von uns denken.</p><h2>3. Der Kinderfoto-Trick</h2><p>Stelle ein Foto von dir als Kind auf. Wenn dein innerer Kritiker aktiv wird, schau auf das Bild und frage dich, was du diesem Kind sagen w\u00fcrdest.</p><div class="script-box"><span class="box-label">Skript-Box</span><p><strong>Statt:</strong> \u201eIch habe versagt. Es war nicht perfekt.\u201c<br><strong>Sag dir:</strong> \u201ePerfektion existiert nicht \u2013 Fortschritt ist das, was z\u00e4hlt.\u201c</p></div><div class="journal-box"><span class="box-label">Journaling-Fragen</span><ul><li>In welchen Bereichen meines Lebens suche ich am intensivsten nach Perfektion \u2013 und wovor sch\u00fctzt mich das?</li><li>Was w\u00fcrde ich wagen, wenn ich w\u00fcsste, dass es nicht perfekt werden muss?</li><li>Welchen Teil von mir habe ich geopfert, um den Erwartungen anderer zu entsprechen?</li></ul></div>`
+  },
+  {
+    cat: "Self-Worth & Shadow Work", grad: "var(--g-amber)",
+    accent: "linear-gradient(90deg,#BCA870,#DDD0B0)",
+    title: "Inner Child Healing",
+    subtitle: "Wie wir unserem inneren Kind begegnen",
+    excerpt: "Kindheitserfahrungen formen uns still \u2013 oft noch Jahrzehnte sp\u00e4ter. Was Inner Child Healing wirklich bedeutet.",
+    html: `<h1>Inner Child Healing</h1><span class="subtitle">Wie wir unserem inneren Kind begegnen</span><hr><p>Unsere Kindheitserfahrungen pr\u00e4gen, wie wir die Welt wahrnehmen \u2013 oft noch Jahrzehnte sp\u00e4ter. Nicht immer durch dramatische Ereignisse. Manchmal durch stille, wiederkehrende Botschaften: Dass wir nur dann geliebt werden, wenn wir funktionieren.</p><hr><blockquote>\u201eHeilung bedeutet nicht, die Vergangenheit zu l\u00f6schen. Sie bedeutet, ihr endlich mit Mitgef\u00fchl zu begegnen.\u201c</blockquote><hr><h2>1. Was das innere Kind ist</h2><p>Das \u201einnere Kind\u201c ist eine n\u00fctzliche Metapher f\u00fcr den Teil von uns, der die emotionalen Spuren unserer Kindheit tr\u00e4gt. Es ist der Teil, der heute noch \u00fcberreagiert, wenn wir uns \u00fcbergangen f\u00fchlen.</p><h2>2. H\u00e4ufige Wunden</h2><p>Die Angst vor Ablehnung, das Gef\u00fchl, nie gut genug zu sein, das Bed\u00fcrfnis, anderen zu gef\u00e4llen, um Konflikte zu vermeiden. Diese Muster waren einmal eine Strategie.</p><h2>3. Wie du Verbindung aufbaust</h2><p>Stelle ein Foto von dir als Kind auf. Wenn du in einem Moment streng mit dir bist, schau auf dieses Bild und frage dich: Was w\u00fcrde ich diesem Kind sagen? Du w\u00fcrdest es tr\u00f6sten, nicht verurteilen.</p><div class="script-box"><span class="box-label">Skript-Box</span><p>\u201eEs war nicht deine Schuld. Du hast getan, was du konntest. Ich bin jetzt hier \u2013 und ich lasse dich nicht allein.\u201c</p></div><div class="journal-box"><span class="box-label">Journaling-Fragen</span><ul><li>Welche Glaubenss\u00e4tze aus meiner Kindheit bestimmen noch heute, wie ich mich selbst sehe?</li><li>In welchen Situationen reagiere ich st\u00e4rker als es der Moment verlangt \u2013 und was k\u00f6nnte dahinterstecken?</li><li>Welchen Teil von mir habe ich fr\u00fcher geopfert, um dazuzugeh\u00f6ren oder geliebt zu werden?</li></ul></div>`
+  },
+  {
+    cat: "Loneliness & Connection", grad: "var(--g-sage)",
+    accent: "linear-gradient(90deg,#8FAF88,#C8D8C0)",
+    title: "Deine soziale Batterie",
+    subtitle: "Bist du ein extrovertierter Introvertierter?",
+    excerpt: "Du liebst Gesellschaft, bist danach aber v\u00f6llig ersch\u00f6pft? Was Introversion wirklich bedeutet \u2013 und was nicht.",
+    html: `<h1>Deine soziale Batterie</h1><span class="subtitle">Bist du ein extrovertierter Introvertierter?</span><hr><p>Du gehst gerne unter Menschen, bist herzlich, interessiert \u2013 und nach einer Weile f\u00fchlst du dich v\u00f6llig leer. Nicht weil es nicht sch\u00f6n war. Sondern weil soziale Interaktion dich einfach kostet.</p><hr><blockquote>\u201eIntrovertiert zu sein bedeutet oft einfach: Im Alleinsein Kraft tanken zu k\u00f6nnen.\u201c</blockquote><hr><h2>1. Introvertiert, extrovertiert, ambivertiert</h2><p>Introvertierte tanken Energie im Alleinsein. Viele Menschen befinden sich irgendwo dazwischen \u2013 ambivertiert. Du findest andere Menschen faszinierend, aber gleichzeitig auch anstrengend.</p><h2>2. Was das f\u00fcr deinen Alltag bedeutet</h2><p>Wenn du wei\u00dft, dass soziale Situationen deine Batterie leeren, kannst du bewusster planen: Wann brauchst du danach Zeit f\u00fcr dich? Welche Kontexte geben dir mehr als sie nehmen?</p><h2>3. Introversion ist kein Problem</h2><p>Introversion ist kein Mangel \u2013 sie ist ein Pers\u00f6nlichkeitsmerkmal mit eigenen St\u00e4rken: Tiefe in Gespr\u00e4chen, Beobachtungsgabe, die F\u00e4higkeit zur echten Verbindung.</p><div class="script-box"><span class="box-label">Skript-Box</span><p>\u201eDas bedeutet nicht, dass etwas mit mir nicht stimmt. Ich habe gerade Energie gegeben. Jetzt darf ich Energie tanken.\u201c</p></div><div class="journal-box"><span class="box-label">Journaling-Fragen</span><ul><li>Welche sozialen Situationen lassen mich danach aufgeladen f\u00fchlen \u2013 und welche lassen mich leer zur\u00fcck?</li><li>Gibt es Menschen in meinem Leben, bei denen ich mich wirklich wie ich selbst f\u00fchle?</li><li>Wann habe ich das letzte Mal mein Introvertiertheit als etwas Positives erlebt?</li></ul></div>`
+  },
+  {
+    cat: "Loneliness & Connection", grad: "var(--g-sage)",
+    accent: "linear-gradient(90deg,#8FAF88,#C8D8C0)",
+    title: "Die Kunst des positiven Alleinseins",
+    subtitle: "Dates mit dir selbst und warum Solitude kein Trostpflaster ist",
+    excerpt: "Einsamkeit und Alleinsein sind nicht dasselbe. Wie du Solitude bewusst als Kraftquelle nutzt.",
+    html: `<h1>Die Kunst des positiven Alleinseins</h1><span class="subtitle">Dates mit dir selbst und warum Solitude kein Trostpflaster ist</span><hr><p>Einsamkeit und Alleinsein sind nicht dasselbe. Alleinsein kann etwas v\u00f6llig anderes sein: eine bewusst gew\u00e4hlte Zeit mit dir selbst, die sich wie ein Atemzug anf\u00fchlt, nicht wie ein Defizit.</p><hr><blockquote>\u201eAusruhen ist produktiv. Du hast nicht \u201enichts\u201c gemacht \u2013 du hast auf deinen K\u00f6rper geh\u00f6rt.\u201c</blockquote><hr><h2>1. Einsamkeit vs. Solitude</h2><p>Einsamkeit entsteht, wenn Alleinsein ungewollt ist. Solitude hingegen ist aktiv \u2013 du w\u00e4hlst die Zeit mit dir selbst. Du gestaltest sie.</p><h2>2. Ein Date mit dir selbst</h2><p>Warte nicht darauf, dass jemand Zeit hat. F\u00fchre dich selbst aus. Geh in das Restaurant, das du schon l\u00e4nger besuchen wolltest. Behandle dich dabei genauso, wie du von einem anderen Menschen behandelt werden m\u00f6chtest.</p><h2>3. Wie du die Zeit allein nutzt</h2><p>Solitude bedeutet nicht, produktiv zu sein. Es geht nicht darum, die Zeit allein zu \u201erechtfertigen\u201c. Manchmal ist das Ziel schlicht, zu regenerieren.</p><div class="script-box"><span class="box-label">Skript-Box</span><p>\u201eDie Beziehung zu mir selbst ist die l\u00e4ngste Beziehung meines Lebens. Es lohnt sich, in sie zu investieren.\u201c</p></div><div class="journal-box"><span class="box-label">Journaling-Fragen</span><ul><li>Wann habe ich das letzte Mal meine eigene Gesellschaft wirklich genossen \u2013 und was habe ich dabei getan?</li><li>Wovor weiche ich aus, wenn ich Alleinsein als unangenehm empfinde?</li><li>Was w\u00fcrde ich unternehmen, wenn ich heute ohne Plan zwei Stunden f\u00fcr mich h\u00e4tte?</li></ul></div>`
+  },
+  {
+    cat: "Nutrition & Body Image", grad: "var(--g-blush)",
+    accent: "linear-gradient(90deg,#BF9690,#DEC9C4)",
+    title: "Frieden schlie\u00dfen mit dem Essen",
+    subtitle: "Der Unterschied zwischen gest\u00f6rtem Essverhalten und einer Essst\u00f6rung",
+    excerpt: "Es gibt einen Bereich zwischen gelegentlichem \u00dcberessen und einer klinischen Essst\u00f6rung \u2013 und er verdient Aufmerksamkeit.",
+    html: `<h1>Frieden schlie\u00dfen mit dem Essen</h1><span class="subtitle">Der Unterschied zwischen gest\u00f6rtem Essverhalten und einer Essst\u00f6rung</span><hr><p>Von einem gest\u00f6rten Essverhalten spricht man, wenn Gedanken rund um Essen, Nahrung und K\u00f6rpergewicht so viel Raum einnehmen, dass sie den Alltag belasten.</p><hr><blockquote>\u201eDein K\u00f6rper ist nicht das Problem. Du hast das Recht, Genuss zu empfinden.\u201c</blockquote><hr><h2>1. Gest\u00f6rtes Essverhalten</h2><p>St\u00e4ndige kreisende Gedanken um Kalorien, Schuldgef\u00fchle nach dem Essen, heimliches Essen aus Scham. Das Essen wird zur inneren Belastung.</p><h2>2. Klinische Essst\u00f6rungen</h2><p><strong>Anorexia nervosa:</strong> Nahrungsaufnahme wird stark eingeschr\u00e4nkt.<br><strong>Bulimia nervosa:</strong> Phasen unkontrollierten Essens wechseln sich mit Gegenma\u00dfnahmen ab.<br><strong>Binge-Eating:</strong> Unkontrolliertes Essen ohne Kompensation, verbunden mit Schamgef\u00fchlen.</p><h2>3. Der erste Schritt</h2><p>Wie viel Raum nimmt das Thema Essen in meinen Gedanken ein? Und wie f\u00fchle ich mich dabei?</p><div class="script-box"><span class="box-label">Skript-Box</span><p>\u201eMein Wert h\u00e4ngt nicht daran, was und wie viel ich heute gegessen habe.\u201c</p></div><div class="journal-box"><span class="box-label">Journaling-Fragen</span><ul><li>Wie viel Zeit verbringen meine Gedanken t\u00e4glich mit dem Thema Essen, Gewicht oder K\u00f6rper?</li><li>Wann habe ich das letzte Mal gegessen, ohne dar\u00fcber nachzudenken \u2013 einfach weil es gut war?</li><li>Was w\u00fcrde sich in meinem Alltag ver\u00e4ndern, wenn Essen wieder neutral w\u00e4re?</li></ul></div>`
+  },
+  {
+    cat: "Nutrition & Body Image", grad: "var(--g-blush)",
+    accent: "linear-gradient(90deg,#BF9690,#DEC9C4)",
+    title: "Der Ausweg aus dem Di\u00e4twahn",
+    subtitle: "Warum Verzicht zu Hei\u00dfhunger f\u00fchrt \u2013 und was intuitives Essen wirklich bedeutet",
+    excerpt: "Je strenger die Regeln, desto lauter werden die Impulse dagegen. Was wirklich passiert \u2013 und wie du aufh\u00f6rst zu k\u00e4mpfen.",
+    html: `<h1>Der Ausweg aus dem Di\u00e4twahn</h1><span class="subtitle">Warum Verzicht zu Hei\u00dfhunger f\u00fchrt \u2013 und was intuitives Essen wirklich bedeutet</span><hr><p>Di\u00e4ten f\u00fchlen sich im ersten Moment nach Kontrolle an. Doch was oft folgt, ist vorhersehbar: Je strenger die Regeln, desto lauter werden die Impulse, die dagegen arbeiten.</p><hr><blockquote>\u201eEssen ist eine neutrale Substanz. Es ist weder moralisch gut noch schlecht.\u201c</blockquote><hr><h2>1. Warum Di\u00e4ten den Teufelskreis bef\u00fcern</h2><p>Der Binge-and-Restrict-Kreislauf: Verzicht f\u00fchrt zu Essanf\u00e4llen, Essanf\u00e4lle f\u00fchren zu neuem Verzicht.</p><h2>2. Was intuitives Essen bedeutet</h2><p>Du isst, wenn du hungrig bist. Du stoppst, wenn du satt bist. Du teilst Lebensmittel nicht in \u201egut\u201c und \u201eschlecht\u201c ein.</p><h2>3. Die Food Police zum Schweigen bringen</h2><p>Die innere Stimme, die jeden Bissen kommentiert. Sie zum Schweigen zu bringen beginnt mit dem Bemerken: Wann klingt diese Stimme laut? Was l\u00f6st sie aus?</p><div class="script-box"><span class="box-label">Skript-Box</span><p>\u201eIch habe gegessen. Mein K\u00f6rper hat Energie bekommen. Das war richtig.\u201c</p><p>\u201eIch war gerade \u00fcberfordert und habe Trost gesucht. Das ist menschlich. Was brauche ich jetzt wirklich?\u201c</p></div><div class="journal-box"><span class="box-label">Journaling-Fragen</span><ul><li>Welche Essensregeln habe ich internalisiert \u2013 und woher kommen sie?</li><li>Nutze ich Essen, um Emotionen wie Stress oder Traurigkeit zu bet\u00e4uben?</li><li>Wann habe ich meinem K\u00f6rper das letzte Mal vertraut, statt einer Regel?</li></ul></div>`
+  },
+  {
+    cat: "Habits, Sleep & Productivity", grad: "var(--g-slate)",
+    accent: "linear-gradient(90deg,#7A9DB5,#B8CCDA)",
+    title: "Warum wir prokrastinieren",
+    subtitle: "Wie Versagensängste und fehlende Struktur zum Aufschieben f\u00fchren",
+    excerpt: "Prokrastination ist kein Zeichen von Faulheit. Dahinter steckt fast immer etwas anderes \u2013 und das l\u00e4sst sich angehen.",
+    html: `<h1>Warum wir prokrastinieren</h1><span class="subtitle">Wie Versagensängste und fehlende Struktur zum Aufschieben f\u00fchren</span><hr><p>Wir schieben wichtige Aufgaben auf \u2013 obwohl wir genau wissen, dass sich der Druck dadurch nicht verringert. Prokrastination ist kein Zeichen von Faulheit. Sie ist fast immer ein Zeichen von Versagensangst, Perfektionismus oder fehlender Struktur.</p><hr><blockquote>\u201eDer Weg ist das Ziel. Fortschritt ist immer besser als Perfektion.\u201c</blockquote><hr><h2>1. Was wirklich dahinter steckt</h2><p>Wenn wir etwas nicht angehen, k\u00f6nnen wir auch nicht scheitern. Manchmal sind die eigenen Erwartungen so hoch angesetzt, dass der Einstieg sich \u00fcberw\u00e4ltigend anf\u00fchlt.</p><h2>2. Wie du den Kreislauf durchbrichst</h2><p><strong>Die 50-Prozent-Regel:</strong> Nimm dir vor, nur die H\u00e4lfte der Aufgabe zu erledigen.<br><strong>Kleine St\u00fccke:</strong> Zerlege gro\u00dfe Aufgaben in winzige, sofort machbare Schritte.<br><strong>Handschriftliche Listen:</strong> Das Durchstreichen erledigter Aufgaben setzt Dopamin frei.</p><h2>3. Perfektion ist der Feind des Anfangs</h2><p>Einfach anzufangen, auch wenn der Zeitpunkt nicht perfekt ist, ist fast immer besser als das Warten auf Perfektion.</p><div class="script-box"><span class="box-label">Skript-Box</span><p>\u201eIch muss heute nicht alles fertig machen. Ich fange mit dem kleinsten m\u00f6glichen Schritt an.\u201c</p></div><div class="journal-box"><span class="box-label">Journaling-Fragen</span><ul><li>Welche Aufgabe schiebe ich gerade auf \u2013 und wovor habe ich dabei wirklich Angst?</li><li>Was ist der kleinste m\u00f6gliche Schritt, den ich heute noch tun k\u00f6nnte?</li><li>Was w\u00fcrde ich tun, wenn ich w\u00fcsste, dass das Ergebnis egal ist \u2013 solange ich anfange?</li></ul></div>`
+  },
+  {
+    cat: "Habits, Sleep & Productivity", grad: "var(--g-slate)",
+    accent: "linear-gradient(90deg,#7A9DB5,#B8CCDA)",
+    title: "Die Macht des Schlafs",
+    subtitle: "Wie Ruhe negative Gedanken und \u00c4ngste bek\u00e4mpft",
+    excerpt: "Fast zwei Drittel aller Menschen schlafen schlecht wegen Sorgen. Was wirklich passiert \u2013 und wie eine gute Abendroutine aussieht.",
+    html: `<h1>Die Macht des Schlafs</h1><span class="subtitle">Wie Ruhe negative Gedanken und \u00c4ngste bek\u00e4mpft</span><hr><p>Fast zwei Drittel aller Menschen finden nachts keinen Schlaf \u2013 wachgehalten von Gr\u00fcbeln, Sorgen und einem Gehirn, das nicht aufh\u00f6rt zu arbeiten. Schlechter Schlaf erh\u00f6ht das Risiko f\u00fcr Angst und Niedergeschlagenheit.</p><hr><blockquote>\u201eDu kannst deinem Gehirn beibringen, dass Nacht Erholung bedeutet \u2013 aber es braucht klare Signale.\u201c</blockquote><hr><h2>1. Was chronischer Schlafmangel macht</h2><p>Erh\u00f6htes Risiko f\u00fcr Depressionen und Angstzust\u00e4nde, geminderte Ged\u00e4chtnisleistung, geschw\u00e4chtes Immunsystem, schwieriger emotionale Reaktionen zu regulieren.</p><h2>2. Die Gedanken-Ablade-Routine</h2><p>Schreibe deine Gedanken auf, bevor du ins Bett gehst. Das Aufschreiben ist ein Signal: \u201eDiese Information ist sicher. Du musst nicht wach bleiben.\u201c</p><h2>3. K\u00f6rpersignale nutzen</h2><p>Ein hei\u00dfes Bad eine Stunde vor dem Schlafengehen hilft dem Einschlafen \u2013 weil die K\u00f6rpertemperatur danach absinkt. Das Schlafzimmer sollte k\u00fchl, dunkel und ruhig sein.</p><h2>4. Die 4-4-8 Atemtechnik</h2><p>Vier Sekunden einatmen, vier halten, acht ausatmen. Diese verl\u00e4ngerte Ausatmung stimuliert den Vagusnerv.</p><div class="script-box"><span class="box-label">Skript-Box: Deine Abend-Routine</span><p>1. Gedanken aufschreiben.<br>2. Bildschirme aus oder Blaulichtfilter.<br>3. K\u00f6rper abk\u00fchlen lassen.<br>4. Bei Schlaflosigkeit: 4-4-8 Atemtechnik.</p></div><div class="journal-box"><span class="box-label">Journaling-Fragen</span><ul><li>Was hindert mich meistens am Einschlafen?</li><li>Habe ich eine Abendroutine, die mir signalisiert, dass der Tag vorbei ist?</li><li>Was w\u00e4re der eine kleine Schritt, den ich heute Abend ausprobieren k\u00f6nnte?</li></ul></div>`
+  },
+  {
+    cat: "Therapy, Healing & Mental Health Basics", grad: "var(--g-lilac)",
+    accent: "linear-gradient(90deg,#9080C0,#D0C8E0)",
+    title: "Mental Wellness 101",
+    subtitle: "Wie K\u00f6rper, Psyche und soziales Umfeld zusammenh\u00e4ngen",
+    excerpt: "Psychische Gesundheit entsteht im Zusammenspiel von K\u00f6rper, Geist und Umfeld. Was du selbst beeinflussen kannst.",
+    html: `<h1>Mental Wellness 101</h1><span class="subtitle">Wie K\u00f6rper, Psyche und soziales Umfeld zusammenh\u00e4ngen</span><hr><p>Psychische Gesundheit ist genauso wichtig wie physische. Unser mentales Wohlbefinden ist nicht von unserem K\u00f6rper, unseren Beziehungen oder unserem Alltag zu trennen.</p><hr><blockquote>\u201eDein Verstand ist dein wichtigstes Werkzeug. Pflege ihn genauso bewusst wie deinen K\u00f6rper.\u201c</blockquote><hr><h2>1. Das Gleichgewicht zwischen Anspannung und Erholung</h2><p>Wir befinden uns t\u00e4glich in einem stetigen Wechsel zwischen Anspannung und Erholung. Wenn \u00e4u\u00dfere Belastungen \u00fcber lange Zeit \u00fcberwiegen, gerät dieses Gleichgewicht ins Wanken.</p><h2>2. Die drei S\u00e4ulen der mentalen Gesundheit</h2><p><strong>K\u00f6rper:</strong> Schlaf, Bewegung, Ern\u00e4hrung.<br><strong>Psyche:</strong> Wie wir mit uns selbst sprechen, welche Glaubenss\u00e4tze wir haben \u2013 all das ist lernbar.<br><strong>Soziales Umfeld:</strong> Echte Verbindungen zu anderen sind einer der st\u00e4rksten Schutzfaktoren.</p><h2>3. Was du selbst beeinflussen kannst</h2><p>Kleine, konsistente Entscheidungen machen \u00fcber Zeit einen echten Unterschied.</p><div class="script-box"><span class="box-label">Skript-Box</span><p>\u201eWas brauche ich gerade wirklich \u2013 Bewegung, Ruhe, Verbindung, oder einfach ein ehrliches Gespr\u00e4ch?\u201c</p></div><div class="journal-box"><span class="box-label">Journaling-Fragen</span><ul><li>Welche der drei S\u00e4ulen vernachl\u00e4ssige ich gerade am meisten?</li><li>Gibt es Menschen in meinem Leben, die meine mentale Batterie aufladen \u2013 und solche, die sie leeren?</li><li>Was w\u00fcrde \u201egut auf mich achten\u201c f\u00fcr mich konkret bedeuten?</li></ul></div>`
+  },
+  {
+    cat: "Therapy, Healing & Mental Health Basics", grad: "var(--g-lilac)",
+    accent: "linear-gradient(90deg,#9080C0,#D0C8E0)",
+    title: "Therapie 101",
+    subtitle: "Hilfe finden, verstehen und annehmen",
+    excerpt: "Du musst nicht erst in einer Krise sein, um Therapie zu beginnen. Was Therapie wirklich ist \u2013 und wie du den richtigen Therapeuten findest.",
+    html: `<h1>Therapie 101</h1><span class="subtitle">Hilfe finden, verstehen und annehmen</span><hr><p>Du musst nicht erst warten, bis du dich in einer tiefen Krise befindest. Therapie ist kein letzter Ausweg \u2013 sie ist ein Werkzeug. Bei der Behandlung von Depressionen verbessern sich rund 80 Prozent der Menschen, die eine Therapie beginnen.</p><hr><blockquote>\u201eSich Hilfe zu suchen, ist kein Zeichen von Schw\u00e4che. Es ist ein Zeichen von Mut.\u201c</blockquote><hr><h2>1. Was Therapie ist</h2><p>Psychotherapie ist der Prozess, mit einem ausgebildeten Experten \u00fcber deine Probleme zu sprechen \u2013 um Bew\u00e4ltigungsstrategien zu entwickeln, Verhaltensmuster zu verstehen und Ziele zu definieren.</p><h2>2. Den richtigen Therapeuten finden</h2><p>Der erste Schritt ist, jemanden zu finden, bei dem du dich sicher genug f\u00fchlst, um ehrlich zu sein. Im Erstgespr\u00e4ch darfst du Fragen stellen \u2013 nicht nur beantworten.</p><h2>3. Wann Medikamente sinnvoll sein k\u00f6nnen</h2><p>In manchen F\u00e4llen kann eine medikament\u00f6se Behandlung \u2013 oft in Kombination mit Therapie \u2013 sehr hilfreich sein. Du darfst alle Fragen stellen, die du hast.</p><div class="script-box"><span class="box-label">Skript-Box: Was du im Erstgespr\u00e4ch fragen kannst</span><p>\u201eWelche Erfahrung haben Sie mit dem, womit ich k\u00e4mpfe?\u201c<br>\u201eWelchen therapeutischen Ansatz verfolgen Sie?\u201c<br>\u201eWie lange wird die Therapie voraussichtlich dauern?\u201c<br>\u201eWie werde ich merken, dass wir Fortschritte machen?\u201c</p></div><div class="journal-box"><span class="box-label">Journaling-Fragen</span><ul><li>Gibt es etwas, das mich schon l\u00e4nger belastet und das ich alleine nicht l\u00f6sen kann?</li><li>Was h\u00e4lt mich davon ab, mir professionelle Unterst\u00fctzung zu suchen?</li><li>Was w\u00fcrde ich jemandem sagen, den ich liebe, wenn er dieselben Dinge durchmacht wie ich?</li></ul></div>`
+  }
+];
+
+const ORDER = ["Anxiety & Overthinking","Boundaries & Relationships","Self-Worth & Shadow Work","Loneliness & Connection","Nutrition & Body Image","Habits, Sleep & Productivity","Therapy, Healing & Mental Health Basics"];
+
+function buildLearn() {
+  const body = document.getElementById("learnBody");
+  ORDER.forEach(catName => {
+    const arts = ARTICLES.filter(a => a.cat === catName);
+    if (!arts.length) return;
+    const section = document.createElement("div");
+    section.className = "cat-section";
+    section.innerHTML = `<div class="cat-header"><div class="cat-orb" style="background:${arts[0].grad}"></div><div><div class="cat-title">${catName}</div><div class="cat-desc">${arts.length} Artikel</div></div></div>`;
+    const grid = document.createElement("div");
+    grid.className = "articles-grid";
+    arts.forEach(art => {
+      const card = document.createElement("div");
+      card.className = "article-card";
+      card.innerHTML = `<div class="article-card__accent" style="background:${art.accent}"></div><div class="article-card__tag">Learn</div><div class="article-card__title">${art.title}</div><div class="article-card__excerpt">${art.excerpt}</div><div class="article-card__read">Artikel lesen <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>`;
+      card.addEventListener("click", () => openArticle(art));
+      grid.appendChild(card);
+    });
+    section.appendChild(grid);
+    body.appendChild(section);
+  });
+}
+
+function openArticle(art) {
+  document.getElementById("panelCat").textContent = art.cat;
+  document.getElementById("panelBody").innerHTML = art.html;
+  document.getElementById("overlay").classList.add("open");
+  document.getElementById("articlePanel").classList.add("open");
+  document.body.style.overflow = "hidden";
+  document.getElementById("articlePanel").scrollTop = 0;
+  document.getElementById("panelBody").scrollTop = 0;
+}
+
+function closePanel() {
+  document.getElementById("overlay").classList.remove("open");
+  document.getElementById("articlePanel").classList.remove("open");
+  document.body.style.overflow = "";
+}
+
+document.addEventListener("keydown", e => { if (e.key === "Escape") closePanel(); });
+buildLearn();
+</script>
+</body>
+</html>

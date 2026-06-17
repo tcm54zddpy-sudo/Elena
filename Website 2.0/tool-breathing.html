@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mindbloom — Atemübung</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Mulish:wght@300;400;500&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #F8F7F4;
+  --white:     #FFFFFF;
+  --border:    rgba(0,0,0,0.08);
+  --border-m:  rgba(0,0,0,0.13);
+  --text:      #1A1A1A;
+  --muted:     #6B6B6B;
+  --faint:     #ABABAB;
+  --g-sage:    linear-gradient(135deg,#C8D8C0,#8FAF88);
+  --g-dusk:    linear-gradient(135deg,#C4C0DC,#8A84B8);
+  --g-blush:   linear-gradient(135deg,#DEC9C4,#BF9690);
+  --g-slate:   linear-gradient(135deg,#B8CCDA,#7A9DB5);
+  --g-amber:   linear-gradient(135deg,#DDD0B0,#BCA870);
+  --sage-tint: #F0F4EE;
+  --sage:      #5A8050;
+  --serif:     'Playfair Display',Georgia,serif;
+  --serif-body:'Lora',Georgia,serif;
+  --sans:      'Mulish',sans-serif;
+  --r:16px;
+}
+
+html, body { height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  display: flex; flex-direction: column;
+}
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; font-family: var(--sans); border: none; }
+
+/* ── STAGE ── */
+.stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+.bg-orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  transition: opacity 2s ease, transform 2s ease;
+}
+.bg-orb--1 {
+  width: 480px; height: 480px;
+  top: -120px; right: -160px;
+  background: radial-gradient(circle, rgba(200,216,192,0.35) 0%, transparent 70%);
+  opacity: 0;
+}
+.bg-orb--2 {
+  width: 360px; height: 360px;
+  bottom: -80px; left: -100px;
+  background: radial-gradient(circle, rgba(143,175,136,0.25) 0%, transparent 70%);
+  opacity: 0;
+}
+.bg-orb.visible { opacity: 1; }
+
+/* ── CARD ── */
+.card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 2.8rem 2.4rem;
+  width: 100%;
+  max-width: 520px;
+  position: relative; z-index: 1;
+  box-shadow: 0 4px 32px rgba(0,0,0,.07);
+  animation: fadeIn .45s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.card-eyebrow {
+  font-size: 10.5px; font-weight: 500; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--faint);
+  margin-bottom: 12px;
+}
+
+.card-title {
+  font-family: var(--serif);
+  font-size: clamp(22px, 4vw, 30px);
+  font-weight: 400; line-height: 1.25;
+  margin-bottom: 10px;
+}
+.card-sub {
+  font-family: var(--serif-body);
+  font-size: 14.5px; font-style: italic;
+  color: var(--muted); line-height: 1.65;
+  margin-bottom: 24px;
+}
+
+.btn-primary {
+  padding: 0.6rem 1.6rem; border-radius: 100px;
+  background: var(--text); color: #fff;
+  font-size: 13px; font-weight: 500; border: none;
+  transition: opacity .18s; display: inline-flex; align-items: center; gap: 6px;
+}
+.btn-primary:hover { opacity: .8; }
+
+.btn-secondary {
+  padding: 0.55rem 1.3rem; border-radius: 100px;
+  border: 1px solid var(--border-m); background: none;
+  font-size: 13px; color: var(--muted);
+  transition: color .18s, border-color .18s;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.btn-secondary:hover { color: var(--text); border-color: var(--text); }
+
+.btn-ghost {
+  font-size: 12px; color: var(--faint); background: none; border: none;
+  cursor: pointer; transition: color .18s; padding: 0;
+}
+.btn-ghost:hover { color: var(--muted); }
+
+/* ── INTRO ── */
+.intro-card { text-align: center; }
+.intro-card .card-title { font-size: clamp(24px,4vw,34px); margin-bottom: 14px; }
+
+.intro-steps {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px; margin: 20px 0 28px;
+}
+.intro-step {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 12px; padding: 14px 10px;
+  text-align: center;
+}
+.intro-step-num {
+  font-family: var(--serif); font-size: 1.6rem;
+  color: var(--sage); font-weight: 300;
+  display: block; margin-bottom: 4px;
+}
+.intro-step-label {
+  font-size: 11px; color: var(--muted); font-weight: 400;
+  text-transform: uppercase; letter-spacing: .08em;
+  display: block; margin-bottom: 2px;
+}
+.intro-step-unit {
+  font-size: 11px; color: var(--faint);
+}
+
+.btn-start {
+  width: 100%;
+  padding: 0.8rem; border-radius: 100px;
+  background: var(--text); color: #fff;
+  font-size: 14px; font-weight: 500; border: none;
+  transition: opacity .18s; cursor: pointer;
+}
+.btn-start:hover { opacity: .8; }
+
+/* ── BREATHING ANIMATION ── */
+.breath-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+.breath-ring-wrap {
+  position: relative;
+  width: 220px; height: 220px;
+  margin: 0 auto 32px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.breath-ring {
+  position: absolute;
+  border-radius: 50%;
+  transition: transform 0s; /* will be overridden by JS */
+}
+
+.breath-ring--outer {
+  width: 220px; height: 220px;
+  border: 1.5px solid rgba(90,128,80,0.15);
+}
+.breath-ring--middle {
+  width: 170px; height: 170px;
+  border: 1px solid rgba(90,128,80,0.10);
+}
+.breath-ring--inner {
+  width: 120px; height: 120px;
+  background: var(--g-sage);
+  box-shadow: 0 0 40px rgba(143,175,136,0.3);
+  transition: transform 4s cubic-bezier(.45,.05,.55,.95),
+              box-shadow 1s ease;
+}
+.breath-ring--inner.hold {
+  transition: transform 2s ease,
+              box-shadow 0.5s ease;
+}
+.breath-ring--inner.exhale {
+  transition: transform 4s cubic-bezier(.45,.05,.55,.95),
+              box-shadow 1s ease;
+}
+
+.breath-center {
+  position: relative; z-index: 2;
+  text-align: center;
+  pointer-events: none;
+}
+.breath-phase {
+  font-family: var(--serif);
+  font-size: 1rem; font-weight: 400;
+  color: var(--white);
+  display: block;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+.breath-count {
+  font-family: var(--serif);
+  font-size: 2rem; font-weight: 300;
+  color: var(--white);
+  display: block;
+  line-height: 1;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+
+.breath-label {
+  font-family: var(--serif);
+  font-size: 1.3rem; font-weight: 400;
+  color: var(--text);
+  text-align: center;
+  margin-bottom: 6px;
+  min-height: 2rem;
+  transition: opacity .4s ease;
+}
+.breath-sub {
+  font-family: var(--serif-body);
+  font-size: 13px; font-style: italic;
+  color: var(--muted);
+  text-align: center;
+  margin-bottom: 32px;
+  min-height: 1.4rem;
+}
+
+.breath-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.round-counter {
+  font-size: 12px; color: var(--faint);
+}
+
+/* cycle dots */
+.cycle-dots {
+  display: flex; gap: 6px; justify-content: center;
+  margin-bottom: 28px;
+}
+.cdot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--border-m);
+  transition: background .4s, transform .3s;
+}
+.cdot.done { background: var(--sage); }
+.cdot.active { background: var(--sage); transform: scale(1.4); }
+
+/* ── FINISH ── */
+.finish-card { text-align: center; }
+.finish-orb {
+  width: 72px; height: 72px; border-radius: 50%;
+  background: var(--g-sage); margin: 0 auto 20px;
+  display: flex; align-items: center; justify-content: center;
+}
+.finish-note {
+  font-family: var(--serif-body); font-style: italic;
+  font-size: 14.5px; color: var(--muted);
+  margin-bottom: 28px; line-height: 1.7;
+}
+.finish-actions { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+
+/* ── TECHNIQUE SELECT ── */
+.technique-grid {
+  display: flex; flex-direction: column; gap: 8px;
+  margin-bottom: 28px;
+}
+.technique-option {
+  display: flex; align-items: center; gap: 14px;
+  background: var(--bg); border: 1.5px solid var(--border);
+  border-radius: 12px; padding: 14px 16px;
+  cursor: pointer; transition: border-color .18s, background .18s;
+  text-align: left;
+}
+.technique-option:hover { border-color: var(--border-m); }
+.technique-option.selected { border-color: var(--sage); background: var(--sage-tint); }
+.technique-icon {
+  width: 38px; height: 38px; border-radius: 50%;
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+}
+.technique-info { flex: 1; }
+.technique-name {
+  font-family: var(--serif); font-size: 15px; font-weight: 400;
+  color: var(--text); display: block; margin-bottom: 2px;
+}
+.technique-desc { font-size: 12px; color: var(--muted); }
+.technique-rhythm {
+  font-size: 11px; font-weight: 500; color: var(--faint);
+  letter-spacing: .06em;
+}
+</style>
+<script src="nav.js"></script>
+</head>
+<body>
+<div id="site-nav-placeholder"></div>
+
+<div class="stage" id="stage">
+  <div class="bg-orb bg-orb--1" id="bgOrb1"></div>
+  <div class="bg-orb bg-orb--2" id="bgOrb2"></div>
+  <div id="cardContainer"></div>
+</div>
+
+<script>
+const TECHNIQUES = [
+  {
+    id: '4-2-4',
+    name: '4-2-4 Atemübung',
+    desc: 'Beruhigt das Nervensystem, ideal bei Stress & Angst',
+    rhythm: '4s einatmen · 2s halten · 4s ausatmen',
+    icon: '🌿',
+    phases: [
+      { label: 'Einatmen',  duration: 4, scale: 1.35, action: 'inhale' },
+      { label: 'Halten',    duration: 2, scale: 1.35, action: 'hold'   },
+      { label: 'Ausatmen',  duration: 4, scale: 1.0,  action: 'exhale' },
+    ],
+    cycles: 5,
+    introText: 'Atme tief und gleichmäßig. Lass den Atem dich führen.',
+  },
+  {
+    id: '4-7-8',
+    name: '4-7-8 Technik',
+    desc: 'Tiefe Entspannung, gut zum Einschlafen',
+    rhythm: '4s einatmen · 7s halten · 8s ausatmen',
+    icon: '🌙',
+    phases: [
+      { label: 'Einatmen',  duration: 4, scale: 1.35, action: 'inhale' },
+      { label: 'Halten',    duration: 7, scale: 1.35, action: 'hold'   },
+      { label: 'Ausatmen',  duration: 8, scale: 1.0,  action: 'exhale' },
+    ],
+    cycles: 4,
+    introText: 'Langsam und tief. Diese Technik signalisiert deinem Körper: Es ist sicher.',
+  },
+  {
+    id: 'box',
+    name: 'Box Breathing',
+    desc: 'Fokus & Ausgeglichenheit, von Navy SEALs genutzt',
+    rhythm: '4s einatmen · 4s halten · 4s ausatmen · 4s halten',
+    icon: '□',
+    phases: [
+      { label: 'Einatmen',  duration: 4, scale: 1.35, action: 'inhale' },
+      { label: 'Halten',    duration: 4, scale: 1.35, action: 'hold'   },
+      { label: 'Ausatmen',  duration: 4, scale: 1.0,  action: 'exhale' },
+      { label: 'Halten',    duration: 4, scale: 1.0,  action: 'hold'   },
+    ],
+    cycles: 4,
+    introText: 'Gleichmäßig wie ein Quadrat. Jede Seite hat denselben Wert.',
+  },
+];
+
+let selectedTechIdx = 0;
+let currentCycle = 0;
+let currentPhase = 0;
+let timer = null;
+let countdown = 0;
+let running = false;
+
+function renderIntro() {
+  clearAll();
+  const c = document.getElementById('cardContainer');
+  c.innerHTML = '';
+  const card = document.createElement('div');
+  card.className = 'card intro-card';
+
+  const t = TECHNIQUES[selectedTechIdx];
+
+  card.innerHTML = `
+    <div class="card-eyebrow">Beruhigung · Atemübung</div>
+    <div class="card-title">Komm zurück zu dir.</div>
+    <div class="card-sub">Wähle eine Technik und folge dem Rhythmus. Dein Nervensystem weiß, was zu tun ist.</div>
+    <div class="technique-grid">
+      ${TECHNIQUES.map((tech, i) => `
+        <div class="technique-option${i === selectedTechIdx ? ' selected' : ''}" onclick="selectTechnique(${i})">
+          <div class="technique-icon">${tech.icon}</div>
+          <div class="technique-info">
+            <span class="technique-name">${tech.name}</span>
+            <span class="technique-desc">${tech.desc}</span>
+          </div>
+          <span class="technique-rhythm">${tech.phases.map(p => p.duration).join('-')}</span>
+        </div>`).join('')}
+    </div>
+    <button class="btn-start" onclick="startBreathing()">Jetzt beginnen</button>
+    <div style="margin-top:14px; font-size:12px; color:var(--faint); text-align:center;">
+      ${t.cycles} Runden · ca. ${Math.round(t.cycles * t.phases.reduce((s,p)=>s+p.duration,0) / 60)} Minuten · Alles bleibt bei dir
+    </div>`;
+
+  c.appendChild(card);
+}
+
+function selectTechnique(idx) {
+  selectedTechIdx = idx;
+  renderIntro();
+}
+
+function startBreathing() {
+  currentCycle = 0;
+  currentPhase = 0;
+  running = true;
+
+  document.getElementById('bgOrb1').classList.add('visible');
+  document.getElementById('bgOrb2').classList.add('visible');
+
+  renderBreathCard();
+  setTimeout(() => runPhase(), 200);
+}
+
+function renderBreathCard() {
+  const t = TECHNIQUES[selectedTechIdx];
+  const c = document.getElementById('cardContainer');
+  c.innerHTML = '';
+  const card = document.createElement('div');
+  card.className = 'card breath-stage';
+
+  const dotsHTML = Array.from({length: t.cycles}, (_, i) => `
+    <div class="cdot${i < currentCycle ? ' done' : i === currentCycle ? ' active' : ''}" id="cdot${i}"></div>
+  `).join('');
+
+  card.innerHTML = `
+    <div class="cycle-dots">${dotsHTML}</div>
+    <div class="breath-ring-wrap">
+      <div class="breath-ring breath-ring--outer" id="ringOuter"></div>
+      <div class="breath-ring breath-ring--middle" id="ringMiddle"></div>
+      <div class="breath-ring breath-ring--inner" id="ringInner"></div>
+      <div class="breath-center">
+        <span class="breath-phase" id="breathPhase"></span>
+        <span class="breath-count" id="breathCount"></span>
+      </div>
+    </div>
+    <div class="breath-label" id="breathLabel"></div>
+    <div class="breath-sub" id="breathSub">${t.introText}</div>
+    <div class="breath-controls">
+      <button class="btn-ghost" onclick="stopBreathing()">← Abbrechen</button>
+      <span class="round-counter" id="roundCounter">Runde ${currentCycle + 1} von ${t.cycles}</span>
+    </div>`;
+
+  c.appendChild(card);
+}
+
+function runPhase() {
+  if (!running) return;
+  const t = TECHNIQUES[selectedTechIdx];
+  const phase = t.phases[currentPhase];
+  countdown = phase.duration;
+
+  updatePhaseUI(phase);
+
+  const tick = setInterval(() => {
+    if (!running) { clearInterval(tick); return; }
+    countdown--;
+    updateCountdown(countdown);
+
+    if (countdown <= 0) {
+      clearInterval(tick);
+      nextPhase();
+    }
+  }, 1000);
+}
+
+function updatePhaseUI(phase) {
+  const phaseEl   = document.getElementById('breathPhase');
+  const countEl   = document.getElementById('breathCount');
+  const labelEl   = document.getElementById('breathLabel');
+  const innerRing = document.getElementById('ringInner');
+  if (!phaseEl) return;
+
+  phaseEl.textContent  = phase.label;
+  countEl.textContent  = phase.duration;
+  labelEl.textContent  = phase.label;
+
+  innerRing.className = 'breath-ring breath-ring--inner' +
+    (phase.action === 'hold' ? ' hold' : phase.action === 'exhale' ? ' exhale' : '');
+  innerRing.style.transform = `scale(${phase.scale})`;
+
+  const glow = phase.action === 'inhale' ? '0 0 60px rgba(143,175,136,0.45)' :
+               phase.action === 'hold'   ? '0 0 50px rgba(143,175,136,0.35)' :
+                                           '0 0 20px rgba(143,175,136,0.15)';
+  innerRing.style.boxShadow = glow;
+}
+
+function updateCountdown(n) {
+  const countEl = document.getElementById('breathCount');
+  if (countEl) countEl.textContent = Math.max(n, 0);
+}
+
+function nextPhase() {
+  if (!running) return;
+  const t = TECHNIQUES[selectedTechIdx];
+  currentPhase++;
+
+  if (currentPhase >= t.phases.length) {
+    currentPhase = 0;
+    currentCycle++;
+
+    if (currentCycle >= t.cycles) {
+      renderFinish();
+      return;
+    }
+
+    updateCycleDots();
+    document.getElementById('roundCounter').textContent =
+      `Runde ${currentCycle + 1} von ${t.cycles}`;
+  }
+
+  runPhase();
+}
+
+function updateCycleDots() {
+  const t = TECHNIQUES[selectedTechIdx];
+  for (let i = 0; i < t.cycles; i++) {
+    const dot = document.getElementById('cdot' + i);
+    if (!dot) continue;
+    dot.className = 'cdot' +
+      (i < currentCycle ? ' done' : i === currentCycle ? ' active' : '');
+  }
+}
+
+function stopBreathing() {
+  running = false;
+  clearAll();
+  document.getElementById('bgOrb1').classList.remove('visible');
+  document.getElementById('bgOrb2').classList.remove('visible');
+  renderIntro();
+}
+
+function clearAll() {
+  running = false;
+  if (timer) { clearInterval(timer); timer = null; }
+}
+
+function renderFinish() {
+  running = false;
+  document.getElementById('bgOrb1').classList.remove('visible');
+  document.getElementById('bgOrb2').classList.remove('visible');
+
+  const t = TECHNIQUES[selectedTechIdx];
+  const c = document.getElementById('cardContainer');
+  c.innerHTML = '';
+  const card = document.createElement('div');
+  card.className = 'card finish-card';
+
+  card.innerHTML = `
+    <div class="finish-orb">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <div class="card-title" style="margin-bottom:10px;">Gut gemacht.</div>
+    <div class="finish-note">Du hast ${t.cycles} Runden ${t.name} abgeschlossen. Dein Nervensystem hat gerade aktiv umgeschaltet — das spürt man nicht immer sofort, aber es wirkt.</div>
+    <div class="finish-actions">
+      <button class="btn-primary" onclick="startBreathing()">Nochmal</button>
+      <a href="tools.html" class="btn-secondary">← Zurück zu den Tools</a>
+    </div>`;
+
+  c.appendChild(card);
+}
+
+renderIntro();
+</script>
+</body>
+</html>

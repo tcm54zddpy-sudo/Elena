@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mindbloom — Wie man jemandem mit Angstzuständen wirklich hilft</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Mulish:wght@300;400;500&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<script src="nav.js"></script>
+<script src="library.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #F8F7F4; --white: #FFFFFF;
+  --border: rgba(0,0,0,0.08); --border-m: rgba(0,0,0,0.13);
+  --text: #1A1A1A; --muted: #6B6B6B; --faint: #ABABAB;
+  --sage: #5A8050; --dusk: #6A64A0;
+  --serif: "Playfair Display", Georgia, serif;
+  --serif-body: "Lora", Georgia, serif;
+  --sans: "Mulish", sans-serif;
+  --r: 16px; --r-sm: 10px;
+}
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: var(--sans); font-weight: 300; font-size: 15px; line-height: 1.75; -webkit-font-smoothing: antialiased; }
+a { text-decoration: none; color: inherit; }
+.article-wrapper { max-width: 700px; margin: 0 auto; padding: 2.5rem 2.8rem 6rem; }
+.article-back { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--faint); font-weight: 400; margin-bottom: 2rem; transition: color .18s; }
+.article-back:hover { color: var(--muted); }
+.article-cat-label { display: inline-block; font-size: 10.5px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; padding: 4px 12px; border-radius: 100px; margin-bottom: 1.2rem; }
+article h1 { font-family: var(--serif); font-size: clamp(22px, 3.5vw, 32px); font-weight: 400; line-height: 1.3; margin-bottom: 6px; }
+article .subtitle { font-family: var(--serif-body); font-style: italic; font-size: 15px; color: var(--muted); margin-bottom: 2rem; display: block; }
+article hr { border: none; border-top: 1px solid var(--border); margin: 1.8rem 0; }
+article blockquote { border-left: 3px solid var(--border-m); padding-left: 1.2rem; font-family: var(--serif-body); font-style: italic; font-size: 15px; color: var(--muted); margin: 1.5rem 0; line-height: 1.75; }
+article h2 { font-family: var(--serif); font-size: 1.05rem; font-weight: 400; margin: 2rem 0 .6rem; }
+article p { font-family: var(--serif-body); font-size: 15px; line-height: 1.85; margin-bottom: 1.1rem; color: #2A2A2A; }
+article strong { font-weight: 500; color: var(--text); }
+article ul, article ol { padding-left: 1.4rem; margin-bottom: 1.1rem; }
+article li { font-family: var(--serif-body); font-size: 15px; line-height: 1.85; margin-bottom: .4rem; color: #2A2A2A; }
+.script-box { background: #f5f4f0; border: 1px solid var(--border-m); border-radius: var(--r-sm); padding: 1.4rem 1.6rem; margin: 1.5rem 0; }
+.script-box .box-label { font-size: 10px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); display: block; margin-bottom: .9rem; }
+.script-box p { font-size: 14px; margin-bottom: .7rem; }
+.script-box p:last-child { margin-bottom: 0; }
+.journal-box { background: #f0f4ee; border: 1px solid rgba(90,128,80,.18); border-radius: var(--r-sm); padding: 1.4rem 1.6rem; margin: 1.5rem 0; }
+.journal-box .box-label { font-size: 10px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--sage); display: block; margin-bottom: .9rem; }
+.journal-box li { font-size: 14px; color: #3A5030; }
+.tip-box { background: #eeedf6; border: 1px solid rgba(106,100,160,.18); border-radius: var(--r-sm); padding: 1rem 1.4rem; margin: 1.5rem 0; }
+.tip-box p { font-size: 13px; color: var(--dusk); margin: 0; font-style: italic; }
+.article-footer-nav { margin-top: 3.5rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+.footer-back-link { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--faint); padding: 8px 16px; border: 1px solid var(--border); border-radius: 100px; transition: all .18s; }
+.footer-back-link:hover { border-color: var(--border-m); color: var(--muted); }
+</style>
+</head>
+<body>
+<div id="site-nav-placeholder"></div>
+
+<div class="article-wrapper">
+  <a class="article-back" href="topics.html">← Back to Topics</a>
+
+  <div class="article-cat-label" style="background:rgba(138,132,184,.12);color:#6A64A0;">Emotions</div>
+
+  <article>
+    <h1>Wie man jemandem mit Angstzuständen wirklich hilft</h1>
+    <span class="subtitle">Ein Guide für Angehörige</span>
+    <hr>
+    <p>Wenn ein Mensch, der uns wichtig ist, in einer Spirale aus ängstlichen Gedanken feststeckt, fühlen wir uns oft hilflos. Gut gemeinte Aussagen wie „Beruhig dich einfach" helfen in diesen Momenten nicht nur nicht – sie können dazu führen, dass sich die betroffene Person noch unverstandener fühlt.</p>
+    <hr>
+    <blockquote>„Ich höre dich. Es ist schwer. Ich bin hier."</blockquote>
+    <hr>
+    <h2>1. Übe reflektiertes Zuhören</h2>
+    <p>Das Wirksamste ist echtes, ungeteiltes Zuhören. Fasse zusammen, was die Person sagt, und zeige, dass du ihre Emotionen nachvollziehen kannst.</p>
+    <h2>2. Vermeide toxische Positivität</h2>
+    <p>„Schau auf das Positive!", „Alles wird gut" – diese Sätze tun negative Emotionen einfach ab, anstatt sie anzuerkennen.</p>
+    <h2>3. Hilf dabei, Katastrophengedanken zu erden</h2>
+    <p>Eine wirksame Frage: „Erinnerst du dich an eine andere Zeit, als du dich genauso intensiv gesorgt hast – und was ist daraus geworden?"</p>
+    <h2>4. Beruhige durch sanfte Ablenkung</h2>
+    <p>Biete an, gemeinsam tief Atem zu holen. Ein Spaziergang, eine Grounding-Übung – das hilft, akut aus der Gedankenspirale auszubrechen.</p>
+    <h2>5. Unterstütze bei der Suche nach professioneller Hilfe</h2>
+    <p>Als Angehöriger kannst du nicht die Rolle eines Therapeuten übernehmen. Wenn die Ängste überhand nehmen, behutsam professionelle Unterstützung ins Gespräch bringen.</p>
+    <div class="script-box">
+      <span class="box-label">Skript-Box</span>
+      <p><strong>Statt:</strong> „Beruhig dich doch einfach."<br><strong>Sag lieber:</strong> „Ich sehe, dass es gerade schwer ist. Ich bin hier."</p>
+      <p><strong>Statt:</strong> „Das wird schon alles gut werden."<br><strong>Sag lieber:</strong> „Ich weiß nicht, wie es ausgeht – aber ich weiß, dass wir es gemeinsam herausfinden werden."</p>
+    </div>
+    <div class="journal-box">
+      <span class="box-label">Journaling-Fragen</span>
+      <ul>
+        <li>Wie reagiere ich instinktiv, wenn jemand Angst zeigt – und was steckt dahinter?</li>
+        <li>Wo ist die Grenze zwischen echtem Unterstützen und dem Persönlich-Übernehmen der emotionalen Last?</li>
+        <li>Was brauche ich selbst, um für jemanden da sein zu können?</li>
+      </ul>
+    </div>
+  </article>
+
+  <div class="article-footer-nav">
+    <a class="footer-back-link" href="topics.html">← Back to Topics</a>
+  </div>
+</div>
+</body>
+</html>

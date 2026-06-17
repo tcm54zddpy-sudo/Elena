@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mindbloom – Rechtliches</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- TODO vor Launch: Google Fonts durch lokal gehostete Fonts ersetzen (DSGVO) -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Mulish:wght@300;400;500&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet" />
+  <script src="nav.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #F8F7F4;
+      --white:    #FFFFFF;
+      --border:   rgba(0,0,0,0.08);
+      --text:     #1A1A1A;
+      --muted:    #6B6B6B;
+      --faint:    #ABABAB;
+      --sage:     #5A8050;
+      --sage-tint:#F0F4EE;
+      --dusk:     #6A64A0;
+      --dusk-tint:#EEEDF6;
+      --amber:    #907840;
+      --amber-tint:#F5F0E4;
+      --serif:    'Playfair Display', Georgia, serif;
+      --sans:     'Mulish', sans-serif;
+      --r:        16px;
+      --shadow:   0 1px 4px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.06);
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--sans);
+      font-weight: 300;
+      font-size: 15px;
+      line-height: 1.75;
+      color: var(--text);
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; color: var(--sage); }
+    a:hover { text-decoration: underline; }
+
+    /* nav styles injected by nav.js */
+
+    /* ── LAYOUT ── */
+    .container { max-width: 1160px; margin: 0 auto; padding: 0 2.8rem; }
+
+    .legal-layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 3rem;
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 4rem 2.8rem 6rem;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      position: sticky;
+      top: 88px;
+      height: fit-content;
+    }
+    .sidebar__title {
+      font-size: .7rem;
+      font-weight: 500;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--faint);
+      margin-bottom: 1rem;
+    }
+    .sidebar__nav { list-style: none; display: flex; flex-direction: column; gap: .15rem; }
+    .sidebar__nav a {
+      display: block;
+      padding: .45rem .75rem;
+      border-radius: 8px;
+      font-size: .82rem;
+      color: var(--muted);
+      transition: background .15s, color .15s;
+    }
+    .sidebar__nav a:hover, .sidebar__nav a.active {
+      background: var(--white);
+      color: var(--text);
+      text-decoration: none;
+    }
+    .sidebar__nav .sidebar__group-title {
+      font-size: .7rem;
+      font-weight: 600;
+      color: var(--sage);
+      padding: .8rem .75rem .2rem;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    /* ── CONTENT ── */
+    .legal-content {
+      min-width: 0;
+    }
+
+    .legal-header {
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .legal-header__eyebrow {
+      display: inline-block;
+      font-size: .72rem;
+      font-weight: 500;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: .75rem;
+    }
+    .legal-header h1 {
+      font-family: var(--serif);
+      font-size: 2.2rem;
+      font-weight: 400;
+      line-height: 1.2;
+      margin-bottom: .75rem;
+    }
+    .legal-header__meta {
+      font-size: .82rem;
+      color: var(--muted);
+    }
+
+    /* Section blocks */
+    .legal-section {
+      margin-bottom: 4rem;
+      scroll-margin-top: 100px;
+    }
+    .legal-section__title {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 1.5rem;
+      padding-bottom: .75rem;
+      border-bottom: 2px solid var(--sage-tint);
+    }
+    .legal-section__title span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px; height: 28px;
+      background: var(--sage-tint);
+      color: var(--sage);
+      border-radius: 50%;
+      font-size: .85rem;
+      font-weight: 600;
+      font-family: var(--sans);
+      margin-right: .6rem;
+      flex-shrink: 0;
+    }
+
+    .legal-subsection {
+      margin-bottom: 2rem;
+      scroll-margin-top: 100px;
+    }
+    .legal-subsection h3 {
+      font-size: .95rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: .6rem;
+      letter-spacing: .01em;
+    }
+    p { margin-bottom: .75rem; color: var(--muted); font-size: .9rem; line-height: 1.8; }
+    p strong { color: var(--text); font-weight: 500; }
+
+    ul.legal-list {
+      list-style: none;
+      margin: .5rem 0 .75rem 0;
+      display: flex; flex-direction: column; gap: .35rem;
+    }
+    ul.legal-list li {
+      position: relative;
+      padding-left: 1.2rem;
+      font-size: .88rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+    ul.legal-list li::before {
+      content: "–";
+      position: absolute; left: 0;
+      color: var(--sage);
+      font-weight: 600;
+    }
+
+    /* Callout boxes */
+    .callout {
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+      font-size: .85rem;
+      line-height: 1.7;
+    }
+    .callout--warning {
+      background: #FFF8E1;
+      border-left: 3px solid #F5C842;
+      color: #7B5E00;
+    }
+    .callout--info {
+      background: var(--sage-tint);
+      border-left: 3px solid var(--sage);
+      color: #3A5A30;
+    }
+    .callout--crisis {
+      background: #FFF0F0;
+      border-left: 3px solid #C0392B;
+      color: #7B1A1A;
+    }
+    .callout p { color: inherit; margin-bottom: 0; }
+
+    /* Placeholder highlight */
+    .placeholder {
+      background: #FEF9C3;
+      border-radius: 4px;
+      padding: 1px 5px;
+      font-weight: 500;
+      color: #92400E;
+      font-family: monospace;
+      font-size: .85em;
+    }
+
+    /* Tab navigation (top) */
+    .legal-tabs {
+      display: flex;
+      gap: .5rem;
+      margin-bottom: 0;
+      flex-wrap: wrap;
+    }
+    .legal-tab {
+      padding: .5rem 1.1rem;
+      border-radius: 40px;
+      font-size: .82rem;
+      font-weight: 400;
+      color: var(--muted);
+      background: var(--white);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .legal-tab:hover { border-color: var(--sage); color: var(--sage); }
+    .legal-tab.active {
+      background: var(--sage);
+      color: #fff;
+      border-color: var(--sage);
+    }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* footer styles injected by nav.js */
+
+    @media (max-width: 768px) {
+      .legal-layout { grid-template-columns: 1fr; padding: 2rem 1.2rem 4rem; }
+      .sidebar { position: static; margin-bottom: 2rem; }
+      .nav__links { display: none; }
+      .legal-header h1 { font-size: 1.6rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="site-nav-placeholder"></div>
+
+  <!-- MAIN -->
+  <div class="legal-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <p class="sidebar__title">Rechtliches</p>
+      <ul class="sidebar__nav">
+        <li><span class="sidebar__group-title">Impressum</span></li>
+        <li><a href="#impressum-verantwortlich">Verantwortlicher</a></li>
+        <li><a href="#impressum-haftung">Haftungsausschluss</a></li>
+
+        <li><span class="sidebar__group-title">Datenschutz</span></li>
+        <li><a href="#ds-verantwortlicher">Verantwortlicher</a></li>
+        <li><a href="#ds-daten">Welche Daten</a></li>
+        <li><a href="#ds-art9">Gesundheitsdaten (Art. 9)</a></li>
+        <li><a href="#ds-cookies">Cookies</a></li>
+        <li><a href="#ds-rechte">Deine Rechte</a></li>
+        <li><a href="#ds-loeschung">Löschung & Export</a></li>
+
+        <li><span class="sidebar__group-title">Nutzungsbedingungen</span></li>
+        <li><a href="#agb-zweck">Zweck & Mindestalter</a></li>
+        <li><a href="#agb-erlaubt">Erlaubte Inhalte</a></li>
+        <li><a href="#agb-verboten">Verbotene Inhalte</a></li>
+        <li><a href="#agb-moderation">Moderation</a></li>
+        <li><a href="#agb-rechte">Rechte an Inhalten</a></li>
+        <li><a href="#agb-haftung">Haftung & Kündigung</a></li>
+      </ul>
+    </aside>
+
+    <!-- CONTENT -->
+    <main class="legal-content">
+
+      <div class="legal-header">
+        <span class="legal-header__eyebrow">Rechtliche Dokumente</span>
+        <h1>Impressum, Datenschutz &amp; Nutzungsbedingungen</h1>
+        <p class="legal-header__meta">Stand: Juni 2026 &nbsp;·&nbsp; Plattform: <span class="placeholder">Mindbloom</span> &nbsp;·&nbsp; Domain: <span class="placeholder">[DEINE-DOMAIN.DE]</span></p>
+
+        <div class="callout callout--warning" style="margin-top:1.2rem">
+          ⚠️ Alle <span class="placeholder">[PLATZHALTER]</span> müssen vor dem Launch durch echte Angaben ersetzt werden. Diese Texte sind eine rechtliche Vorlage – eine Prüfung durch einen deutschen Fachanwalt für IT-Recht wird empfohlen.
+        </div>
+
+        <!-- Tabs -->
+        <div class="legal-tabs" style="margin-top:1.5rem">
+          <button class="legal-tab active" onclick="showTab('impressum')">§ Impressum</button>
+          <button class="legal-tab" onclick="showTab('datenschutz')">🔒 Datenschutzerklärung</button>
+          <button class="legal-tab" onclick="showTab('agb')">📋 Nutzungsbedingungen</button>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════════════
+           TAB 1: IMPRESSUM
+      ════════════════════════════════════════════════ -->
+      <div id="tab-impressum" class="tab-content active">
+
+        <div class="legal-section" id="impressum-verantwortlich">
+          <h2 class="legal-section__title"><span>1</span>Angaben gemäß § 5 TMG</h2>
+
+          <div class="legal-subsection">
+            <h3>Verantwortlich für den Inhalt</h3>
+            <p>
+              <strong><span class="placeholder">[DEIN VOLLSTÄNDIGER NAME]</span></strong><br>
+              <span class="placeholder">[STRASSE UND HAUSNUMMER]</span><br>
+              <span class="placeholder">[PLZ ORT]</span><br>
+              Deutschland
+            </p>
+            <p>
+              E-Mail: <a href="mailto:[DEINE@EMAIL.DE]"><span class="placeholder">[DEINE@EMAIL.DE]</span></a>
+            </p>
+          </div>
+
+          <div class="legal-subsection">
+            <h3>Plattform</h3>
+            <p><span class="placeholder">Mindbloom</span> ist eine nicht-kommerzielle Community-Plattform zum Austausch über mentale Gesundheit und persönliches Wohlbefinden.</p>
+          </div>
+        </div>
+
+        <div class="legal-section" id="impressum-haftung">
+          <h2 class="legal-section__title"><span>2</span>Haftungsausschluss</h2>
+
+          <div class="legal-subsection">
+            <h3>Haftung für Inhalte</h3>
+            <p>Als Diensteanbieter sind wir gemäß § 7 Abs. 1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8–10 TMG sind wir nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen. Verpflichtungen zur Entfernung oder Sperrung bleiben unberührt. Eine Haftung ist jedoch erst ab dem Zeitpunkt der Kenntnis einer konkreten Rechtsverletzung möglich.</p>
+          </div>
+
+          <div class="legal-subsection">
+            <h3>Kein Ersatz für professionelle Hilfe</h3>
+            <div class="callout callout--crisis">
+              🆘 <strong>Mindbloom ist kein Ersatz für professionelle medizinische, psychologische oder therapeutische Beratung.</strong> Bei psychischen Krisen oder Notfällen:<br>
+              Telefonseelsorge (kostenlos, 24/7): <strong>0800 111 0 111</strong> oder <strong>0800 111 0 222</strong><br>
+              Notruf: <strong>112</strong>
+            </div>
+          </div>
+
+          <div class="legal-subsection">
+            <h3>Haftung für Links</h3>
+            <p>Unser Angebot enthält Links zu externen Websites. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter verantwortlich. Wir haben keinen Einfluss auf diese Inhalte.</p>
+          </div>
+
+          <div class="legal-subsection">
+            <h3>Urheberrecht</h3>
+            <p>Die durch den Seitenbetreiber erstellten Inhalte unterliegen dem deutschen Urheberrecht. Die Vervielfältigung oder Verwendung außerhalb des Urheberrechts bedarf der schriftlichen Zustimmung des Betreibers.</p>
+          </div>
+        </div>
+
+      </div><!-- /tab-impressum -->
+
+
+      <!-- ════════════════════════════════════════════════
+           TAB 2: DATENSCHUTZ
+      ════════════════════════════════════════════════ -->
+      <div id="tab-datenschutz" class="tab-content">
+
+        <div class="legal-section" id="ds-verantwortlicher">
+          <h2 class="legal-section__title"><span>1</span>Verantwortlicher</h2>
+          <p>Verantwortlich im Sinne der DSGVO:</p>
+          <p>
+            <strong><span class="placeholder">[DEIN VOLLSTÄNDIGER NAME]</span></strong><br>
+            <span class="placeholder">[STRASSE, PLZ ORT]</span><br>
+            E-Mail: <a href="mailto:[DEINE@EMAIL.DE]"><span class="placeholder">[DEINE@EMAIL.DE]</span></a>
+          </p>
+          <p>Wir verarbeiten personenbezogene Daten nur, soweit es zur Bereitstellung unserer Dienste notwendig ist oder du eingewilligt hast. <strong>Wir verkaufen deine Daten nicht und geben sie nicht zu Werbezwecken weiter.</strong></p>
+        </div>
+
+        <div class="legal-section" id="ds-daten">
+          <h2 class="legal-section__title"><span>2</span>Welche Daten wir erheben</h2>
+
+          <div class="legal-subsection">
+            <h3>Registrierungsdaten</h3>
+            <ul class="legal-list">
+              <li>E-Mail-Adresse (Kontoverifikation und Kommunikation)</li>
+              <li>Benutzername / Pseudonym (frei wählbar)</li>
+              <li>Passwort (verschlüsselt gespeichert, niemals im Klartext)</li>
+              <li>Datum der Registrierung</li>
+            </ul>
+            <p><strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. b) DSGVO (Vertragserfüllung)</p>
+          </div>
+
+          <div class="legal-subsection">
+            <h3>Profilangaben (freiwillig)</h3>
+            <ul class="legal-list">
+              <li>Profilbild</li>
+              <li>Kurzbeschreibung / Bio</li>
+              <li>Interessen</li>
+            </ul>
+            <p><strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. a) DSGVO (Einwilligung)</p>
+          </div>
+
+          <div class="legal-subsection">
+            <h3>Nutzerinhalte (Beiträge, Kommentare)</h3>
+            <p>Inhalte, die du auf <span class="placeholder">Mindbloom</span> veröffentlichst, werden auf unseren Servern gespeichert. Du kannst deine Beiträge jederzeit selbst löschen.</p>
+            <p><strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. b) DSGVO (Vertragserfüllung)</p>
+          </div>
+
+          <div class="legal-subsection">
+            <h3>Technische Daten (Server-Logs)</h3>
+            <ul class="legal-list">
+              <li>IP-Adresse (anonymisiert nach 7 Tagen)</li>
+              <li>Datum und Uhrzeit des Zugriffs</li>
+              <li>Browser-Typ und Betriebssystem</li>
+              <li>Aufgerufene URL</li>
+            </ul>
+            <p>Diese Daten werden ausschließlich zur technischen Sicherheit genutzt und nach spätestens <strong>14 Tagen automatisch gelöscht</strong>.</p>
+            <p><strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. f) DSGVO (berechtigte Interessen)</p>
+          </div>
+        </div>
+
+        <div class="legal-section" id="ds-art9">
+          <h2 class="legal-section__title"><span>3</span>Gesundheitsdaten nach Art. 9 DSGVO</h2>
+
+          <div class="callout callout--warning">
+            ⚠️ <strong>Wichtiger Hinweis:</strong> Inhalte über psychische Erkrankungen, Therapieerfahrungen oder mentale Gesundheit gelten als <strong>besondere Kategorie personenbezogener Daten</strong> nach Art. 9 DSGVO und genießen besonderen Schutz.
+          </div>
+
+          <div class="legal-subsection" style="margin-top:1rem">
+            <p>Wenn du Beiträge über deine psychische Gesundheit veröffentlichst, tust du dies freiwillig auf Grundlage von:</p>
+            <ul class="legal-list">
+              <li><strong>Art. 9 Abs. 2 lit. a) DSGVO:</strong> Deiner ausdrücklichen Einwilligung bei Registrierung</li>
+              <li><strong>Art. 9 Abs. 2 lit. e) DSGVO:</strong> Da du diese Daten bewusst öffentlich auf der Plattform teilst</li>
+            </ul>
+            <p>Du kannst diese Einwilligung jederzeit widerrufen, indem du deine Beiträge löschst oder deinen Account löschst.</p>
+          </div>
+        </div>
+
+        <div class="legal-section" id="ds-cookies">
+          <h2 class="legal-section__title"><span>4</span>Cookies</h2>
+
+          <div class="callout callout--info">
+            ✅ Wir setzen ausschließlich technisch notwendige Cookies. Es werden <strong>keine Tracking- oder Analyse-Cookies</strong> ohne deine Einwilligung gesetzt.
+          </div>
+
+          <div class="legal-subsection" style="margin-top:1rem">
+            <h3>Technisch notwendige Cookies (keine Einwilligung erforderlich)</h3>
+            <ul class="legal-list">
+              <li><strong>Session-Cookie</strong> – speichert deinen Login-Status; wird beim Logout gelöscht</li>
+              <li><strong>CSRF-Token</strong> – Schutz gegen Cross-Site-Request-Forgery</li>
+              <li><strong>Cookie-Einstellungen</strong> – speichert deine Cookie-Präferenz</li>
+            </ul>
+            <p><strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. f) DSGVO</p>
+          </div>
+        </div>
+
+        <div class="legal-section" id="ds-rechte">
+          <h2 class="legal-section__title"><span>5</span>Deine Rechte (Art. 15–22 DSGVO)</h2>
+
+          <ul class="legal-list">
+            <li><strong>Auskunftsrecht (Art. 15):</strong> Jederzeit Auskunft über deine gespeicherten Daten</li>
+            <li><strong>Berichtigungsrecht (Art. 16):</strong> Korrektur fehlerhafter Daten</li>
+            <li><strong>Löschungsrecht (Art. 17):</strong> Löschung deiner Daten verlangen</li>
+            <li><strong>Einschränkungsrecht (Art. 18):</strong> Einschränkung der Verarbeitung</li>
+            <li><strong>Datenportabilität (Art. 20):</strong> Export deiner Daten in maschinenlesbarem Format</li>
+            <li><strong>Widerspruchsrecht (Art. 21):</strong> Widerspruch gegen die Verarbeitung</li>
+            <li><strong>Widerruf der Einwilligung (Art. 7 Abs. 3):</strong> Jederzeit ohne Angabe von Gründen</li>
+          </ul>
+
+          <p>Zur Ausübung deiner Rechte wende dich an: <a href="mailto:[DEINE@EMAIL.DE]"><span class="placeholder">[DEINE@EMAIL.DE]</span></a></p>
+          <p>Du hast außerdem das Recht, eine Beschwerde bei der zuständigen Datenschutzaufsichtsbehörde einzureichen. Für Bayern: <strong>Bayerisches Landesamt für Datenschutzaufsicht (BayLDA)</strong>, Promenade 18, 91522 Ansbach.</p>
+        </div>
+
+        <div class="legal-section" id="ds-loeschung">
+          <h2 class="legal-section__title"><span>6</span>Löschung & Datenexport</h2>
+
+          <div class="legal-subsection">
+            <h3>Speicherdauer</h3>
+            <ul class="legal-list">
+              <li>Account-Daten: Bis zur Account-Löschung, danach innerhalb von 30 Tagen vollständig gelöscht</li>
+              <li>Beiträge: Sofort bei Löschung durch dich oder anonymisiert nach Account-Löschung</li>
+              <li>Server-Logs (IP-Adressen): Automatisch nach 14 Tagen</li>
+              <li>E-Mail-Korrespondenz: Bis zu 3 Jahre</li>
+            </ul>
+          </div>
+
+          <div class="legal-subsection">
+            <h3>Datenexport (Art. 20 DSGVO)</h3>
+            <p>Du kannst jederzeit einen vollständigen Export deiner Daten (Profil, Beiträge, Kommentare) im Format JSON oder CSV anfordern. Bereitstellung innerhalb von 30 Tagen.</p>
+            <p>Anfrage an: <a href="mailto:[DEINE@EMAIL.DE]"><span class="placeholder">[DEINE@EMAIL.DE]</span></a></p>
+          </div>
+
+          <div class="legal-subsection">
+            <h3>Datensicherheit (TOMs)</h3>
+            <ul class="legal-list">
+              <li>Verschlüsselte Übertragung via HTTPS/TLS</li>
+              <li>Passwort-Hashing mit Argon2/bcrypt</li>
+              <li>Zugriffsbeschränkungen auf Datenbankebene</li>
+              <li>Regelmäßige Sicherheitsupdates</li>
+              <li>Automatische Löschung von Logs</li>
+            </ul>
+          </div>
+        </div>
+
+      </div><!-- /tab-datenschutz -->
+
+
+      <!-- ════════════════════════════════════════════════
+           TAB 3: NUTZUNGSBEDINGUNGEN
+      ════════════════════════════════════════════════ -->
+      <div id="tab-agb" class="tab-content">
+
+        <div class="legal-section" id="agb-zweck">
+          <h2 class="legal-section__title"><span>1</span>Geltungsbereich & Mindestalter</h2>
+
+          <div class="legal-subsection">
+            <h3>Vertragsparteien</h3>
+            <p>Diese Nutzungsbedingungen gelten für die Plattform <span class="placeholder">Mindbloom</span>, betrieben von <span class="placeholder">[DEIN NAME]</span>, <span class="placeholder">[ADRESSE]</span>. Durch die Registrierung akzeptierst du diese Bedingungen.</p>
+          </div>
+
+          <div class="legal-subsection">
+            <h3>Mindestalter</h3>
+            <ul class="legal-list">
+              <li>Du musst mindestens <strong>16 Jahre</strong> alt sein</li>
+              <li>Unter 16 Jahren: ausdrückliche Einwilligung eines Erziehungsberechtigten erforderlich</li>
+              <li>Du gibst bei der Registrierung wahrheitsgemäße Angaben an</li>
+              <li>Nur ein Account pro Person (Mehrfach-Accounts untersagt)</li>
+            </ul>
+          </div>
+
+          <div class="legal-subsection">
+            <h3>Zweck der Plattform</h3>
+            <p><span class="placeholder">Mindbloom</span> ist eine Community-Plattform zum Austausch über mentale Gesundheit, Wohlbefinden und Selbstfürsorge.</p>
+            <div class="callout callout--crisis">
+              🆘 Die Plattform ist <strong>kein Ersatz für professionelle therapeutische oder medizinische Beratung</strong>. Bei einer Krise: <strong>Telefonseelsorge 0800 111 0 111</strong> (kostenlos, 24/7)
+            </div>
+          </div>
+        </div>
+
+        <div class="legal-section" id="agb-erlaubt">
+          <h2 class="legal-section__title"><span>2</span>Erlaubte Inhalte</h2>
+
+          <ul class="legal-list">
+            <li>Persönliche Erfahrungsberichte zu mentaler Gesundheit und Wohlbefinden</li>
+            <li>Tipps und Strategien zur Selbstfürsorge</li>
+            <li>Gegenseitige Unterstützung und Ermutigung in der Community</li>
+            <li>Fragen, Austausch und respektvolle Diskussionen</li>
+            <li>Ressourcen und Informationen (mit Quellenangabe)</li>
+          </ul>
+
+          <div class="callout callout--info" style="margin-top:1rem">
+            💬 Mindbloom ist ein <strong>Safe Space</strong>. Wir bitten alle Mitglieder, sich respektvoll und empathisch zu verhalten.
+          </div>
+        </div>
+
+        <div class="legal-section" id="agb-verboten">
+          <h2 class="legal-section__title"><span>3</span>Verbotene Inhalte</h2>
+
+          <div class="callout callout--warning" style="margin-bottom:1rem">
+            ⚠️ Verstöße gegen diese Regeln können zur sofortigen Sperrung des Accounts führen.
+          </div>
+
+          <ul class="legal-list">
+            <li>Detaillierte Beschreibungen von Methoden zur Selbstverletzung oder Suizid</li>
+            <li>Glorifizierung oder Romantisierung von Selbstverletzung, Suizid oder Essstörungen</li>
+            <li>Hassrede, Diskriminierung, Beleidigungen oder Mobbing</li>
+            <li>Falsche medizinische Informationen oder Heilsversprechen</li>
+            <li>Empfehlungen, Medikamente abzusetzen oder Therapien abzubrechen</li>
+            <li>Spam, Werbung oder kommerzielle Angebote ohne Genehmigung</li>
+            <li>Inhalte, die Minderjährige gefährden</li>
+            <li>Verletzung von Urheberrechten oder Persönlichkeitsrechten Dritter</li>
+            <li>Persönliche Daten anderer Nutzer ohne deren Einwilligung teilen</li>
+          </ul>
+        </div>
+
+        <div class="legal-section" id="agb-moderation">
+          <h2 class="legal-section__title"><span>4</span>Moderation & Meldungen</h2>
+
+          <div class="legal-subsection">
+            <h3>Sanktionsstufen</h3>
+            <ul class="legal-list">
+              <li><strong>Stufe 1:</strong> Verwarnung und Entfernung des Inhalts</li>
+              <li><strong>Stufe 2:</strong> Temporäre Sperre (7–30 Tage)</li>
+              <li><strong>Stufe 3:</strong> Permanente Sperrung des Accounts</li>
+            </ul>
+          </div>
+
+          <div class="legal-subsection">
+            <h3>Meldungen</h3>
+            <p>Problematische Inhalte kannst du über den Report-Button melden. Wir prüfen Meldungen zeitnah. Bei schwerwiegenden Verstößen (z.B. akute Selbstverletzungsgefahr) handeln wir sofort.</p>
+          </div>
+        </div>
+
+        <div class="legal-section" id="agb-rechte">
+          <h2 class="legal-section__title"><span>5</span>Rechte an deinen Inhalten</h2>
+
+          <p>Du behältst die Urheberrechte an deinen eigenen Beiträgen. Durch die Veröffentlichung räumst du uns eine nicht-exklusive, kostenlose Lizenz ein, diese Inhalte auf der Plattform darzustellen. Diese Lizenz endet, wenn du den Inhalt löschst oder deinen Account schließt.</p>
+          <p>Du bestätigst, dass deine Inhalte keine Rechte Dritter verletzen.</p>
+        </div>
+
+        <div class="legal-section" id="agb-haftung">
+          <h2 class="legal-section__title"><span>6</span>Haftung & Kündigung</h2>
+
+          <div class="legal-subsection">
+            <h3>Haftungsbeschränkung</h3>
+            <p><span class="placeholder">Mindbloom</span> ist eine Peer-Support-Community. Wir übernehmen keine Haftung für Nutzerinhalte oder Entscheidungen, die Nutzer auf Basis von Community-Beiträgen treffen. Im Rahmen des gesetzlich Zulässigen ist unsere Haftung auf Vorsatz und grobe Fahrlässigkeit beschränkt.</p>
+          </div>
+
+          <div class="legal-subsection">
+            <h3>Kündigung</h3>
+            <p>Du kannst deinen Account jederzeit ohne Angabe von Gründen löschen. Nach der Löschung werden alle Daten innerhalb von 30 Tagen vollständig entfernt.</p>
+          </div>
+
+          <div class="legal-subsection">
+            <h3>Anwendbares Recht</h3>
+            <p>Es gilt deutsches Recht. Die EU-Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit: <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener">ec.europa.eu/consumers/odr</a></p>
+          </div>
+        </div>
+
+      </div><!-- /tab-agb -->
+
+    </main>
+  </div>
+
+  <div id="site-footer-placeholder"></div>
+
+  <script>
+    function showTab(tabId) {
+      // Hide all tab contents
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.legal-tab').forEach(el => el.classList.remove('active'));
+
+      // Show selected
+      document.getElementById('tab-' + tabId).classList.add('active');
+      event.target.classList.add('active');
+
+      // Scroll to top of content
+      document.querySelector('.legal-header').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // Sidebar active link highlighting on scroll
+    const sections = document.querySelectorAll('[id]');
+    const sidebarLinks = document.querySelectorAll('.sidebar__nav a');
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          sidebarLinks.forEach(link => {
+            link.classList.toggle('active', link.getAttribute('href') === '#' + entry.target.id);
+          });
+        }
+      });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+
+    sections.forEach(section => observer.observe(section));
+  </script>
+
+</body>
+</html>

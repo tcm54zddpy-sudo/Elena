@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mindbloom — Prepare</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Mulish:wght@300;400;500&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#F8F7F4;--white:#FFFFFF;
+  --border:rgba(0,0,0,.08);--border-m:rgba(0,0,0,.13);
+  --text:#1A1A1A;--muted:#6B6B6B;--faint:#ABABAB;
+  --g-sage:linear-gradient(135deg,#C8D8C0,#8FAF88);
+  --g-dusk:linear-gradient(135deg,#C4C0DC,#8A84B8);
+  --g-blush:linear-gradient(135deg,#DEC9C4,#BF9690);
+  --g-slate:linear-gradient(135deg,#B8CCDA,#7A9DB5);
+  --g-amber:linear-gradient(135deg,#DDD0B0,#BCA870);
+  --g-prepare:linear-gradient(135deg,#C0CCDC,#7888A8);
+  --sage:#5A8050;--dusk:#6A64A0;--blush:#9A6A64;--slate:#4A7A95;
+  --serif:'Playfair Display',Georgia,serif;
+  --lora:'Lora',Georgia,serif;
+  --sans:'Mulish',sans-serif;
+  --r:16px;
+}
+html,body{min-height:100%;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-weight:300;font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column;}
+a{text-decoration:none;color:inherit;}
+button{cursor:pointer;font-family:var(--sans);border:none;background:none;}
+textarea,input{font-family:var(--lora);font-size:15px;}
+
+/* NAV */
+
+/* LAYOUT */
+.page{flex:1;display:flex;flex-direction:column;align-items:center;padding:0 1.2rem 5rem;}
+.card-wrap{width:100%;max-width:560px;padding-top:2.2rem;}
+
+/* PROGRESS */
+.prog-row{display:flex;align-items:center;gap:.7rem;margin-bottom:2rem;}
+.prog-bar-bg{flex:1;height:2px;background:var(--border-m);border-radius:10px;}
+.prog-bar-fill{height:100%;border-radius:10px;background:var(--text);transition:width .5s ease;}
+.prog-label{font-size:11px;color:var(--faint);white-space:nowrap;letter-spacing:.05em;}
+
+/* STEP CARD */
+.step-card{background:var(--white);border:1px solid var(--border);border-radius:22px;padding:2rem 2rem 1.6rem;animation:fadeUp .35s ease;}
+.step-tag{font-size:10px;font-weight:500;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);margin-bottom:.6rem;}
+.step-q{font-family:var(--serif);font-size:1.3rem;font-weight:400;line-height:1.35;margin-bottom:.4rem;}
+.step-sub{font-size:13.5px;color:var(--muted);margin-bottom:1.4rem;line-height:1.6;}
+
+/* OPTION PILLS */
+.options{display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.2rem;}
+.opt{text-align:left;padding:13px 16px;border-radius:13px;border:1px solid var(--border-m);background:var(--bg);font-size:14px;color:var(--muted);font-family:var(--sans);font-weight:300;transition:all .14s;line-height:1.45;}
+.opt:hover{background:var(--white);color:var(--text);border-color:rgba(0,0,0,.2);transform:translateX(3px);}
+.opt.sel{background:var(--white);color:var(--text);border-color:rgba(0,0,0,.22);box-shadow:0 2px 12px rgba(0,0,0,.07);}
+
+/* MULTI CHIPS */
+.chips{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.2rem;}
+.chip{padding:8px 15px;border-radius:100px;border:1px solid var(--border-m);background:var(--bg);font-size:13px;color:var(--muted);font-family:var(--sans);transition:all .14s;}
+.chip:hover{color:var(--text);border-color:rgba(0,0,0,.2);}
+.chip.sel{background:var(--white);color:var(--text);border-color:rgba(0,0,0,.22);box-shadow:0 2px 8px rgba(0,0,0,.07);}
+
+/* TEXTAREA */
+.ta{width:100%;min-height:90px;border:1px solid var(--border-m);border-radius:var(--r);padding:13px 15px;font-family:var(--lora);font-size:14.5px;font-style:italic;color:var(--text);background:var(--white);outline:none;resize:none;line-height:1.7;margin-bottom:1.2rem;}
+.ta::placeholder{color:var(--faint);}
+.ta:focus{box-shadow:0 2px 14px rgba(0,0,0,.06);}
+
+/* RANGE / BATTERY */
+.battery-wrap{margin-bottom:1.4rem;}
+.battery-label-row{display:flex;justify-content:space-between;font-size:12px;color:var(--faint);margin-bottom:.5rem;}
+.battery-visual{width:100%;height:28px;background:var(--bg);border:1px solid var(--border-m);border-radius:8px;overflow:hidden;position:relative;margin-bottom:.4rem;}
+.battery-fill{height:100%;border-radius:7px;transition:width .3s ease;}
+.battery-val{text-align:center;font-size:12px;color:var(--muted);}
+input[type=range]{width:100%;-webkit-appearance:none;height:4px;border-radius:10px;background:var(--border-m);outline:none;margin-bottom:.3rem;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--text);cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15);}
+
+/* IF-THEN BUILDER */
+.ifthen-list{display:flex;flex-direction:column;gap:.7rem;margin-bottom:1rem;}
+.ifthen-row{background:var(--bg);border:1px solid var(--border);border-radius:13px;padding:1rem 1.1rem;}
+.ifthen-row .lbl{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:.3rem;}
+.ifthen-ta{width:100%;border:none;background:none;outline:none;font-family:var(--lora);font-style:italic;font-size:14px;color:var(--text);resize:none;min-height:44px;line-height:1.6;}
+.ifthen-ta::placeholder{color:var(--faint);}
+.add-btn{font-size:12.5px;color:var(--muted);border:1px dashed var(--border-m);border-radius:100px;padding:7px 16px;transition:all .15s;display:inline-flex;align-items:center;gap:.4rem;}
+.add-btn:hover{color:var(--text);border-color:var(--text);}
+
+/* FOOTER */
+.step-footer{display:flex;align-items:center;justify-content:space-between;padding-top:1.2rem;border-top:1px solid var(--border);margin-top:.4rem;}
+.btn-next{display:inline-flex;align-items:center;gap:.5rem;background:var(--text);color:#fff;border-radius:100px;padding:11px 22px;font-size:13px;font-weight:500;letter-spacing:.04em;transition:opacity .18s,transform .1s;}
+.btn-next:hover{opacity:.85;transform:translateY(-1px);}
+.btn-next:disabled{opacity:.28;cursor:not-allowed;transform:none;}
+.btn-back{display:inline-flex;align-items:center;gap:.4rem;color:var(--muted);border:1px solid var(--border-m);border-radius:100px;padding:10px 18px;font-size:12.5px;transition:all .15s;}
+.btn-back:hover{color:var(--text);border-color:var(--text);}
+
+/* TOOL SELECTION */
+.tool-grid{display:flex;flex-direction:column;gap:.6rem;margin-bottom:1.2rem;}
+.tool-opt{display:flex;align-items:flex-start;gap:1rem;padding:14px 16px;border-radius:14px;border:1px solid var(--border-m);background:var(--bg);text-align:left;transition:all .15s;cursor:pointer;}
+.tool-opt:hover{background:var(--white);border-color:rgba(0,0,0,.18);transform:translateX(3px);}
+.tool-opt.sel{background:var(--white);border-color:rgba(0,0,0,.2);box-shadow:0 2px 12px rgba(0,0,0,.07);}
+.tool-icon{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:17px;}
+.tool-info .t-name{font-family:var(--serif);font-size:.95rem;font-weight:400;margin-bottom:2px;}
+.tool-info .t-desc{font-size:12.5px;color:var(--muted);line-height:1.5;}
+
+/* RESULT / PLAN */
+.plan-card{background:var(--white);border:1px solid var(--border);border-radius:22px;padding:1.8rem 2rem;margin-bottom:.8rem;animation:fadeUp .4s ease;}
+.plan-section{margin-bottom:1.4rem;}
+.plan-section:last-child{margin-bottom:0;}
+.plan-icon-row{display:flex;align-items:center;gap:.6rem;margin-bottom:.6rem;}
+.plan-emoji{font-size:1.1rem;}
+.plan-section-title{font-family:var(--serif);font-size:1rem;font-weight:400;}
+.plan-body{font-size:13.5px;color:var(--muted);line-height:1.7;}
+.plan-tag{display:inline-block;padding:3px 11px;border-radius:100px;font-size:11.5px;font-weight:500;margin-bottom:.5rem;}
+.plan-item{padding:9px 13px;background:var(--bg);border-radius:10px;font-size:13.5px;margin-bottom:.4rem;color:var(--text);font-family:var(--lora);font-style:italic;}
+.plan-divider{height:1px;background:var(--border);margin:1.2rem 0;}
+.result-actions{display:flex;gap:.7rem;flex-wrap:wrap;margin-top:1.4rem;}
+
+/* INTRO SCREEN */
+.intro-card{background:var(--white);border:1px solid var(--border);border-radius:22px;padding:2.2rem 2rem;text-align:center;animation:fadeUp .4s ease;}
+.intro-orb{width:64px;height:64px;border-radius:50%;background:var(--g-prepare);margin:0 auto 1.2rem;display:flex;align-items:center;justify-content:center;}
+.intro-title{font-family:var(--serif);font-size:1.6rem;font-weight:400;margin-bottom:.5rem;}
+.intro-sub{font-size:14px;color:var(--muted);line-height:1.7;max-width:360px;margin:0 auto 1.6rem;}
+.intro-tags{display:flex;flex-wrap:wrap;gap:.4rem;justify-content:center;margin-bottom:1.8rem;}
+.intro-tag{font-size:12px;padding:4px 12px;border-radius:100px;background:var(--bg);border:1px solid var(--border-m);color:var(--muted);}
+
+/* SECTION HEADER between tools */
+.tool-header{margin-bottom:1.2rem;}
+.tool-header-tag{font-size:10px;font-weight:500;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);margin-bottom:.3rem;}
+.tool-header-title{font-family:var(--serif);font-size:1.1rem;font-weight:400;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+@media(max-width:520px){
+  .step-card{padding:1.5rem 1.3rem 1.3rem;}
+  .intro-card{padding:1.8rem 1.3rem;}
+  .plan-card{padding:1.5rem 1.3rem;}
+}
+</style>
+  <script src="nav.js"></script>
+</head>
+<body>
+  <div id="site-nav-placeholder"></div>
+  
+
+<div class="page">
+  <div class="card-wrap" id="root"></div>
+</div>
+
+<script>
+// ─── STATE ────────────────────────────────────────────────────────────────────
+const S = {
+  phase: 'intro',        // intro | finder | tools | tool_X | plan
+  situation: null,
+  concern: null,
+  selectedTools: [],
+  activeTool: null,
+  toolIndex: 0,
+  // tool data
+  compass: { person:null, topic:'', goals:[], avoid:[], success:'' },
+  redflag: { situation:null, topics:[], persons:'', reactions:[] },
+  ifthen: { fear:'', pairs:[{if:'',then:''}] },
+  safexit: { situation:null, difficulties:[], signals:[], actions:[] },
+  energy: { current:70, cost:50, drains:[], gains:[], prep:'', recharge:'' },
+};
+
+// ─── ROUTING ──────────────────────────────────────────────────────────────────
+const TOOL_ROUTING = {
+  // situation → concern → [tools]
+  'gespräch':  { 'sagen':['compass','ifthen'], 'konflikt':['compass','redflag','ifthen'], 'ablehnung':['compass','safexit'], 'überfordert':['compass','energy'], 'default':['compass','ifthen'] },
+  'familie':   { 'konflikt':['redflag','ifthen','safexit'], 'überfordert':['energy','safexit'], 'default':['redflag','ifthen','safexit'] },
+  'date':      { 'ablehnung':['compass','energy'], 'überfordert':['energy','safexit'], 'default':['compass','energy'] },
+  'event':     { 'überfordert':['energy','safexit'], 'energie':['energy'], 'default':['energy','safexit'] },
+  'präsentation':{ 'sagen':['compass','ifthen'], 'überfordert':['energy','ifthen'], 'default':['ifthen','energy'] },
+  'arzt':      { 'sagen':['compass'], 'überfordert':['compass','energy'], 'default':['compass','energy'] },
+  'entscheidung':{ 'überfordert':['ifthen','energy'], 'default':['ifthen','energy'] },
+  'anderes':   { 'default':['compass','ifthen','energy'] },
+};
+
+const TOOLS_META = {
+  compass:  { emoji:'🧭', name:'Conversation Compass', desc:'Klarheit vor schwierigen Gesprächen schaffen.', grad:'var(--g-slate)' },
+  redflag:  { emoji:'🚩', name:'Red Flag Predictor',   desc:'Mögliche Stressmomente vorab erkennen.', grad:'var(--g-blush)' },
+  ifthen:   { emoji:'📋', name:'If–Then Builder',      desc:'Konkrete Handlungspläne für schwierige Momente.', grad:'var(--g-amber)' },
+  safexit:  { emoji:'🛟', name:'Safe Exit Planner',    desc:'Ein Sicherheitsnetz für belastende Situationen.', grad:'var(--g-sage)' },
+  energy:   { emoji:'⚡', name:'Energy Forecast',      desc:'Überforderung vorbeugen und Energie planen.', grad:'var(--g-dusk)' },
+};
+
+function routeTools() {
+  const sit = S.situation || 'anderes';
+  const con = S.concern || 'default';
+  const routes = TOOL_ROUTING[sit] || TOOL_ROUTING['anderes'];
+  const list = routes[con] || routes['default'] || ['compass'];
+  S.selectedTools = [...new Set(list)];
+}
+
+// ─── RENDER ───────────────────────────────────────────────────────────────────
+function render() {
+  const root = document.getElementById('root');
+  root.innerHTML = '';
+  if (S.phase === 'intro') renderIntro(root);
+  else if (S.phase === 'finder1') renderFinder1(root);
+  else if (S.phase === 'finder2') renderFinder2(root);
+  else if (S.phase === 'tools') renderToolSelect(root);
+  else if (S.phase === 'compass') renderCompass(root);
+  else if (S.phase === 'redflag') renderRedflag(root);
+  else if (S.phase === 'ifthen') renderIfthen(root);
+  else if (S.phase === 'safexit') renderSafexit(root);
+  else if (S.phase === 'energy') renderEnergy(root);
+  else if (S.phase === 'plan') renderPlan(root);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ─── PROGRESS BAR ─────────────────────────────────────────────────────────────
+function progHTML(pct, label) {
+  return `<div class="prog-row">
+    <div class="prog-bar-bg"><div class="prog-bar-fill" style="width:${pct}%"></div></div>
+    <div class="prog-label">${label}</div>
+  </div>`;
+}
+
+// ─── INTRO ────────────────────────────────────────────────────────────────────
+function renderIntro(root) {
+  root.innerHTML = `
+    <div class="intro-card">
+      <div class="intro-orb">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <div class="intro-title">Prepare</div>
+      <div class="intro-sub">Mentale Vorbereitung für Situationen, die dich beschäftigen. Kein Test, keine Therapie — nur Klarheit und ein Plan, der zu dir passt.</div>
+      <div class="intro-tags">
+        <span class="intro-tag">Schwierige Gespräche</span>
+        <span class="intro-tag">Familientreffen</span>
+        <span class="intro-tag">Dates</span>
+        <span class="intro-tag">Präsentationen</span>
+        <span class="intro-tag">Soziale Events</span>
+        <span class="intro-tag">Konflikte</span>
+        <span class="intro-tag">Wichtige Entscheidungen</span>
+      </div>
+      <button class="btn-next" style="width:100%;justify-content:center;" onclick="go('finder1')">
+        Loslegen
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>`;
+}
+
+// ─── FINDER 1 ─────────────────────────────────────────────────────────────────
+const SITUATIONS = [
+  { key:'gespräch',     label:'Ein schwieriges Gespräch' },
+  { key:'familie',      label:'Ein Familientreffen' },
+  { key:'date',         label:'Ein Date' },
+  { key:'event',        label:'Ein soziales Event' },
+  { key:'präsentation', label:'Eine Präsentation oder Prüfung' },
+  { key:'arzt',         label:'Ein Arzt- oder Therapietermin' },
+  { key:'entscheidung', label:'Eine schwierige Entscheidung' },
+  { key:'anderes',      label:'Etwas anderes' },
+];
+
+function renderFinder1(root) {
+  root.innerHTML = progHTML(15,'Schritt 1 von 2') + `
+    <div class="step-card">
+      <div class="step-tag">Situation</div>
+      <div class="step-q">Worauf möchtest du dich vorbereiten?</div>
+      <div class="step-sub">Wähle das, was am nächsten dran ist.</div>
+      <div class="options">
+        ${SITUATIONS.map(s=>`<button class="opt ${S.situation===s.key?'sel':''}" onclick="setSituation('${s.key}')">${s.label}</button>`).join('')}
+      </div>
+      <div class="step-footer">
+        <button class="btn-back" onclick="go('intro')">← Zurück</button>
+        <button class="btn-next" onclick="go('finder2')" ${S.situation?'':'disabled'}>
+          Weiter <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>`;
+}
+function setSituation(k){ S.situation=k; render(); }
+
+// ─── FINDER 2 ─────────────────────────────────────────────────────────────────
+const CONCERNS = [
+  { key:'sagen',      label:'Ich weiß nicht, was ich sagen soll.' },
+  { key:'konflikt',   label:'Ich habe Angst vor Konflikten.' },
+  { key:'ablehnung',  label:'Ich habe Angst vor Ablehnung.' },
+  { key:'überfordert',label:'Ich fühle mich überfordert.' },
+  { key:'energie',    label:'Ich habe wenig Energie.' },
+  { key:'situationen',label:'Ich rechne mit schwierigen Situationen.' },
+  { key:'allgemein',  label:'Ich möchte mich allgemein vorbereiten.' },
+];
+
+function renderFinder2(root) {
+  root.innerHTML = progHTML(30,'Schritt 2 von 2') + `
+    <div class="step-card">
+      <div class="step-tag">Fokus</div>
+      <div class="step-q">Was beschäftigt dich am meisten?</div>
+      <div class="step-sub">Keine richtige oder falsche Antwort.</div>
+      <div class="options">
+        ${CONCERNS.map(c=>`<button class="opt ${S.concern===c.key?'sel':''}" onclick="setConcern('${c.key}')">${c.label}</button>`).join('')}
+      </div>
+      <div class="step-footer">
+        <button class="btn-back" onclick="go('finder1')">← Zurück</button>
+        <button class="btn-next" onclick="finishFinder()" ${S.concern?'':'disabled'}>
+          Meine Tools sehen <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>`;
+}
+function setConcern(k){ S.concern=k; render(); }
+function finishFinder(){ routeTools(); go('tools'); }
+
+// ─── TOOL SELECT ──────────────────────────────────────────────────────────────
+function renderToolSelect(root) {
+  root.innerHTML = progHTML(40,'Deine Tools') + `
+    <div class="step-card">
+      <div class="step-tag">Empfehlung</div>
+      <div class="step-q">Diese Tools passen zu deiner Situation.</div>
+      <div class="step-sub">Du kannst alle nacheinander durchgehen — oder nur das auswählen, das dich gerade am meisten anspricht.</div>
+      <div class="tool-grid">
+        ${S.selectedTools.map(k=>{
+          const t = TOOLS_META[k];
+          return `<button class="tool-opt" onclick="startTool('${k}')">
+            <div class="tool-icon" style="background:${t.grad};">${t.emoji}</div>
+            <div class="tool-info">
+              <div class="t-name">${t.name}</div>
+              <div class="t-desc">${t.desc}</div>
+            </div>
+          </button>`;
+        }).join('')}
+      </div>
+      <div class="step-footer">
+        <button class="btn-back" onclick="go('finder2')">← Zurück</button>
+        <button class="btn-next" onclick="startFirst()">
+          Alle durchgehen <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>`;
+}
+function startFirst(){ S.toolIndex=0; startTool(S.selectedTools[0]); }
+function startTool(k){ S.activeTool=k; go(k); }
+
+// ─── COMPASS ──────────────────────────────────────────────────────────────────
+let compassStep = 0;
+const COMPASS_GOALS = ['Gehört werden','Verständnis schaffen','Grenze setzen','Ehrlich sein','Konflikt lösen','Beziehung stärken'];
+const COMPASS_AVOID = ['Laut werden','Schuldzuweisungen','Rückzieher machen','Abschweifen','Recht haben müssen'];
+const COMPASS_PERSONS = ['Elternteil','Partner:in','Freund:in','Kolleg:in','Chef:in','Andere Person'];
+
+function renderCompass(root) {
+  const steps = [renderCompassP, renderCompassTopic, renderCompassGoals, renderCompassAvoid, renderCompassSuccess];
+  const pct = 40 + (compassStep/steps.length)*25;
+  root.innerHTML = progHTML(pct, `Compass · ${compassStep+1} / ${steps.length}`);
+  const card = document.createElement('div');
+  card.className = 'step-card';
+  steps[compassStep](card);
+  root.appendChild(card);
+}
+
+function renderCompassP(card) {
+  card.innerHTML = `<div class="step-tag">Conversation Compass</div>
+    <div class="step-q">Mit wem wirst du sprechen?</div>
+    <div class="options">
+      ${COMPASS_PERSONS.map(p=>`<button class="opt ${S.compass.person===p?'sel':''}" onclick="compassPick('person','${p}')">${p}</button>`).join('')}
+    </div>
+    ${compassFoot(!!S.compass.person, ()=>compassStep=1, ()=>go('tools'))}`;
+}
+function renderCompassTopic(card) {
+  card.innerHTML = `<div class="step-tag">Conversation Compass</div>
+    <div class="step-q">Worum geht es?</div>
+    <div class="step-sub">Kurz und in deinen eigenen Worten.</div>
+    <textarea class="ta" placeholder="z.B. Ich möchte klären, dass ich mehr Freiraum brauche." oninput="S.compass.topic=this.value">${S.compass.topic}</textarea>
+    ${compassFoot(true, ()=>compassStep=2, ()=>compassStep=0)}`;
+}
+function renderCompassGoals(card) {
+  card.innerHTML = `<div class="step-tag">Conversation Compass</div>
+    <div class="step-q">Was ist dein eigentliches Ziel?</div>
+    <div class="step-sub">Wähle maximal 2.</div>
+    <div class="chips">
+      ${COMPASS_GOALS.map(g=>`<button class="chip ${S.compass.goals.includes(g)?'sel':''}" onclick="toggleChip('compass','goals','${g}',2)">${g}</button>`).join('')}
+    </div>
+    ${compassFoot(S.compass.goals.length>0, ()=>compassStep=3, ()=>compassStep=1)}`;
+}
+function renderCompassAvoid(card) {
+  card.innerHTML = `<div class="step-tag">Conversation Compass</div>
+    <div class="step-q">Was möchtest du vermeiden?</div>
+    <div class="chips">
+      ${COMPASS_AVOID.map(a=>`<button class="chip ${S.compass.avoid.includes(a)?'sel':''}" onclick="toggleChip('compass','avoid','${a}',5)">${a}</button>`).join('')}
+    </div>
+    ${compassFoot(true, ()=>compassStep=4, ()=>compassStep=2)}`;
+}
+function renderCompassSuccess(card) {
+  card.innerHTML = `<div class="step-tag">Conversation Compass</div>
+    <div class="step-q">Was wäre ein Erfolg für dich?</div>
+    <div class="step-sub">Nicht: "Die andere Person stimmt mir zu." — Sondern: Was liegt in deiner Hand?</div>
+    <textarea class="ta" placeholder='z.B. Ich habe ehrlich gesagt, was mir wichtig ist.' oninput="S.compass.success=this.value">${S.compass.success}</textarea>
+    ${compassFoot(true, ()=>finishTool(), ()=>compassStep=3, 'Fertig ✓')}`;
+}
+function compassPick(field, val){ S.compass[field]=val; render(); }
+function compassFoot(canNext, nextFn, backFn, label='Weiter') {
+  return `<div class="step-footer">
+    <button class="btn-back" onclick="(${backFn.toString()})();render()">← Zurück</button>
+    <button class="btn-next" onclick="(${nextFn.toString()})();render()" ${canNext?'':'disabled'}>
+      ${label} <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </button>
+  </div>`;
+}
+
+// ─── RED FLAG ─────────────────────────────────────────────────────────────────
+let rfStep = 0;
+const RF_SITS = ['Familienfeier','Date','Ex treffen','Arbeitsevent','Freundeskreis','Andere'];
+const RF_TOPICS = ['Beziehung','Karriere','Kinder','Politik','Gesundheit','Geld','Andere'];
+
+function renderRedflag(root) {
+  const steps = [renderRfSit, renderRfTopics, renderRfPersons, renderRfReactions];
+  const pct = 40 + (rfStep/steps.length)*25;
+  root.innerHTML = progHTML(pct, `Red Flag · ${rfStep+1} / ${steps.length}`);
+  const card = document.createElement('div');
+  card.className = 'step-card';
+  steps[rfStep](card);
+  root.appendChild(card);
+}
+function renderRfSit(card) {
+  card.innerHTML = `<div class="step-tag">Red Flag Predictor</div>
+    <div class="step-q">Welche Situation steht bevor?</div>
+    <div class="options">
+      ${RF_SITS.map(s=>`<button class="opt ${S.redflag.situation===s?'sel':''}" onclick="S.redflag.situation='${s}';render()">${s}</button>`).join('')}
+    </div>
+    ${rfFoot(!!S.redflag.situation, ()=>rfStep=1, ()=>go('tools'))}`;
+}
+function renderRfTopics(card) {
+  card.innerHTML = `<div class="step-tag">Red Flag Predictor</div>
+    <div class="step-q">Welche Themen könnten schwierig werden?</div>
+    <div class="chips">
+      ${RF_TOPICS.map(t=>`<button class="chip ${S.redflag.topics.includes(t)?'sel':''}" onclick="toggleChip('redflag','topics','${t}',7)">${t}</button>`).join('')}
+    </div>
+    ${rfFoot(true, ()=>rfStep=2, ()=>rfStep=0)}`;
+}
+function renderRfPersons(card) {
+  card.innerHTML = `<div class="step-tag">Red Flag Predictor</div>
+    <div class="step-q">Gibt es Personen, die herausfordernd sein könnten?</div>
+    <div class="step-sub">Optional — du kannst auch überspringen.</div>
+    <textarea class="ta" placeholder="z.B. Meine Tante fragt immer nach Beziehung und Job." oninput="S.redflag.persons=this.value">${S.redflag.persons}</textarea>
+    ${rfFoot(true, ()=>rfStep=3, ()=>rfStep=1)}`;
+}
+function renderRfReactions(card) {
+  const pairs = S.redflag.reactions.length ? S.redflag.reactions : [['','']];
+  if (!S.redflag.reactions.length) S.redflag.reactions = [['','']];
+  card.innerHTML = `<div class="step-tag">Red Flag Predictor</div>
+    <div class="step-q">Wie möchtest du reagieren?</div>
+    <div class="step-sub">Trigger und deine geplante Reaktion.</div>
+    <div id="rfPairs">
+      ${S.redflag.reactions.map((r,i)=>`
+        <div class="ifthen-row" style="margin-bottom:.6rem;">
+          <div class="lbl">Wenn …</div>
+          <textarea class="ifthen-ta" placeholder='z.B. Jemand kritisiert meine Lebensentscheidungen.' oninput="S.redflag.reactions[${i}][0]=this.value">${r[0]}</textarea>
+          <div class="lbl" style="margin-top:.5rem;">Dann …</div>
+          <textarea class="ifthen-ta" placeholder='z.B. Ruhig bleiben, kurz antworten, Thema wechseln.' oninput="S.redflag.reactions[${i}][1]=this.value">${r[1]}</textarea>
+        </div>`).join('')}
+    </div>
+    <button class="add-btn" onclick="S.redflag.reactions.push(['','']);render()">+ Weiteres Szenario</button>
+    ${rfFoot(true, ()=>finishTool(), ()=>rfStep=2, 'Fertig ✓')}`;
+}
+function rfFoot(canNext, nextFn, backFn, label='Weiter') {
+  return `<div class="step-footer">
+    <button class="btn-back" onclick="(${backFn.toString()})();render()">← Zurück</button>
+    <button class="btn-next" onclick="(${nextFn.toString()})();render()" ${canNext?'':'disabled'}>
+      ${label} <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </button>
+  </div>`;
+}
+
+// ─── IF-THEN ──────────────────────────────────────────────────────────────────
+let itStep = 0;
+function renderIfthen(root) {
+  const steps = [renderItFear, renderItPairs];
+  const pct = 40 + (itStep/steps.length)*25;
+  root.innerHTML = progHTML(pct, `If–Then · ${itStep+1} / ${steps.length}`);
+  const card = document.createElement('div');
+  card.className = 'step-card';
+  steps[itStep](card);
+  root.appendChild(card);
+}
+function renderItFear(card) {
+  card.innerHTML = `<div class="step-tag">If–Then Builder</div>
+    <div class="step-q">Wovor hast du am meisten Angst?</div>
+    <div class="step-sub">Schreib es auf — roh und ehrlich.</div>
+    <textarea class="ta" placeholder="z.B. Dass ich die Kontrolle verliere und anfange zu weinen." oninput="S.ifthen.fear=this.value">${S.ifthen.fear}</textarea>
+    <div class="step-footer">
+      <button class="btn-back" onclick="go('tools')">← Zurück</button>
+      <button class="btn-next" onclick="itStep=1;render()">
+        Weiter <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>`;
+}
+function renderItPairs(card) {
+  if (!S.ifthen.pairs.length) S.ifthen.pairs = [{ if:'', then:'' }];
+  card.innerHTML = `<div class="step-tag">If–Then Builder</div>
+    <div class="step-q">Erstelle deinen Handlungsplan.</div>
+    <div class="step-sub">Was könnte passieren — und was tust du dann?</div>
+    <div id="itList" class="ifthen-list">
+      ${S.ifthen.pairs.map((p,i)=>`
+        <div class="ifthen-row">
+          <div class="lbl">Wenn …</div>
+          <textarea class="ifthen-ta" placeholder='z.B. Meine Mutter kritisiert mich.' oninput="S.ifthen.pairs[${i}].if=this.value">${p.if}</textarea>
+          <div class="lbl" style="margin-top:.5rem;">Dann …</div>
+          <textarea class="ifthen-ta" placeholder='z.B. Ich atme durch und sage: Darüber möchte ich heute nicht sprechen.' oninput="S.ifthen.pairs[${i}].then=this.value">${p.then}</textarea>
+        </div>`).join('')}
+    </div>
+    <button class="add-btn" onclick="S.ifthen.pairs.push({if:'',then:''});render()">+ Szenario hinzufügen</button>
+    <div class="step-footer">
+      <button class="btn-back" onclick="itStep=0;render()">← Zurück</button>
+      <button class="btn-next" onclick="finishTool()">
+        Fertig ✓ <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>`;
+}
+
+// ─── SAFE EXIT ────────────────────────────────────────────────────────────────
+let sxStep = 0;
+const SX_SITS = ['Familienfeier','Date','Party','Treffen mit Ex','Arbeitsevent','Andere'];
+const SX_DIFFS = ['Konflikte','Kritik','Überforderung','Bestimmte Personen','Emotionale Gespräche','Zu viele Menschen'];
+const SX_SIGNALS = ['Herzrasen','Anspannung','Reizbarkeit','Erschöpfung','Rückzug','Gedankenkarussell'];
+const SX_ACTIONS = ['Frische Luft','Spaziergang','Atemübung','Freund:in schreiben','Pause machen','Früher gehen','Auf Toilette gehen','Musik hören'];
+
+function renderSafexit(root) {
+  const steps = [renderSxSit, renderSxDiffs, renderSxSignals, renderSxActions];
+  const pct = 40 + (sxStep/steps.length)*25;
+  root.innerHTML = progHTML(pct, `Safe Exit · ${sxStep+1} / ${steps.length}`);
+  const card = document.createElement('div');
+  card.className = 'step-card';
+  steps[sxStep](card);
+  root.appendChild(card);
+}
+function renderSxSit(card) {
+  card.innerHTML = `<div class="step-tag">Safe Exit Planner</div>
+    <div class="step-q">Welche Situation steht bevor?</div>
+    <div class="options">
+      ${SX_SITS.map(s=>`<button class="opt ${S.safexit.situation===s?'sel':''}" onclick="S.safexit.situation='${s}';render()">${s}</button>`).join('')}
+    </div>
+    ${sxFoot(!!S.safexit.situation, ()=>sxStep=1, ()=>go('tools'))}`;
+}
+function renderSxDiffs(card) {
+  card.innerHTML = `<div class="step-tag">Safe Exit Planner</div>
+    <div class="step-q">Was könnte schwierig werden?</div>
+    <div class="chips">
+      ${SX_DIFFS.map(d=>`<button class="chip ${S.safexit.difficulties.includes(d)?'sel':''}" onclick="toggleChip('safexit','difficulties','${d}',6)">${d}</button>`).join('')}
+    </div>
+    ${sxFoot(true, ()=>sxStep=2, ()=>sxStep=0)}`;
+}
+function renderSxSignals(card) {
+  card.innerHTML = `<div class="step-tag">Safe Exit Planner</div>
+    <div class="step-q">Woran merkst du, dass es dir zu viel wird?</div>
+    <div class="chips">
+      ${SX_SIGNALS.map(s=>`<button class="chip ${S.safexit.signals.includes(s)?'sel':''}" onclick="toggleChip('safexit','signals','${s}',6)">${s}</button>`).join('')}
+    </div>
+    ${sxFoot(true, ()=>sxStep=3, ()=>sxStep=1)}`;
+}
+function renderSxActions(card) {
+  card.innerHTML = `<div class="step-tag">Safe Exit Planner</div>
+    <div class="step-q">Was kannst du dann tun?</div>
+    <div class="step-sub">Dein persönlicher Exit-Plan.</div>
+    <div class="chips">
+      ${SX_ACTIONS.map(a=>`<button class="chip ${S.safexit.actions.includes(a)?'sel':''}" onclick="toggleChip('safexit','actions','${a}',8)">${a}</button>`).join('')}
+    </div>
+    ${sxFoot(true, ()=>finishTool(), ()=>sxStep=2, 'Fertig ✓')}`;
+}
+function sxFoot(canNext, nextFn, backFn, label='Weiter') {
+  return `<div class="step-footer">
+    <button class="btn-back" onclick="(${backFn.toString()})();render()">← Zurück</button>
+    <button class="btn-next" onclick="(${nextFn.toString()})();render()" ${canNext?'':'disabled'}>
+      ${label} <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </button>
+  </div>`;
+}
+
+// ─── ENERGY ───────────────────────────────────────────────────────────────────
+let enStep = 0;
+const EN_DRAINS = ['Konflikte','Menschenmengen','Small Talk','Unsicherheit','Emotionale Gespräche','Lärm','Kritik','Zeitdruck'];
+const EN_GAINS  = ['Schlaf','Ruhe','Bewegung','Natur','Musik','Alleinsein','Vertraute Menschen','Kreativität'];
+
+function renderEnergy(root) {
+  const steps = [renderEnCurrent, renderEnCost, renderEnDrains, renderEnGains, renderEnPlan];
+  const pct = 40 + (enStep/steps.length)*25;
+  root.innerHTML = progHTML(pct, `Energy · ${enStep+1} / ${steps.length}`);
+  const card = document.createElement('div');
+  card.className = 'step-card';
+  steps[enStep](card);
+  root.appendChild(card);
+}
+function batteryColor(v){ if(v>60) return '#8FAF88'; if(v>30) return '#BCA870'; return '#BF9690'; }
+function renderEnCurrent(card) {
+  card.innerHTML = `<div class="step-tag">Energy Forecast</div>
+    <div class="step-q">Wie viel Energie hast du gerade?</div>
+    <div class="battery-wrap">
+      <div class="battery-label-row"><span>0%</span><span>100%</span></div>
+      <div class="battery-visual"><div id="bfill1" class="battery-fill" style="width:${S.energy.current}%;background:${batteryColor(S.energy.current)};"></div></div>
+      <input type="range" min="0" max="100" value="${S.energy.current}" oninput="S.energy.current=+this.value;document.getElementById('bfill1').style.width=this.value+'%';document.getElementById('bfill1').style.background=batteryColor(+this.value);document.getElementById('bval1').textContent=this.value+'%'">
+      <div class="battery-val" id="bval1">${S.energy.current}%</div>
+    </div>
+    <div class="step-footer">
+      <button class="btn-back" onclick="go('tools')">← Zurück</button>
+      <button class="btn-next" onclick="enStep=1;render()">Weiter <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+    </div>`;
+}
+function renderEnCost(card) {
+  card.innerHTML = `<div class="step-tag">Energy Forecast</div>
+    <div class="step-q">Wie viel Energie wird die Situation kosten?</div>
+    <div class="battery-wrap">
+      <div class="battery-label-row"><span>Wenig</span><span>Sehr viel</span></div>
+      <div class="battery-visual"><div id="bfill2" class="battery-fill" style="width:${S.energy.cost}%;background:${batteryColor(100-S.energy.cost)};"></div></div>
+      <input type="range" min="0" max="100" value="${S.energy.cost}" oninput="S.energy.cost=+this.value;document.getElementById('bfill2').style.width=this.value+'%';document.getElementById('bfill2').style.background=batteryColor(100-this.value);document.getElementById('bval2').textContent=this.value+'%'">
+      <div class="battery-val" id="bval2">${S.energy.cost}%</div>
+    </div>
+    <div class="step-footer">
+      <button class="btn-back" onclick="enStep=0;render()">← Zurück</button>
+      <button class="btn-next" onclick="enStep=2;render()">Weiter <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+    </div>`;
+}
+function renderEnDrains(card) {
+  card.innerHTML = `<div class="step-tag">Energy Forecast</div>
+    <div class="step-q">Was kostet dich besonders Energie?</div>
+    <div class="chips">
+      ${EN_DRAINS.map(d=>`<button class="chip ${S.energy.drains.includes(d)?'sel':''}" onclick="toggleChip('energy','drains','${d}',8)">${d}</button>`).join('')}
+    </div>
+    <div class="step-footer">
+      <button class="btn-back" onclick="enStep=1;render()">← Zurück</button>
+      <button class="btn-next" onclick="enStep=3;render()">Weiter <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+    </div>`;
+}
+function renderEnGains(card) {
+  card.innerHTML = `<div class="step-tag">Energy Forecast</div>
+    <div class="step-q">Was gibt dir Energie?</div>
+    <div class="chips">
+      ${EN_GAINS.map(g=>`<button class="chip ${S.energy.gains.includes(g)?'sel':''}" onclick="toggleChip('energy','gains','${g}',8)">${g}</button>`).join('')}
+    </div>
+    <div class="step-footer">
+      <button class="btn-back" onclick="enStep=2;render()">← Zurück</button>
+      <button class="btn-next" onclick="enStep=4;render()">Weiter <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+    </div>`;
+}
+function renderEnPlan(card) {
+  const balance = S.energy.current - S.energy.cost;
+  const msg = balance >= 20 ? 'Du hast genug Energie für diese Situation.' : balance >= 0 ? 'Es könnte knapp werden — bereite dich gut vor.' : 'Die Situation könnte dich überfordern. Plane bewusst Auszeiten ein.';
+  card.innerHTML = `<div class="step-tag">Energy Forecast</div>
+    <div class="step-q">Deine Energiebilanz</div>
+    <div style="background:var(--bg);border-radius:12px;padding:1rem 1.1rem;margin-bottom:1.2rem;font-size:13.5px;color:var(--text);line-height:1.65;">
+      <strong style="font-family:var(--lora);font-weight:400;">${msg}</strong>
+    </div>
+    <div class="step-sub">Was brauchst du <em>vor</em> der Situation?</div>
+    <textarea class="ta" placeholder="z.B. Eine Stunde alleine, früh schlafen gehen, meditieren." oninput="S.energy.prep=this.value">${S.energy.prep}</textarea>
+    <div class="step-sub">Was hilft dir danach beim <em>Auftanken</em>?</div>
+    <textarea class="ta" placeholder="z.B. Ein langer Spaziergang, ruhige Musik, nichts planen." oninput="S.energy.recharge=this.value">${S.energy.recharge}</textarea>
+    <div class="step-footer">
+      <button class="btn-back" onclick="enStep=3;render()">← Zurück</button>
+      <button class="btn-next" onclick="finishTool()">Fertig ✓ <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+    </div>`;
+}
+
+// ─── TOOL FLOW ─────────────────────────────────────────────────────────────────
+function finishTool() {
+  const idx = S.selectedTools.indexOf(S.activeTool);
+  const next = S.selectedTools[idx + 1];
+  if (next) {
+    // reset sub-steps
+    compassStep=0; rfStep=0; itStep=0; sxStep=0; enStep=0;
+    startTool(next);
+  } else {
+    go('plan');
+  }
+}
+
+// ─── PLAN ─────────────────────────────────────────────────────────────────────
+function renderPlan(root) {
+  root.innerHTML = progHTML(100, 'Dein Plan');
+  const card = document.createElement('div');
+  card.className = 'plan-card';
+
+  let html = `<div class="step-tag" style="margin-bottom:1rem;">Mental Prep Plan</div>
+    <div style="font-family:var(--serif);font-size:1.4rem;font-weight:400;margin-bottom:1.6rem;line-height:1.3;">Dein persönlicher Vorbereitungsplan</div>`;
+
+  // COMPASS
+  if (S.selectedTools.includes('compass') && (S.compass.goals.length || S.compass.topic)) {
+    html += `<div class="plan-section">
+      <div class="plan-icon-row"><span class="plan-emoji">🧭</span><div class="plan-section-title">Mein Ziel</div></div>
+      ${S.compass.person ? `<div class="plan-item">Mit: ${S.compass.person}</div>` : ''}
+      ${S.compass.topic ? `<div class="plan-item">Thema: ${S.compass.topic}</div>` : ''}
+      ${S.compass.goals.length ? `<div class="plan-item">Ziel: ${S.compass.goals.join(' · ')}</div>` : ''}
+      ${S.compass.avoid.length ? `<div class="plan-item">Vermeiden: ${S.compass.avoid.join(' · ')}</div>` : ''}
+      ${S.compass.success ? `<div class="plan-item">Erfolg = ${S.compass.success}</div>` : ''}
+    </div><div class="plan-divider"></div>`;
+  }
+
+  // RED FLAG
+  if (S.selectedTools.includes('redflag') && (S.redflag.topics.length || S.redflag.reactions.length)) {
+    html += `<div class="plan-section">
+      <div class="plan-icon-row"><span class="plan-emoji">🚩</span><div class="plan-section-title">Mögliche Stolpersteine</div></div>
+      ${S.redflag.topics.length ? `<div class="plan-item">Heikle Themen: ${S.redflag.topics.join(', ')}</div>` : ''}
+      ${S.redflag.persons ? `<div class="plan-item">Personen: ${S.redflag.persons}</div>` : ''}
+      ${S.redflag.reactions.filter(r=>r[0]).map(r=>`<div class="plan-item">Wenn ${r[0]} → ${r[1] || '…'}</div>`).join('')}
+    </div><div class="plan-divider"></div>`;
+  }
+
+  // IF-THEN
+  if (S.selectedTools.includes('ifthen') && S.ifthen.pairs.some(p=>p.if)) {
+    html += `<div class="plan-section">
+      <div class="plan-icon-row"><span class="plan-emoji">📋</span><div class="plan-section-title">Mein Handlungsplan</div></div>
+      ${S.ifthen.pairs.filter(p=>p.if).map(p=>`<div class="plan-item">Wenn ${p.if} → ${p.then || '…'}</div>`).join('')}
+    </div><div class="plan-divider"></div>`;
+  }
+
+  // SAFE EXIT
+  if (S.selectedTools.includes('safexit') && (S.safexit.signals.length || S.safexit.actions.length)) {
+    html += `<div class="plan-section">
+      <div class="plan-icon-row"><span class="plan-emoji">🛟</span><div class="plan-section-title">Mein Sicherheitsnetz</div></div>
+      ${S.safexit.signals.length ? `<div class="plan-item">Warnzeichen: ${S.safexit.signals.join(' · ')}</div>` : ''}
+      ${S.safexit.actions.length ? `<div class="plan-item">Dann: ${S.safexit.actions.join(' · ')}</div>` : ''}
+    </div><div class="plan-divider"></div>`;
+  }
+
+  // ENERGY
+  if (S.selectedTools.includes('energy')) {
+    const balance = S.energy.current - S.energy.cost;
+    html += `<div class="plan-section">
+      <div class="plan-icon-row"><span class="plan-emoji">⚡</span><div class="plan-section-title">Mein Energieplan</div></div>
+      <div class="plan-item">Aktuelle Energie: ${S.energy.current}% · Situationskosten: ~${S.energy.cost}% · Bilanz: ${balance>0?'+':''}${balance}%</div>
+      ${S.energy.prep ? `<div class="plan-item">Vorher: ${S.energy.prep}</div>` : ''}
+      ${S.energy.recharge ? `<div class="plan-item">Nachher: ${S.energy.recharge}</div>` : ''}
+      ${S.energy.gains.length ? `<div class="plan-item">Auftanken durch: ${S.energy.gains.join(' · ')}</div>` : ''}
+    </div>`;
+  }
+
+  html += `<div class="result-actions">
+    <button class="btn-next" onclick="restart()">
+      Neuer Plan
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10M23 14l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+    </button>
+    <a href="tools.html" class="btn-back">← Alle Tools</a>
+  </div>`;
+
+  card.innerHTML = html;
+  root.appendChild(card);
+}
+
+// ─── HELPERS ──────────────────────────────────────────────────────────────────
+function toggleChip(obj, field, val, max) {
+  const arr = S[obj][field];
+  const idx = arr.indexOf(val);
+  if (idx > -1) arr.splice(idx, 1);
+  else if (arr.length < max) arr.push(val);
+  render();
+}
+function go(phase) { S.phase = phase; render(); }
+function restart() {
+  Object.assign(S, {
+    phase:'intro', situation:null, concern:null, selectedTools:[], activeTool:null, toolIndex:0,
+    compass:{person:null,topic:'',goals:[],avoid:[],success:''},
+    redflag:{situation:null,topics:[],persons:'',reactions:[]},
+    ifthen:{fear:'',pairs:[{if:'',then:''}]},
+    safexit:{situation:null,difficulties:[],signals:[],actions:[]},
+    energy:{current:70,cost:50,drains:[],gains:[],prep:'',recharge:''},
+  });
+  compassStep=0; rfStep=0; itStep=0; sxStep=0; enStep=0;
+  render();
+}
+
+render();
+</script>
+</body>
+</html>

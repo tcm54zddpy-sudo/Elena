@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mindbloom — Anxiety Grounding Tool</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Mulish:wght@300;400;500&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #F8F7F4;
+  --white:     #FFFFFF;
+  --border:    rgba(0,0,0,0.08);
+  --border-m:  rgba(0,0,0,0.13);
+  --text:      #1A1A1A;
+  --muted:     #6B6B6B;
+  --faint:     #ABABAB;
+  --g-sage:    linear-gradient(135deg,#C8D8C0,#8FAF88);
+  --g-dusk:    linear-gradient(135deg,#C4C0DC,#8A84B8);
+  --g-blush:   linear-gradient(135deg,#DEC9C4,#BF9690);
+  --g-slate:   linear-gradient(135deg,#B8CCDA,#7A9DB5);
+  --g-amber:   linear-gradient(135deg,#DDD0B0,#BCA870);
+  --sage-tint: #F0F4EE;
+  --sage:      #5A8050;
+  --serif:     'Playfair Display',Georgia,serif;
+  --serif-body:'Lora',Georgia,serif;
+  --sans:      'Mulish',sans-serif;
+  --r:16px;
+}
+
+html, body { height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  display: flex; flex-direction: column;
+}
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; font-family: var(--sans); border: none; }
+
+/* ── NAV ── */
+
+/* ── MAIN STAGE ── */
+.stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* animated bg orb */
+.bg-orb {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+  transition: background 1.2s ease, opacity 1s ease, transform 1.2s ease;
+}
+.bg-orb--1 { width: 500px; height: 500px; top: -100px; right: -150px; }
+.bg-orb--2 { width: 360px; height: 360px; bottom: -80px; left: -100px; }
+
+/* ── PROGRESS DOTS ── */
+.progress-dots {
+  display: flex; gap: 8px;
+  margin-bottom: 40px;
+  position: relative; z-index: 1;
+}
+.pdot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--border-m);
+  transition: background .4s, transform .3s;
+}
+.pdot.done { background: var(--text); }
+.pdot.active { background: var(--text); transform: scale(1.4); }
+
+/* ── CARD ── */
+.card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 2.8rem 2.4rem;
+  width: 100%;
+  max-width: 560px;
+  position: relative; z-index: 1;
+  box-shadow: 0 4px 32px rgba(0,0,0,.07);
+}
+
+.card-eyebrow {
+  font-size: 10.5px; font-weight: 500; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--faint);
+  margin-bottom: 12px;
+  display: flex; align-items: center; gap: 8px;
+}
+.card-sense-orb {
+  width: 10px; height: 10px; border-radius: 50; flex-shrink: 0;
+  border-radius: 50%;
+}
+
+.card-number {
+  font-family: var(--serif);
+  font-size: clamp(48px,10vw,80px);
+  font-weight: 300; line-height: 1;
+  color: var(--text); opacity: .08;
+  position: absolute; top: 1.6rem; right: 2rem;
+  pointer-events: none; user-select: none;
+}
+
+.card-title {
+  font-family: var(--serif);
+  font-size: clamp(22px, 4vw, 30px);
+  font-weight: 400; line-height: 1.25;
+  margin-bottom: 10px;
+}
+.card-sub {
+  font-family: var(--serif-body);
+  font-size: 14.5px; font-style: italic;
+  color: var(--muted); line-height: 1.65;
+  margin-bottom: 24px;
+}
+
+/* input items */
+.inputs-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+.input-row {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 12px; padding: 10px 14px;
+  transition: border-color .18s;
+}
+.input-row:focus-within { border-color: var(--border-m); background: var(--white); }
+.input-num {
+  font-family: var(--serif); font-size: 15px;
+  color: var(--faint); flex-shrink: 0; width: 18px; text-align: center;
+}
+.input-field {
+  flex: 1; border: none; background: transparent; outline: none;
+  font-family: var(--sans); font-size: 14px; font-weight: 300;
+  color: var(--text);
+  caret-color: var(--sage);
+}
+.input-field::placeholder { color: var(--faint); }
+.input-check {
+  width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0;
+  background: var(--bg); border: 1.5px solid var(--border-m);
+  display: flex; align-items: center; justify-content: center;
+  transition: background .2s, border-color .2s;
+}
+.input-check.filled { background: var(--sage); border-color: var(--sage); }
+.input-check svg { display: none; }
+.input-check.filled svg { display: block; }
+
+/* card actions */
+.card-actions { display: flex; align-items: center; justify-content: space-between; }
+.btn-primary {
+  padding: 0.6rem 1.6rem; border-radius: 100px;
+  background: var(--text); color: #fff;
+  font-size: 13px; font-weight: 500; border: none;
+  transition: opacity .18s; display: flex; align-items: center; gap: 6px;
+}
+.btn-primary:hover { opacity: .8; }
+.btn-primary:disabled { opacity: .3; cursor: not-allowed; }
+.btn-skip {
+  font-size: 12px; color: var(--faint); background: none; border: none;
+  cursor: pointer; transition: color .18s; padding: 0;
+}
+.btn-skip:hover { color: var(--muted); }
+
+/* ── INTRO SCREEN ── */
+.intro-card { text-align: center; }
+.intro-card .card-title { font-size: clamp(26px,4vw,36px); margin-bottom: 16px; }
+.intro-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 8px; margin: 20px 0 28px; text-align: left;
+}
+.intro-step {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 10px; padding: 10px 12px;
+  font-size: 13px; color: var(--muted);
+}
+.intro-step-num {
+  font-family: var(--serif); font-size: 1.1rem;
+  color: var(--text); font-weight: 400; flex-shrink: 0; width: 22px;
+}
+.btn-start {
+  width: 100%;
+  padding: 0.75rem; border-radius: 100px;
+  background: var(--text); color: #fff;
+  font-size: 14px; font-weight: 500; border: none;
+  transition: opacity .18s;
+}
+.btn-start:hover { opacity: .8; }
+
+/* ── FINISH SCREEN ── */
+.finish-card { text-align: center; }
+.finish-orb {
+  width: 72px; height: 72px; border-radius: 50%;
+  background: var(--g-sage); margin: 0 auto 20px;
+  display: flex; align-items: center; justify-content: center;
+}
+.summary-grid {
+  display: flex; flex-direction: column; gap: 6px;
+  margin: 24px 0; text-align: left;
+}
+.summary-row {
+  display: flex; align-items: flex-start; gap: 10px;
+  background: var(--bg); border-radius: 10px; padding: 10px 14px;
+}
+.summary-sense {
+  font-size: 10px; font-weight: 500; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--faint);
+  flex-shrink: 0; width: 60px; margin-top: 1px;
+}
+.summary-items { font-size: 13px; color: var(--muted); font-weight: 300; line-height: 1.6; }
+.finish-note {
+  font-family: var(--serif-body); font-style: italic;
+  font-size: 14px; color: var(--muted); margin-bottom: 24px; line-height: 1.65;
+}
+.finish-actions { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.btn-secondary {
+  padding: 0.55rem 1.3rem; border-radius: 100px;
+  border: 1px solid var(--border-m); background: none;
+  font-size: 13px; color: var(--muted);
+  transition: color .18s, border-color .18s;
+}
+.btn-secondary:hover { color: var(--text); border-color: var(--text); }
+
+/* animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.card { animation: fadeIn .45s ease forwards; }
+</style>
+  <script src="nav.js"></script>
+</head>
+<body>
+  <div id="site-nav-placeholder"></div>
+
+<!-- NAV -->
+  
+
+<!-- STAGE -->
+<div class="stage" id="stage">
+  <div class="bg-orb bg-orb--1" id="bgOrb1"></div>
+  <div class="bg-orb bg-orb--2" id="bgOrb2"></div>
+
+  <!-- progress dots (hidden on intro/finish) -->
+  <div class="progress-dots" id="progressDots" style="display:none;">
+    <div class="pdot" id="pd0"></div>
+    <div class="pdot" id="pd1"></div>
+    <div class="pdot" id="pd2"></div>
+    <div class="pdot" id="pd3"></div>
+    <div class="pdot" id="pd4"></div>
+  </div>
+
+  <!-- card container -->
+  <div id="cardContainer"></div>
+</div>
+
+<script>
+const STEPS = [
+  {
+    count: 5,
+    sense: 'Sehen',
+    icon: '👁',
+    grad: 'var(--g-slate)',
+    dotColor: '#7A9DB5',
+    title: 'Nenne 5 Dinge, die du gerade siehst.',
+    sub: 'Schau dich langsam um. Was ist direkt vor dir? An den Wänden, auf dem Boden, durch das Fenster?',
+    placeholders: ['z.B. meine Hände','ein Lichtfleck an der Wand','die Uhr','mein Glas','das Muster auf dem Tisch']
+  },
+  {
+    count: 4,
+    sense: 'Fühlen',
+    icon: '✋',
+    grad: 'var(--g-sage)',
+    dotColor: '#8FAF88',
+    title: 'Nenne 4 Dinge, die du körperlich spürst.',
+    sub: 'Was berührt deine Haut? Die Temperatur, den Stuhl, deine Kleidung, den Boden unter deinen Füßen.',
+    placeholders: ['z.B. die Kühle der Luft','den Stoff auf meinen Armen','meine Füße auf dem Boden','die Wärme meiner Hände']
+  },
+  {
+    count: 3,
+    sense: 'Hören',
+    icon: '👂',
+    grad: 'var(--g-dusk)',
+    dotColor: '#8A84B8',
+    title: 'Nenne 3 Geräusche, die du gerade hörst.',
+    sub: 'Schließe die Augen für einen Moment. Was nimmst du wahr — nah, fern, leise, laut?',
+    placeholders: ['z.B. Verkehr von draußen','mein eigenes Atmen','das Summen der Heizung']
+  },
+  {
+    count: 2,
+    sense: 'Riechen',
+    icon: '👃',
+    grad: 'var(--g-amber)',
+    dotColor: '#BCA870',
+    title: 'Nenne 2 Dinge, die du riechst.',
+    sub: 'Atme tief ein. Was nimmst du wahr? Auch ein neutraler Geruch zählt — Luft, Papier, deine Haut.',
+    placeholders: ['z.B. frische Luft','meinen Tee']
+  },
+  {
+    count: 1,
+    sense: 'Schmecken',
+    icon: '👅',
+    grad: 'var(--g-blush)',
+    dotColor: '#BF9690',
+    title: 'Nenne 1 Sache, die du schmeckst.',
+    sub: 'Was liegt gerade auf deiner Zunge? Kaffee, Wasser, Frische, nichts — alles ist eine Antwort.',
+    placeholders: ['z.B. der Nachgeschmack von Kaffee']
+  }
+];
+
+let currentStep = -1; // -1 = intro
+const answers = STEPS.map(s => Array(s.count).fill(''));
+
+function renderIntro() {
+  currentStep = -1;
+  document.getElementById('progressDots').style.display = 'none';
+  setBgOrbs(null);
+
+  const c = document.getElementById('cardContainer');
+  c.innerHTML = '';
+  const card = document.createElement('div');
+  card.className = 'card intro-card';
+  card.innerHTML = `
+    <div class="card-title">Du bist gerade nicht allein mit dem, was du fühlst.</div>
+    <div class="card-sub">Die 5-4-3-2-1 Methode bringt dich zurück in den Moment. Schritt für Schritt, ohne Druck.</div>
+    <div class="intro-grid">
+      ${STEPS.map(s => `
+        <div class="intro-step">
+          <span class="intro-step-num">${s.count}</span>
+          <span>${s.sense}</span>
+        </div>`).join('')}
+    </div>
+    <button class="btn-start" onclick="startTool()">Jetzt beginnen</button>
+    <div style="margin-top:14px; font-size:12px; color:var(--faint); text-align:center;">
+      Ca. 3–5 Minuten · Alles bleibt bei dir
+    </div>`;
+  c.appendChild(card);
+}
+
+function startTool() {
+  document.getElementById('progressDots').style.display = 'flex';
+  goStep(0);
+}
+
+function goStep(n) {
+  currentStep = n;
+  const step = STEPS[n];
+
+  // progress dots
+  for (let i = 0; i < 5; i++) {
+    const dot = document.getElementById('pd' + i);
+    dot.className = 'pdot' + (i < n ? ' done' : i === n ? ' active' : '');
+  }
+
+  // bg orbs
+  setBgOrbs(step.grad);
+
+  // build card
+  const c = document.getElementById('cardContainer');
+  c.innerHTML = '';
+  const card = document.createElement('div');
+  card.className = 'card';
+
+  const inputsHTML = Array.from({length: step.count}, (_, i) => `
+    <div class="input-row" id="row${n}_${i}">
+      <span class="input-num">${i + 1}</span>
+      <input class="input-field" id="inp${n}_${i}"
+        placeholder="${step.placeholders[i] || ''}"
+        value="${answers[n][i]}"
+        oninput="onInput(${n},${i},this.value)"
+        onkeydown="if(event.key==='Enter')focusNext(${n},${i})">
+      <div class="input-check${answers[n][i].trim() ? ' filled' : ''}" id="chk${n}_${i}">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+    </div>`).join('');
+
+  const filledCount = answers[n].filter(v => v.trim()).length;
+  const canContinue = filledCount >= Math.ceil(step.count / 2);
+
+  card.innerHTML = `
+    <div class="card-eyebrow">
+      <div class="card-sense-orb" style="background:${step.grad};"></div>
+      Schritt ${n+1} von 5 · ${step.sense}
+    </div>
+    <div class="card-number">${step.count}</div>
+    <div class="card-title">${step.title}</div>
+    <div class="card-sub">${step.sub}</div>
+    <div class="inputs-list">${inputsHTML}</div>
+    <div class="card-actions">
+      <button class="btn-skip" onclick="skipStep(${n})">
+        ${n === 0 ? '← Zurück zur Übersicht' : '← Zurück'}
+      </button>
+      <button class="btn-primary" id="btnContinue" onclick="nextStep(${n})" ${canContinue ? '' : 'disabled'}>
+        ${n < 4 ? 'Weiter →' : 'Abschließen ✓'}
+      </button>
+    </div>`;
+
+  c.appendChild(card);
+
+  // focus first empty
+  setTimeout(() => {
+    for (let i = 0; i < step.count; i++) {
+      const el = document.getElementById(`inp${n}_${i}`);
+      if (el && !el.value.trim()) { el.focus(); break; }
+    }
+  }, 120);
+}
+
+function onInput(step, idx, val) {
+  answers[step][idx] = val;
+  const chk = document.getElementById(`chk${step}_${idx}`);
+  chk.className = 'input-check' + (val.trim() ? ' filled' : '');
+
+  const filledCount = answers[step].filter(v => v.trim()).length;
+  const canContinue = filledCount >= Math.ceil(STEPS[step].count / 2);
+  const btn = document.getElementById('btnContinue');
+  if (btn) btn.disabled = !canContinue;
+}
+
+function focusNext(stepN, idx) {
+  const next = document.getElementById(`inp${stepN}_${idx + 1}`);
+  if (next) { next.focus(); return; }
+  // if last field and enough filled — auto-advance
+  const filledCount = answers[stepN].filter(v => v.trim()).length;
+  if (filledCount >= Math.ceil(STEPS[stepN].count / 2)) {
+    nextStep(stepN);
+  }
+}
+
+function nextStep(n) {
+  if (n < 4) { goStep(n + 1); }
+  else { renderFinish(); }
+}
+
+function skipStep(n) {
+  if (n === 0) { renderIntro(); }
+  else { goStep(n - 1); }
+}
+
+function setBgOrbs(grad) {
+  const o1 = document.getElementById('bgOrb1');
+  const o2 = document.getElementById('bgOrb2');
+  if (!grad) {
+    o1.style.opacity = '0'; o2.style.opacity = '0'; return;
+  }
+  o1.style.background = grad;
+  o2.style.background = grad;
+  o1.style.opacity = '1';
+  o2.style.opacity = '1';
+}
+
+function renderFinish() {
+  document.getElementById('progressDots').style.display = 'none';
+  setBgOrbs(null);
+
+  const c = document.getElementById('cardContainer');
+  c.innerHTML = '';
+  const card = document.createElement('div');
+  card.className = 'card finish-card';
+
+  const summaryHTML = STEPS.map((s, i) => {
+    const filled = answers[i].filter(v => v.trim());
+    if (filled.length === 0) return '';
+    return `
+      <div class="summary-row">
+        <span class="summary-sense">${s.sense}</span>
+        <span class="summary-items">${filled.join(', ')}</span>
+      </div>`;
+  }).join('');
+
+  card.innerHTML = `
+    <div class="finish-orb">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <div class="card-title" style="margin-bottom:10px;">Du bist angekommen.</div>
+    <div class="finish-note">Du hast gerade deine Sinne genutzt, um dich in den gegenwärtigen Moment zurückzuholen. Das war keine Kleinigkeit.</div>
+    <div class="summary-grid">${summaryHTML}</div>
+    <div class="finish-actions">
+      <button class="btn-primary" onclick="renderIntro()">
+        Nochmal beginnen
+      </button>
+      <a href="tools.html" class="btn-secondary">← Zurück zu den Tools</a>
+    </div>`;
+
+  c.appendChild(card);
+}
+
+// ── INIT ──
+renderIntro();
+</script>
+</body>
+</html>

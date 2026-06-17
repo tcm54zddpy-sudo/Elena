@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mindbloom — Topics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Mulish:wght@300;400;500&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #F8F7F4;
+  --white:     #FFFFFF;
+  --border:    rgba(0,0,0,0.08);
+  --border-m:  rgba(0,0,0,0.13);
+  --text:      #1A1A1A;
+  --muted:     #6B6B6B;
+  --faint:     #ABABAB;
+
+  --g-sage:    linear-gradient(135deg, #C8D8C0 0%, #8FAF88 100%);
+  --g-dusk:    linear-gradient(135deg, #C4C0DC 0%, #8A84B8 100%);
+  --g-blush:   linear-gradient(135deg, #DEC9C4 0%, #BF9690 100%);
+  --g-slate:   linear-gradient(135deg, #B8CCDA 0%, #7A9DB5 100%);
+  --g-amber:   linear-gradient(135deg, #DDD0B0 0%, #BCA870 100%);
+  --g-rose:    linear-gradient(135deg, #D8BFCA 0%, #B890A5 100%);
+  --g-moss:    linear-gradient(135deg, #C0CEB8 0%, #7A9870 100%);
+  --g-clay:    linear-gradient(135deg, #D4C4B0 0%, #A08060 100%);
+  --g-fog:     linear-gradient(135deg, #C8CCD4 0%, #8A90A0 100%);
+  --g-gold:    linear-gradient(135deg, #DDD0A8 0%, #B8A050 100%);
+  --g-lilac:   linear-gradient(135deg, #D0C8E0 0%, #9080C0 100%);
+
+  --sage-tint:  #F0F4EE;
+  --dusk-tint:  #EEEDF6;
+  --amber-tint: #F5F0E4;
+  --sage:   #5A8050;
+  --dusk:   #6A64A0;
+
+  --serif:      'Playfair Display', Georgia, serif;
+  --serif-body: 'Lora', Georgia, serif;
+  --sans:       'Mulish', sans-serif;
+  --r: 16px; --r-sm: 10px;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+}
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; font-family: var(--sans); border: none; }
+
+/* ── NAV ── */
+
+/* ── PAGE HEADER ── */
+.page-hero {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 52px 2.8rem 0;
+  text-align: center;
+}
+.page-hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(28px, 4vw, 46px);
+  font-weight: 400; margin-bottom: 12px;
+}
+.page-hero p {
+  font-family: var(--serif-body);
+  font-size: 16px; font-style: italic;
+  color: var(--muted); max-width: 520px; margin: 0 auto 32px;
+  line-height: 1.7;
+}
+
+/* ── SEARCH BAR ── */
+.search-wrap {
+  max-width: 560px;
+  margin: 0 auto 32px;
+  position: relative;
+}
+.search-bar {
+  width: 100%;
+  display: flex; align-items: center; gap: 10px;
+  background: var(--bg); border: 1px solid var(--border-m);
+  border-radius: 100px; padding: 10px 16px;
+  transition: border-color .18s, box-shadow .18s;
+}
+.search-bar:focus-within {
+  border-color: var(--border-m);
+  box-shadow: 0 2px 16px rgba(0,0,0,.07);
+}
+.search-bar input {
+  border: none; background: transparent; outline: none;
+  font-family: var(--sans); font-size: 14px; font-weight: 300;
+  color: var(--text); flex: 1;
+}
+.search-bar input::placeholder { color: var(--faint); }
+.search-bar svg { color: var(--faint); flex-shrink: 0; }
+#searchClear {
+  background: none; border: none; color: var(--faint);
+  cursor: pointer; font-size: 16px; line-height: 1;
+  padding: 0 2px; display: none;
+  transition: color .18s;
+}
+#searchClear:hover { color: var(--muted); }
+
+/* ── CATEGORY FILTER PILLS ── */
+.filter-row {
+  display: flex; gap: 6px; justify-content: center;
+  flex-wrap: wrap;
+  padding: 0 2.8rem 24px;
+  border-bottom: 1px solid var(--border);
+}
+.filter-pill {
+  padding: 5px 14px; border-radius: 100px;
+  font-size: 12px; font-weight: 400;
+  border: 1px solid var(--border);
+  background: none; color: var(--muted);
+  cursor: pointer; transition: all .18s;
+  display: flex; align-items: center; gap: 6px;
+}
+.filter-pill .fp-dot {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+}
+.filter-pill:hover { border-color: var(--border-m); color: var(--text); }
+.filter-pill.active { background: var(--text); color: #fff; border-color: var(--text); }
+.filter-pill.active .fp-dot { opacity: .7; }
+
+/* ── MAIN LAYOUT ── */
+.page-body {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 2.8rem 6rem;
+}
+
+/* no results */
+.no-results {
+  display: none; text-align: center; padding: 4rem 0;
+  color: var(--faint);
+}
+.no-results p { font-family: var(--serif-body); font-style: italic; font-size: 15px; margin-top: 8px; }
+
+/* ── CATEGORY BLOCK ── */
+.category-block {
+  margin-bottom: 3.5rem;
+}
+.cat-header {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 1.2rem;
+  cursor: pointer;
+}
+.cat-orb {
+  width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+}
+.cat-title-group { flex: 1; }
+.cat-title {
+  font-family: var(--serif);
+  font-size: 1.15rem; font-weight: 400;
+  color: var(--text); margin-bottom: 2px;
+}
+.cat-count {
+  font-size: 11px; color: var(--faint); font-weight: 300;
+}
+.cat-all-link {
+  font-size: 12px; color: var(--faint); font-weight: 400;
+  display: flex; align-items: center; gap: 4px;
+  transition: color .18s; white-space: nowrap;
+}
+.cat-all-link:hover { color: var(--muted); }
+.cat-title-group--link {
+  text-decoration: none; color: inherit;
+}
+.cat-title-group--link:hover .cat-title { text-decoration: underline; text-underline-offset: 3px; }
+
+/* ── TOPIC PILLS GRID ── */
+.topic-grid {
+  display: flex; flex-wrap: wrap; gap: 8px;
+}
+.topic-pill {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 14px 8px 10px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  cursor: pointer;
+  transition: border-color .18s, box-shadow .18s, transform .15s;
+  text-decoration: none;
+  color: var(--text);
+}
+.topic-pill:hover {
+  border-color: var(--border-m);
+  box-shadow: 0 2px 10px rgba(0,0,0,.07);
+  transform: translateY(-1px);
+}
+.tp-dot {
+  width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+}
+.tp-name {
+  font-size: 13px; font-weight: 400;
+}
+.tp-tag {
+  font-size: 10px; font-weight: 500; letter-spacing: .05em;
+  padding: 1px 6px; border-radius: 100px;
+  margin-left: 2px;
+}
+
+/* ── FEATURED TOPIC CARD (large, for MVP topics) ── */
+.featured-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 3.5rem;
+}
+.featured-label {
+  font-size: 10.5px; font-weight: 500; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--faint);
+  margin-bottom: 1rem;
+}
+.feat-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 1.4rem;
+  display: flex; flex-direction: column; gap: 10px;
+  cursor: pointer;
+  transition: border-color .18s, box-shadow .2s, transform .18s;
+  text-decoration: none; color: var(--text);
+  position: relative; overflow: hidden;
+}
+.feat-card:hover {
+  border-color: var(--border-m);
+  box-shadow: 0 6px 24px rgba(0,0,0,.08);
+  transform: translateY(-2px);
+}
+.feat-card__bg {
+  position: absolute; top: -20px; right: -20px;
+  width: 100px; height: 100px; border-radius: 50%; opacity: .12;
+}
+.feat-card__tag {
+  font-size: 10px; font-weight: 500; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--faint);
+}
+.feat-card__title {
+  font-family: var(--serif); font-size: 1rem; font-weight: 400;
+  line-height: 1.35; position: relative; z-index: 1;
+}
+.feat-card__desc {
+  font-size: 12.5px; color: var(--muted); font-weight: 300;
+  line-height: 1.55; position: relative; z-index: 1;
+}
+.feat-card__footer {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: auto; padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+.feat-card__read { font-size: 11px; color: var(--faint); font-weight: 300; }
+.feat-card__arrow { font-size: 13px; color: var(--faint); }
+
+/* ── SECTION HEADINGS ── */
+.block-head { margin-bottom: 1.6rem; }
+.block-head__eyebrow {
+  font-size: 10.5px; font-weight: 600; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--faint); margin-bottom: 9px;
+}
+.block-head__title {
+  font-family: var(--serif);
+  font-size: clamp(21px, 2.6vw, 28px); font-weight: 400;
+  margin-bottom: 6px;
+}
+.block-head__sub {
+  font-family: var(--serif-body); font-style: italic;
+  font-size: 14px; color: var(--muted); line-height: 1.6;
+}
+
+/* ── CORE TOPICS GRID ── */
+.core-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.core-card {
+  position: relative; overflow: hidden;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 1.5rem 1.4rem;
+  display: flex; flex-direction: column; gap: 7px;
+  text-decoration: none; color: var(--text);
+  transition: border-color .18s, box-shadow .2s, transform .18s;
+}
+.core-card:hover {
+  border-color: var(--border-m);
+  box-shadow: 0 8px 28px rgba(0,0,0,.09);
+  transform: translateY(-3px);
+}
+.core-card__orb { width: 40px; height: 40px; border-radius: 50%; margin-bottom: 6px; }
+.core-card__name { font-family: var(--serif); font-size: 1.05rem; font-weight: 400; line-height: 1.3; }
+.core-card__desc { font-size: 12.5px; color: var(--muted); line-height: 1.55; }
+.core-card__subs { font-size: 11px; color: var(--faint); line-height: 1.5; margin-top: 2px; }
+.core-card__cta {
+  margin-top: auto; padding-top: 12px;
+  font-size: 10.5px; font-weight: 600; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--faint);
+  display: flex; align-items: center; gap: 5px; transition: color .18s;
+}
+.core-card:hover .core-card__cta { color: var(--text); }
+@media (max-width: 980px) { .core-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .core-grid { grid-template-columns: 1fr; } }
+
+/* ── DIVIDER ── */
+.section-divider {
+  height: 1px; background: var(--border); margin: 0 0 3rem;
+}
+
+/* ── CRISIS BANNER ── */
+.crisis-banner {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 1.4rem 1.8rem;
+  display: flex; align-items: center; gap: 1.4rem;
+  margin-bottom: 3.5rem;
+}
+.crisis-icon {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: var(--g-blush); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.crisis-text h4 { font-size: 14px; font-weight: 500; margin-bottom: 3px; }
+.crisis-text p { font-size: 12.5px; color: var(--muted); font-weight: 300; }
+.crisis-link {
+  margin-left: auto; flex-shrink: 0;
+  font-size: 12.5px; font-weight: 500; color: var(--muted);
+  border: 1px solid var(--border-m); padding: 6px 16px;
+  border-radius: 100px; text-decoration: none;
+  transition: border-color .18s, color .18s;
+  white-space: nowrap;
+}
+.crisis-link:hover { border-color: var(--text); color: var(--text); }
+
+
+/* ── ARTICLE CARDS (within topic categories) ── */
+.articles-section { margin-top: 1.4rem; border-top: 1px solid var(--border); padding-top: 1.2rem; }
+.articles-section-label { font-size: 10px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); margin-bottom: .9rem; }
+.articles-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
+.article-card {
+  background: var(--white); border: 1px solid var(--border); border-radius: var(--r);
+  padding: 1.2rem 1.4rem; cursor: pointer;
+  transition: border-color .2s, box-shadow .2s, transform .18s;
+  display: flex; flex-direction: column; gap: 8px;
+  position: relative; overflow: hidden;
+}
+.article-card:hover { border-color: var(--border-m); box-shadow: 0 4px 18px rgba(0,0,0,.08); transform: translateY(-2px); }
+.article-card__accent { position: absolute; top: 0; left: 0; right: 0; height: 3px; opacity: 0; transition: opacity .2s; }
+.article-card:hover .article-card__accent { opacity: 1; }
+.article-card__tag { font-size: 10px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--faint); }
+.article-card__title { font-family: var(--serif); font-size: .98rem; font-weight: 400; line-height: 1.4; }
+.article-card__excerpt { font-size: 12.5px; color: var(--muted); line-height: 1.6; }
+.article-card__read { margin-top: auto; padding-top: 8px; font-size: 10.5px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); display: flex; align-items: center; gap: 5px; transition: color .18s; }
+.article-card:hover .article-card__read { color: var(--text); }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.anim { animation: fadeUp .3s ease forwards; }
+</style>
+  <script src="nav.js"></script>
+</head>
+<body>
+  <div id="site-nav-placeholder"></div>
+
+<!-- NAV -->
+  
+
+<!-- HERO -->
+<div class="page-hero">
+  <h1>Find what you're looking for</h1>
+  <p>Browse every topic — or search for exactly what's on your mind right now.</p>
+
+  <div class="search-wrap">
+    <div class="search-bar">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input type="text" id="searchInput" placeholder="Search topics, feelings, situations…" oninput="handleSearch(this.value)" autocomplete="off">
+      <button id="searchClear" onclick="clearSearch()">✕</button>
+    </div>
+  </div>
+
+  <div class="filter-row" id="filterRow">
+    <button class="filter-pill active" onclick="filterCat(this,'all')">All topics</button>
+    <button class="filter-pill" onclick="filterCat(this,'grief')"><div class="fp-dot" style="background:var(--g-blush);"></div>Loss & Grief</button>
+    <button class="filter-pill" onclick="filterCat(this,'relationships')"><div class="fp-dot" style="background:var(--g-rose);"></div>Relationships</button>
+    <button class="filter-pill" onclick="filterCat(this,'family')"><div class="fp-dot" style="background:var(--g-amber);"></div>Family</button>
+    <button class="filter-pill" onclick="filterCat(this,'work')"><div class="fp-dot" style="background:var(--g-slate);"></div>Work & School</button>
+    <button class="filter-pill" onclick="filterCat(this,'self')"><div class="fp-dot" style="background:var(--g-dusk);"></div>Self & Identity</button>
+    <button class="filter-pill" onclick="filterCat(this,'emotions')"><div class="fp-dot" style="background:var(--g-sage);"></div>Emotions</button>
+    <button class="filter-pill" onclick="filterCat(this,'conditions')"><div class="fp-dot" style="background:var(--g-lilac);"></div>Mental Health</button>
+    <button class="filter-pill" onclick="filterCat(this,'trauma')"><div class="fp-dot" style="background:var(--g-clay);"></div>Trauma</button>
+    <button class="filter-pill" onclick="filterCat(this,'transitions')"><div class="fp-dot" style="background:var(--g-moss);"></div>Life Transitions</button>
+    <button class="filter-pill" onclick="filterCat(this,'growth')"><div class="fp-dot" style="background:var(--g-gold);"></div>Personal Growth</button>
+  </div>
+</div>
+
+<!-- PAGE BODY -->
+<div class="page-body" id="pageBody">
+
+  <!-- No results -->
+  <div class="no-results" id="noResults">
+    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#ABABAB" stroke-width="1.2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    <p id="noResultsText">No topics found for that search.</p>
+  </div>
+
+  <!-- Core / Featured topics -->
+  <div id="coreSection">
+    <div class="block-head">
+      <div class="block-head__eyebrow">The essentials</div>
+      <h2 class="block-head__title">Core Topics</h2>
+      <p class="block-head__sub">The central areas of Mindbloom — start here.</p>
+    </div>
+    <div class="core-grid" id="coreGrid"></div>
+    <div class="section-divider" style="margin-top:3rem;"></div>
+  </div>
+
+  <!-- Start here (MVP featured) -->
+  <div id="featuredSection">
+    <div class="featured-label">Start here — most visited</div>
+    <div class="featured-row">
+      <a class="feat-card" href="article-understanding-anxiety.html">
+        <div class="feat-card__bg" style="background:var(--g-slate);"></div>
+        <div class="feat-card__tag">Emotions</div>
+        <div class="feat-card__title">Understanding anxiety — what it is and why it happens</div>
+        <div class="feat-card__desc">A plain-language guide to anxiety, written for people who've never looked into it before.</div>
+        <div class="feat-card__footer"><span class="feat-card__read">6 min read</span><span class="feat-card__arrow">→</span></div>
+      </a>
+      <a class="feat-card" href="article-healing-breakup.html">
+        <div class="feat-card__bg" style="background:var(--g-blush);"></div>
+        <div class="feat-card__tag">Loss & Grief</div>
+        <div class="feat-card__title">Healing after a breakup — a guide for when it really hurts</div>
+        <div class="feat-card__desc">Why breakups can feel like grief, and what actually helps you move through it.</div>
+        <div class="feat-card__footer"><span class="feat-card__read">8 min read</span><span class="feat-card__arrow">→</span></div>
+      </a>
+      <a class="feat-card" href="article-burnout.html">
+        <div class="feat-card__bg" style="background:var(--g-amber);"></div>
+        <div class="feat-card__tag">Work & School</div>
+        <div class="feat-card__title">What burnout actually feels like — and how to know if you have it</div>
+        <div class="feat-card__desc">Burnout isn't just being tired. Here's how to recognise it and what to do next.</div>
+        <div class="feat-card__footer"><span class="feat-card__read">7 min read</span><span class="feat-card__arrow">→</span></div>
+      </a>
+    </div>
+    <div class="section-divider"></div>
+  </div>
+
+  <!-- Crisis banner -->
+  <div class="crisis-banner" id="crisisBanner">
+    <div class="crisis-icon">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#BF9690" stroke-width="1.5" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    </div>
+    <div class="crisis-text">
+      <h4>Are you in crisis right now?</h4>
+      <p>If you're struggling to stay safe, you don't have to find the right article. Go straight to support.</p>
+    </div>
+    <a href="#" class="crisis-link">Get immediate help →</a>
+  </div>
+
+  <!-- Explore more (additional categories) -->
+  <div id="exploreSection">
+    <div class="block-head">
+      <div class="block-head__eyebrow">Keep exploring</div>
+      <h2 class="block-head__title">Explore More</h2>
+      <p class="block-head__sub">Additional areas to dig into whenever you need them.</p>
+    </div>
+    <div id="categoryBlocks"></div>
+  </div>
+
+</div>
+
+<script>
+const CATEGORIES = [
+  {
+    id: 'grief', label: 'Loss & Grief', grad: 'var(--g-blush)',
+    desc: 'When something or someone is gone',
+    topics: [
+      { name: 'Death of a loved one',   tag: null },
+      { name: 'Death of a parent',      tag: null },
+      { name: 'Pet loss',               tag: null },
+      { name: 'Breakup grief',          tag: 'popular' },
+      { name: 'Friendship breakup',     tag: null },
+      { name: 'Estrangement',           tag: null },
+      { name: 'No contact',             tag: 'popular' },
+      { name: 'Ambiguous loss',         tag: null },
+      { name: 'Grief & depression',     tag: null },
+      { name: 'Grief & loneliness',     tag: null },
+    ]
+  },
+  {
+    id: 'relationships', label: 'Relationships', grad: 'var(--g-rose)',
+    desc: 'How we connect — and why it\'s hard',
+    topics: [
+      { name: 'Loneliness',             tag: 'popular' },
+      { name: 'Dating & intimacy',      tag: null },
+      { name: 'Attachment styles',      tag: 'popular' },
+      { name: 'Anxious attachment',     tag: null },
+      { name: 'Avoidant attachment',    tag: null },
+      { name: 'Toxic relationships',    tag: 'popular' },
+      { name: 'Codependency',           tag: null },
+      { name: 'Friendships',            tag: null },
+      { name: 'Conflict & communication', tag: null },
+      { name: 'Breakups & divorce',     tag: 'popular' },
+    ]
+  },
+  {
+    id: 'family', label: 'Family', grad: 'var(--g-amber)',
+    desc: 'The relationships we didn\'t choose',
+    topics: [
+      { name: 'Difficult parents',      tag: 'popular' },
+      { name: 'Narcissistic dynamics',  tag: 'popular' },
+      { name: 'Sibling conflict',       tag: null },
+      { name: 'Becoming a parent',      tag: null },
+      { name: 'Caring for a relative',  tag: null },
+      { name: 'Growing up in a difficult home', tag: null },
+      { name: 'Family estrangement',    tag: null },
+    ]
+  },
+  {
+    id: 'work', label: 'Work & School', grad: 'var(--g-slate)',
+    desc: 'Performance, pressure and purpose',
+    topics: [
+      { name: 'Burnout',                tag: 'popular' },
+      { name: 'Work stress',            tag: 'popular' },
+      { name: 'Procrastination',        tag: 'popular' },
+      { name: 'Exam & performance anxiety', tag: null },
+      { name: 'Imposter syndrome',      tag: 'popular' },
+      { name: 'Career crisis',          tag: null },
+      { name: 'Workplace conflict',     tag: null },
+      { name: 'Motivation at work',     tag: null },
+    ]
+  },
+  {
+    id: 'self', label: 'Self & Identity', grad: 'var(--g-dusk)',
+    desc: 'How you see yourself — and who you want to be',
+    topics: [
+      { name: 'Self-worth',             tag: 'popular' },
+      { name: 'Self-confidence',        tag: 'popular' },
+      { name: 'Perfectionism',          tag: 'popular' },
+      { name: 'People pleasing',        tag: 'popular' },
+      { name: 'Setting boundaries',     tag: 'popular' },
+      { name: 'Body image',             tag: null },
+      { name: 'Identity & purpose',     tag: null },
+      { name: 'Self-criticism',         tag: null },
+    ]
+  },
+  {
+    id: 'emotions', label: 'Emotions', grad: 'var(--g-sage)',
+    desc: 'Understanding what you\'re actually feeling',
+    topics: [
+      { name: 'Anxiety & worry',        tag: 'popular' },
+      { name: 'Shame',                  tag: 'popular' },
+      { name: 'Guilt',                  tag: null },
+      { name: 'Anger',                  tag: null },
+      { name: 'Numbness',               tag: null },
+      { name: 'Hopelessness',           tag: null },
+      { name: 'Overwhelm',              tag: 'popular' },
+      { name: 'Longing',                tag: null },
+      { name: 'Fear of the future',     tag: null },
+    ]
+  },
+  {
+    id: 'conditions', label: 'Mental Health Conditions', grad: 'var(--g-lilac)',
+    desc: 'Clear, honest information — no jargon',
+    topics: [
+      { name: 'Depression',             tag: 'popular' },
+      { name: 'Anxiety disorders',      tag: 'popular' },
+      { name: 'PTSD',                   tag: null },
+      { name: 'ADHD',                   tag: 'popular' },
+      { name: 'OCD',                    tag: null },
+      { name: 'Eating disorders',       tag: null },
+      { name: 'Panic attacks',          tag: 'popular' },
+      { name: 'Social anxiety',         tag: 'popular' },
+    ]
+  },
+  {
+    id: 'trauma', label: 'Trauma', grad: 'var(--g-clay)',
+    desc: 'What trauma is — and what it does to us',
+    topics: [
+      { name: 'What is trauma?',        tag: 'beginner' },
+      { name: 'Childhood trauma',       tag: 'popular' },
+      { name: 'Emotional abuse',        tag: null },
+      { name: 'Neglect',                tag: null },
+      { name: 'Complex PTSD',           tag: null },
+      { name: 'Trauma & the body',      tag: null },
+      { name: 'Healing from trauma',    tag: 'popular' },
+    ]
+  },
+  {
+    id: 'transitions', label: 'Life Transitions', grad: 'var(--g-moss)',
+    desc: 'When life changes faster than you can keep up',
+    topics: [
+      { name: 'Moving & relocating',    tag: null },
+      { name: 'Starting university',    tag: null },
+      { name: 'Becoming a parent',      tag: null },
+      { name: 'Job loss',               tag: null },
+      { name: 'Midlife',                tag: null },
+      { name: 'Retirement',             tag: null },
+      { name: 'Leaving home',           tag: null },
+    ]
+  },
+  {
+    id: 'health', label: 'Health', grad: 'var(--g-fog)',
+    desc: 'Mind and body are more connected than you think',
+    topics: [
+      { name: 'Sleep problems',         tag: 'popular' },
+      { name: 'Chronic illness & pain', tag: null },
+      { name: 'Mind-body connection',   tag: null },
+      { name: 'Fatigue & energy',       tag: null },
+    ]
+  },
+  {
+    id: 'growth', label: 'Personal Growth', grad: 'var(--g-gold)',
+    desc: 'For when you want to understand yourself better',
+    topics: [
+      { name: 'Resilience',             tag: null },
+      { name: 'Mindfulness',            tag: 'popular' },
+      { name: 'Self-compassion',        tag: 'popular' },
+      { name: 'Motivation & habits',    tag: 'popular' },
+      { name: 'Emotional intelligence', tag: null },
+      { name: 'Values & meaning',       tag: null },
+      { name: 'Journaling',             tag: null },
+    ]
+  },
+];
+
+
+// ── ARTICLES DATA ──────────────────────────────────────────────────────────
+const ARTICLES_BY_CAT = {
+  'emotions': [
+    {
+      accent: 'linear-gradient(90deg,#8A84B8,#C4C0DC)',
+      url: 'article-get-out-of-your-head.html',
+      title: 'Get out of your head',
+      subtitle: 'So stoppst du aufdringliche Gedanken und das Gedankenkarussell',
+      excerpt: 'Aufdringliche Gedanken sind normal – aber sie müssen dich nicht überwältigen. Fünf Strategien, die wirklich helfen.',
+      html: `<h1>Get out of your head</h1><span class="subtitle">So stoppst du aufdringliche Gedanken und das Gedankenkarussell</span><hr><p>Plötzlich geht es dir gut – und im nächsten Moment erinnert dich dein Gehirn an einen Fehler von vor drei Jahren. Aufdringliche, negative Gedanken tauchen oft völlig ungefragt auf. Sie können zur echten Belastung werden, wenn wir ihnen zu viel Raum geben.</p><hr><blockquote>„Sortiere deine Ängste in Fakten (Sachbuch) und Vermutungen (Fiktion). Bleib im Sachbuch-Bereich.“</blockquote><hr><h2>1. Catch, Check, Change</h2><p>Wenn eine negative Emotion aufkommt, halte inne. Fange den Gedanken ein. Überprüfe ihn objektiv: Ist er hilfreich? Ist er wirklich wahr? Verändere ihn so, dass er realistischer wird.</p><h2>2. Plane feste „Sorgenzeiten“ ein</h2><p>Vereinbare täglich 15–30 Minuten mit dir selbst für deine Ängste. Wenn tagsüber ein belastender Gedanke auftaucht, schreibe ihn auf und schiebe ihn bewusst auf diese Zeit.</p><h2>3. Raus aus dem Kopf, rein in den Körper</h2><p>Die <strong>5-4-3-2-1-Technik</strong>: Benenne fünf Dinge, die du sehen kannst – vier, die du fühlen kannst – drei, die du hörst – zwei, die du riechst – eines, das du schmeckst.</p><h2>4. Der Sorgenkreis</h2><p>Zeichne einen Kreis. In das Innere schreibst du alles, worauf du Einfluss hast. Außerhalb landet alles, worüber du keine Kontrolle hast.</p><h2>5. Werde zum Freund deines inneren Kritikers</h2><p>Stelle ein Foto von dir als Kind auf. Wenn dein innerer Kritiker laut wird, schau auf dieses Bild und frage dich, was du diesem Kind sagen würdest.</p><div class="script-box"><span class="box-label">Skript-Box</span><p><strong>Statt:</strong> „Ich schaffe das nicht.“<br><strong>Sag dir:</strong> „Ich habe schon schwerere Situationen überstanden. Was ist der nächste konkrete Schritt?“</p><p><strong>Statt:</strong> „Ich bin so dumm.“<br><strong>Sag dir:</strong> „Ich habe mit dem gemacht, was ich in dem Moment wusste. Das reicht.“</p></div><div class="journal-box"><span class="box-label">Journaling-Fragen</span><ul><li>Welcher Gedanke kehrt bei mir besonders häufig wieder? Was steckt wirklich dahinter?</li><li>Was würde ich einem guten Freund sagen, der mir genau das erzählt, was mein innerer Kritiker mir gerade sagt?</li><li>Welche Situationen lösen bei mir das Gedankenkarussell aus?</li></ul></div>`
+    },
+    {
+      accent: 'linear-gradient(90deg,#8A84B8,#C4C0DC)',
+      url: 'article-helping-with-anxiety.html',
+      title: 'Wie man jemandem mit Angstzuständen wirklich hilft',
+      subtitle: 'Ein Guide für Angehörige',
+      excerpt: '„Beruhig dich einfach“ hilft nicht. Was stattdessen funktioniert – für alle, die jemandem wirklich beistehen wollen.',
+      html: `<h1>Wie man jemandem mit Angstzuständen wirklich hilft</h1><span class="subtitle">Ein Guide für Angehörige</span><hr><p>Wenn ein Mensch, der uns wichtig ist, in einer Spirale aus ängstlichen Gedanken feststeckt, fühlen wir uns oft hilflos. Gut gemeinte Aussagen wie „Beruhig dich einfach“ helfen in diesen Momenten nicht nur nicht – sie können dazu führen, dass sich die betroffene Person noch unverstandener fühlt.</p><hr><blockquote>„Ich höre dich. Es ist schwer. Ich bin hier.“</blockquote><hr><h2>1. Übe reflektiertes Zuhören</h2><p>Das Wirksamste ist echtes, ungeteiltes Zuhören. Fasse zusammen, was die Person sagt, und zeige, dass du ihre Emotionen nachvollziehen kannst.</p><h2>2. Vermeide toxische Positivität</h2><p>„Schau auf das Positive!“, „Alles wird gut“ – diese Sätze tun negative Emotionen einfach ab, anstatt sie anzuerkennen.</p><h2>3. Hilf dabei, Katastrophengedanken zu erden</h2><p>Eine wirksame Frage: „Erinnerst du dich an eine andere Zeit, als du dich genauso intensiv gesorgt hast – und was ist daraus geworden?“</p><h2>4. Beruhige durch sanfte Ablenkung</h2><p>Biete an, gemeinsam tief Atem zu holen. Ein Spaziergang, eine Grounding-Übung – das hilft, akut aus der Gedankenspirale auszubrechen.</p><h2>5. Unterstütze bei der Suche nach professioneller Hilfe</h2><p>Als Angehöriger kannst du nicht die Rolle eines Therapeuten übernehmen. Wenn die Ängste überhand nehmen, behutsam professionelle Unterstützung ins Gespräch bringen.</p><div class="script-box"><span class="box-label">Skript-Box</span><p><strong>Statt:</strong> „Beruhig dich doch einfach.“<br><strong>Sag lieber:</strong> „Ich sehe, dass es gerade schwer ist. Ich bin hier.“</p><p><strong>Statt:</strong> „Das wird schon alles gut werden.“<br><strong>Sag lieber:</strong> „Ich weiß nicht, wie es ausgeht – aber ich weiß, dass wir es gemeinsam herausfinden werden.“</p></div><div class="journal-box"><span class="box-label">Journaling-Fragen</span><ul><li>Wie reagiere ich instinktiv, wenn jemand Angst zeigt – und was steckt dahinter?</li><li>Wo ist die Grenze zwischen echtem Unterstützen und dem Persönlich-Übernehmen der emotionalen Last?</li><li>Was brauche ich selbst, um für jemanden da sein zu können?</li></ul></div>`
+    }
+  ],
+  'relationships': [
+    {
+      accent: 'linear-gradient(90deg,#B890A5,#D8BFCA)',
+      url: 'article-setting-boundaries.html',
+      title: 'Grenzen ziehen ohne Schuldgefühle',
+      subtitle: 'Ein „Nein“ ist eine vollständige Antwort',
+      excerpt: 'Warum fällt es uns so schwer, Nein zu sagen – und wie lernt man es, ohne sich danach schlecht zu fühlen?',
+      html: `<h1>Grenzen ziehen ohne Schuldgefühle</h1><span class="subtitle">Ein „Nein“ ist eine vollständige Antwort</span><hr><p>Ein „Nein“ ist genauso vollwertig wie ein „Ja“. Wenn du lernst, Nein zu sagen, schützt du nicht nur dich – du schaffst mehr Raum für die Dinge, denen du wirklich von Herzen „Ja“ sagen kannst.</p><hr><blockquote>„Du lehrst Menschen, wie sie dich behandeln sollen, durch das, was du tolerierst.“</blockquote><hr><h2>1. Lass den Drang los, Gefühle anderer reparieren zu müssen</h2><p>Es ist nicht deine Aufgabe, die Menschen, die du liebst, von schweren Emotionen zu befreien.</p><h2>2. Erkenne, was du bisher toleriert hast</h2><p>Was toleriere ich gerade, was ich eigentlich nicht möchte?</p><h2>3. Grenzen kommunizieren – klar und ohne Entschuldigung</h2><p>Eine Grenze braucht keine ausführliche Begründung. Klare, wertschätzende Formulierungen reichen.</p><div class="script-box"><span class="box-label">Skript-Box</span><p>„Ich weiß es zu schätzen, ich kann aber leider nicht.“<br>„Ich habe dafür gerade nicht die Energie.“<br>„Ich habe bereits geantwortet. Meine Antwort lautet nein.“</p></div><div class="journal-box"><span class="box-label">Journaling-Fragen</span><ul><li>Was habe ich in der Vergangenheit toleriert, was ich heute nicht mehr tolerieren möchte?</li><li>Wem gegenüber fällt es mir besonders schwer, Grenzen zu setzen?</li></ul></div>`
+    },
+    {
+      accent: 'linear-gradient(90deg,#B890A5,#D8BFCA)',
+      url: 'article-conscious-partnership.html',
+      title: 'Bewusste Partnerschaft',
+      subtitle: 'Toxische Beziehungsmuster erkennen und durchbrechen',
+      excerpt: 'Ungesunde Muster schleichen sich oft leise ein. Was bewusste Partnerschaft bedeutet – und wie du anders zu reagieren anfängst.',
+      html: `<h1>Bewusste Partnerschaft</h1><span class="subtitle">Toxische Beziehungsmuster erkennen und durchbrechen</span><hr><p>Ein gesundes Beziehungsleben erfordert ständige Reflexion. Muster, die wir in der Kindheit gelernt haben, laufen oft vollkommen unbewusst ab.</p><hr><blockquote>„Dein Partner ist auch nur ein Mensch. Sei nachsichtig – mit ihm und mit dir.“</blockquote><hr><h2>1. Erkenne ungesunde Muster</h2><p>Konflikte konsequent zu vermeiden, nur um den Frieden zu wahren. Immer positives Feedback zu geben, obwohl man die Dinge anders sieht.</p><h2>2. Erkenne Selbstsabotage</h2><p>Du suchst ständig nach etwas, das nicht stimmt. Du erwartest, dass dein Partner genau so denkt wie du.</p><h2>3. Was bewusste Partnerschaft bedeutet</h2><p>Neugierig statt defensiv werden. Mit dem Herzen zuhören. Den Drang loslassen, Recht haben zu müssen.</p><div class="script-box"><span class="box-label">Skript-Box</span><p>„Ich liebe dich und ich will nicht streiten. Kannst du mir helfen zu verstehen, was zwischen uns steht?“</p></div><div class="journal-box"><span class="box-label">Journaling-Fragen</span><ul><li>Welche Muster aus meiner Vergangenheit erkenne ich in meinen aktuellen Beziehungen?</li><li>Vermeide ich Konflikte, um Frieden zu wahren – und was zahle ich dafür?</li></ul></div>`
+    },
+    {
+      accent: 'linear-gradient(90deg,#8FAF88,#C8D8C0)',
+      url: 'article-social-battery.html',
+      title: 'Deine soziale Batterie',
+      subtitle: 'Bist du ein extrovertierter Introvertierter?',
+      excerpt: 'Du liebst Gesellschaft, bist danach aber völlig erschöpft? Was Introversion wirklich bedeutet – und was nicht.',
+      html: `<h1>Deine soziale Batterie</h1><span class="subtitle">Bist du ein extrovertierter Introvertierter?</span><hr><p>Du gehst gerne unter Menschen – und nach einer Weile fühlst du dich völlig leer. Nicht weil es nicht schön war. Sondern weil soziale Interaktion dich einfach kostet.</p><hr><blockquote>„Introvertiert zu sein bedeutet oft einfach: Im Alleinsein Kraft tanken zu können.“</blockquote><hr><h2>1. Introvertiert, extrovertiert, ambivertiert</h2><p>Introvertierte tanken Energie im Alleinsein. Ambivertierte finden andere Menschen faszinierend, aber auch anstrengend.</p><h2>2. Was das für deinen Alltag bedeutet</h2><p>Wann brauchst du Zeit für dich? Welche Kontexte geben dir Energie?</p><h2>3. Introversion ist kein Problem</h2><p>Introversion ist ein Persönlichkeitsmerkmal mit eigenen Stärken: Tiefe in Gesprächen, echte Verbindung statt Oberflächlichkeit.</p><div class="journal-box"><span class="box-label">Journaling-Fragen</span><ul><li>Welche sozialen Situationen lassen mich danach aufgeladen fühlen – und welche lassen mich leer?</li><li>Wann habe ich das letzte Mal mein Introvertiertheit als etwas Positives erlebt?</li></ul></div>`
+    },
+    {
+      accent: 'linear-gradient(90deg,#8FAF88,#C8D8C0)',
+      url: 'article-positive-solitude.html',
+      title: 'Die Kunst des positiven Alleinseins',
+      subtitle: 'Dates mit dir selbst und warum Solitude kein Trostpflaster ist',
+      excerpt: 'Einsamkeit und Alleinsein sind nicht dasselbe. Wie du Solitude bewusst als Kraftquelle nutzt.',
+      html: `<h1>Die Kunst des positiven Alleinseins</h1><span class="subtitle">Dates mit dir selbst und warum Solitude kein Trostpflaster ist</span><hr><p>Einsamkeit und Alleinsein sind nicht dasselbe. Alleinsein kann eine bewusst gewählte Zeit mit dir selbst sein, die sich wie ein Atemzug anfühlt.</p><hr><blockquote>„Ausruhen ist produktiv. Du hast nicht „nichts“ gemacht – du hast auf deinen Körper gehört.“</blockquote><hr><h2>1. Einsamkeit vs. Solitude</h2><p>Einsamkeit entsteht, wenn Alleinsein ungewollt ist. Solitude ist aktiv gewählt.</p><h2>2. Ein Date mit dir selbst</h2><p>Führe dich selbst aus. Geh in das Restaurant, das du schon länger besuchen wolltest. Behandle dich so, wie du behandelt werden möchtest.</p><h2>3. Wie du die Zeit allein nutzt</h2><p>Es geht nicht darum, die Zeit allein zu „rechtfertigen“. Manchmal ist das Ziel schlicht, zu regenerieren.</p><div class="journal-box"><span class="box-label">Journaling-Fragen</span><ul><li>Wann habe ich das letzte Mal meine eigene Gesellschaft wirklich genossen?</li><li>Was würde ich unternehmen, wenn ich heute ohne Plan zwei Stunden für mich hätte?</li></ul></div>`
+    }
+  ],
+  'self': [
+    {
+      accent: 'linear-gradient(90deg,#BCA870,#DDD0B0)',
+      url: 'article-illusion-of-perfection.html',
+      title: 'Die Illusion der Perfektion',
+      subtitle: 'Das Gesetz der Umkehrung und warum Loslassen die eigentliche Arbeit ist',
+      excerpt: 'Je mehr wir nach Perfektion streben, desto unzufriedener werden wir. Warum das so ist – und was wirklich hilft.',
+      html: `<h1>Die Illusion der Perfektion</h1><span class="subtitle">Das Gesetz der Umkehrung</span><hr><p>Je mehr wir danach streben, uns ständig besser zu fühlen, desto unzufriedener werden wir – weil dieses Streben immer nur die Tatsache verstärkt, dass uns gerade etwas fehlt.</p><hr><blockquote>„Das Streben nach positiven Erfahrungen ist eine negative Erfahrung. Das Akzeptieren von negativen Erfahrungen ist eine positive Erfahrung.“</blockquote><hr><h2>1. Perfektion als erlernte Angst</h2><p>Das ständige Streben nach Perfektion ist selten eine reine Charaktereigenschaft – es ist meist eine Reaktion auf Erfahrungen.</p><h2>2. Loslassen ist das Gegenteil von Arbeit</h2><p>Aufhören, Dinge persönlich zu nehmen. Den Drang ablegen, zu kontrollieren, was andere denken.</p><h2>3. Der Kinderfoto-Trick</h2><p>Stelle ein Foto von dir als Kind auf. Frage dich, was du diesem Kind sagen würdest. Die Antwort ist fast immer sanfter als das, was du dir selbst sagst.</p><div class="script-box"><span class="box-label">Skript-Box</span><p><strong>Statt:</strong> „Ich habe versagt. Es war nicht perfekt.“<br><strong>Sag dir:</strong> „Perfektion existiert nicht – Fortschritt ist das, was zählt.“</p></div><div class="journal-box"><span class="box-label">Journaling-Fragen</span><ul><li>In welchen Bereichen meines Lebens suche ich am intensivsten nach Perfektion?</li><li>Was würde ich wagen, wenn ich wüsste, dass es nicht perfekt werden muss?</li></ul></div>`
+    },
+    {
+      accent: 'linear-gradient(90deg,#BCA870,#DDD0B0)',
+      url: 'article-inner-child-healing.html',
+      title: 'Inner Child Healing',
+      subtitle: 'Wie wir unserem inneren Kind begegnen',
+      excerpt: 'Kindheitserfahrungen formen uns still – oft noch Jahrzehnte später. Was Inner Child Healing wirklich bedeutet.',
+      html: `<h1>Inner Child Healing</h1><span class="subtitle">Wie wir unserem inneren Kind begegnen</span><hr><p>Unsere Kindheitserfahrungen prägen, wie wir die Welt wahrnehmen – oft noch Jahrzehnte später. Manchmal durch stille, wiederkehrende Botschaften: Dass wir nur dann geliebt werden, wenn wir funktionieren.</p><hr><blockquote>„Heilung bedeutet nicht, die Vergangenheit zu löschen. Sie bedeutet, ihr endlich mit Mitgefühl zu begegnen.“</blockquote><hr><h2>1. Was das innere Kind ist</h2><p>Eine Metapher für den Teil von uns, der die emotionalen Spuren unserer Kindheit trägt.</p><h2>2. Häufige Wunden</h2><p>Die Angst vor Ablehnung, das Gefühl, nie gut genug zu sein, das Bedürfnis, anderen zu gefällen.</p><h2>3. Wie du Verbindung aufbaust</h2><p>Stelle ein Foto von dir als Kind auf. Wenn du streng mit dir bist, frage dich: Was würde ich diesem Kind sagen?</p><div class="script-box"><span class="box-label">Skript-Box</span><p>„Es war nicht deine Schuld. Du hast getan, was du konntest. Ich bin jetzt hier.“</p></div><div class="journal-box"><span class="box-label">Journaling-Fragen</span><ul><li>Welche Glaubenssätze aus meiner Kindheit bestimmen noch heute, wie ich mich selbst sehe?</li><li>Welchen Teil von mir habe ich früher geopfert, um dazuzugehören?</li></ul></div>`
+    }
+  ],
+  'health': [
+    {
+      accent: 'linear-gradient(90deg,#BF9690,#DEC9C4)',
+      url: 'article-peace-with-food.html',
+      title: 'Frieden schließen mit dem Essen',
+      subtitle: 'Der Unterschied zwischen gestörtem Essverhalten und einer Essstörung',
+      excerpt: 'Es gibt einen Bereich zwischen gelegentlichem Überessen und einer klinischen Essstörung – und er verdient Aufmerksamkeit.',
+      html: `<h1>Frieden schließen mit dem Essen</h1><span class="subtitle">Der Unterschied zwischen gestörtem Essverhalten und einer Essstörung</span><hr><p>Von einem gestörten Essverhalten spricht man, wenn Gedanken rund um Essen so viel Raum einnehmen, dass sie den Alltag belasten.</p><hr><blockquote>„Dein Körper ist nicht das Problem. Du hast das Recht, Genuss zu empfinden.“</blockquote><hr><h2>1. Gestörtes Essverhalten</h2><p>Ständige kreisende Gedanken um Kalorien, Schuldgefühle nach dem Essen, heimliches Essen aus Scham.</p><h2>2. Klinische Essstörungen</h2><p>Anorexia nervosa, Bulimia nervosa, Binge-Eating-Störung – wenn das Gewicht das Essverhalten vollständig dominiert, ist professionelle Hilfe wichtig.</p><div class="script-box"><span class="box-label">Skript-Box</span><p>„Mein Wert hängt nicht daran, was und wie viel ich heute gegessen habe.“</p></div><div class="journal-box"><span class="box-label">Journaling-Fragen</span><ul><li>Wie viel Zeit verbringen meine Gedanken täglich mit dem Thema Essen?</li><li>Was würde sich verändern, wenn Essen wieder neutral wäre?</li></ul></div>`
+    },
+    {
+      accent: 'linear-gradient(90deg,#BF9690,#DEC9C4)',
+      url: 'article-diet-cycle.html',
+      title: 'Der Ausweg aus dem Diätwahn',
+      subtitle: 'Warum Verzicht zu Heißhunger führt – und was intuitives Essen bedeutet',
+      excerpt: 'Je strenger die Regeln, desto lauter werden die Impulse dagegen. Was wirklich passiert – und wie du aufhörst zu kämpfen.',
+      html: `<h1>Der Ausweg aus dem Diätwahn</h1><span class="subtitle">Warum Verzicht zu Heißhunger führt</span><hr><p>Diäten fühlen sich nach Kontrolle an. Doch je strenger die Regeln, desto lauter werden die Impulse dagegen.</p><hr><blockquote>„Essen ist eine neutrale Substanz. Es ist weder moralisch gut noch schlecht.“</blockquote><hr><h2>1. Der Binge-and-Restrict-Kreislauf</h2><p>Verzicht führt zu Essanfällen, Essanfälle führen zu neuem Verzicht.</p><h2>2. Intuitives Essen</h2><p>Du isst, wenn du hungrig bist. Du stoppst, wenn du satt bist. Keine Lebensmittel werden moralisch bewertet.</p><h2>3. Die Food Police zum Schweigen bringen</h2><p>Bemerken: Wann klingt diese Stimme laut? Was löst sie aus?</p><div class="script-box"><span class="box-label">Skript-Box</span><p>„Ich habe gegessen. Mein Körper hat Energie bekommen. Das war richtig.“</p></div><div class="journal-box"><span class="box-label">Journaling-Fragen</span><ul><li>Welche Essensregeln habe ich internalisiert – und woher kommen sie?</li><li>Wann habe ich meinem Körper das letzte Mal vertraut, statt einer Regel?</li></ul></div>`
+    },
+    {
+      accent: 'linear-gradient(90deg,#7A9DB5,#B8CCDA)',
+      url: 'article-power-of-sleep.html',
+      title: 'Die Macht des Schlafs',
+      subtitle: 'Wie Ruhe negative Gedanken und Ängste bekämpft',
+      excerpt: 'Fast zwei Drittel aller Menschen schlafen schlecht wegen Sorgen. Was wirklich passiert – und wie eine gute Abendroutine aussieht.',
+      html: `<h1>Die Macht des Schlafs</h1><span class="subtitle">Wie Ruhe negative Gedanken und Ängste bekämpft</span><hr><p>Fast zwei Drittel aller Menschen finden nachts keinen Schlaf – wachgehalten von Grübeln und Sorgen.</p><hr><blockquote>„Du kannst deinem Gehirn beibringen, dass Nacht Erholung bedeutet – aber es braucht klare Signale.“</blockquote><hr><h2>1. Was chronischer Schlafmangel macht</h2><p>Erhöhtes Risiko für Depressionen, geminderte Gedächtnisleistung, schwerere emotionale Regulation.</p><h2>2. Die Gedanken-Ablade-Routine</h2><p>Schreibe deine Gedanken auf, bevor du ins Bett gehst. Das Aufschreiben signalisiert: Diese Information ist sicher.</p><h2>3. Die 4-4-8 Atemtechnik</h2><p>Vier Sekunden einatmen, vier halten, acht ausatmen. Das stimuliert den Vagusnerv.</p><div class="script-box"><span class="box-label">Abend-Routine</span><p>1. Gedanken aufschreiben.<br>2. Bildschirme aus.<br>3. Körper abkühlen lassen.<br>4. 4-4-8 Atemtechnik bei Schlaflosigkeit.</p></div><div class="journal-box"><span class="box-label">Journaling-Fragen</span><ul><li>Was hindert mich meistens am Einschlafen?</li><li>Was wäre der eine kleine Schritt, den ich heute Abend ausprobieren könnte?</li></ul></div>`
+    }
+  ],
+  'growth': [
+    {
+      accent: 'linear-gradient(90deg,#7A9DB5,#B8CCDA)',
+      url: 'article-procrastination.html',
+      title: 'Warum wir prokrastinieren',
+      subtitle: 'Wie Versagensängste und fehlende Struktur zum Aufschieben führen',
+      excerpt: 'Prokrastination ist kein Zeichen von Faulheit. Dahinter steckt fast immer etwas anderes – und das lässt sich angehen.',
+      html: `<h1>Warum wir prokrastinieren</h1><span class="subtitle">Wie Versagensängste zum Aufschieben führen</span><hr><p>Prokrastination ist kein Zeichen von Faulheit. Sie ist fast immer ein Zeichen von Versagensangst, Perfektionismus oder fehlender Struktur.</p><hr><blockquote>„Der Weg ist das Ziel. Fortschritt ist immer besser als Perfektion.“</blockquote><hr><h2>Die 50-Prozent-Regel</h2><p>Nimm dir vor, nur die Hälfte der Aufgabe zu erledigen. Die Eintrittshürde sinkt massiv.</p><h2>Kleine Stücke</h2><p>Zerlege große Aufgaben in winzige, sofort machbare Schritte.</p><h2>Perfektion ist der Feind des Anfangs</h2><p>Einfach anzufangen ist fast immer besser als das Warten auf Perfektion.</p><div class="journal-box"><span class="box-label">Journaling-Fragen</span><ul><li>Welche Aufgabe schiebe ich gerade auf – und wovor habe ich dabei wirklich Angst?</li><li>Was ist der kleinste mögliche Schritt, den ich heute noch tun könnte?</li></ul></div>`
+    }
+  ],
+  'conditions': [
+    {
+      accent: 'linear-gradient(90deg,#9080C0,#D0C8E0)',
+      url: 'article-mental-wellness-101.html',
+      title: 'Mental Wellness 101',
+      subtitle: 'Wie Körper, Psyche und soziales Umfeld zusammenhängen',
+      excerpt: 'Psychische Gesundheit entsteht im Zusammenspiel von Körper, Geist und Umfeld. Was du selbst beeinflussen kannst.',
+      html: `<h1>Mental Wellness 101</h1><span class="subtitle">Wie Körper, Psyche und soziales Umfeld zusammenhängen</span><hr><p>Psychische Gesundheit ist genauso wichtig wie physische. Unser mentales Wohlbefinden ist nicht von unserem Körper oder unseren Beziehungen zu trennen.</p><hr><blockquote>„Dein Verstand ist dein wichtigstes Werkzeug. Pflege ihn genauso bewusst wie deinen Körper.“</blockquote><hr><h2>Die drei Säulen</h2><p><strong>Körper:</strong> Schlaf, Bewegung, Ernährung.<br><strong>Psyche:</strong> Wie wir mit uns selbst sprechen, welche Glaubenssätze wir haben.<br><strong>Soziales Umfeld:</strong> Echte Verbindungen sind einer der stärksten Schutzfaktoren.</p><div class="journal-box"><span class="box-label">Journaling-Fragen</span><ul><li>Welche der drei Säulen vernachlässige ich gerade am meisten?</li><li>Was würde „gut auf mich achten“ für mich konkret bedeuten?</li></ul></div>`
+    },
+    {
+      accent: 'linear-gradient(90deg,#9080C0,#D0C8E0)',
+      url: 'article-therapy-101.html',
+      title: 'Therapie 101',
+      subtitle: 'Hilfe finden, verstehen und annehmen',
+      excerpt: 'Du musst nicht erst in einer Krise sein, um Therapie zu beginnen. Was Therapie wirklich ist – und wie du den richtigen Therapeuten findest.',
+      html: `<h1>Therapie 101</h1><span class="subtitle">Hilfe finden, verstehen und annehmen</span><hr><p>Therapie ist kein letzter Ausweg – sie ist ein Werkzeug. Bei der Behandlung von Depressionen verbessern sich rund 80 Prozent der Menschen, die eine Therapie beginnen.</p><hr><blockquote>„Sich Hilfe zu suchen, ist kein Zeichen von Schwäche. Es ist ein Zeichen von Mut.“</blockquote><hr><h2>Den richtigen Therapeuten finden</h2><p>Jemanden finden, bei dem du dich sicher genug fühlst, um ehrlich zu sein. Im Erstgespräch darfst du Fragen stellen.</p><div class="script-box"><span class="box-label">Fragen fürs Erstgespräch</span><p>„Welche Erfahrung haben Sie mit dem, womit ich kämpfe?“<br>„Welchen therapeutischen Ansatz verfolgen Sie?“<br>„Wie werde ich merken, dass wir Fortschritte machen?“</p></div><div class="journal-box"><span class="box-label">Journaling-Fragen</span><ul><li>Gibt es etwas, das mich schon länger belastet und das ich alleine nicht lösen kann?</li><li>Was hält mich davon ab, mir Unterstützung zu suchen?</li></ul></div>`
+    }
+  ]
+};
+
+
+// Map topics.html category IDs → dedicated category pages
+const CAT_PAGE_HREFS = {
+  'self':          'topic-self-worth.html',
+  'emotions':      'topic-emotions.html',
+  'relationships': 'topic-relationships.html',
+  'transitions':   'topic-transitions.html',
+  'growth':        'topic-habits.html',
+  'work':          'topic-stress.html',
+};
+
+// ── CORE TOPICS — the 8 main categories from the Topics mega-menu ──
+// filterId links a core card to the matching filter pill (null = no pill)
+const CORE_TOPICS = [
+  { id: 'self-worth',    filterId: 'self',          href: 'topic-self-worth.html',    grad: 'var(--g-dusk)',  name: 'Self-Worth & Identity', desc: 'How you see yourself — and who you want to be',          subs: ['Self-Worth', 'Confidence', 'Perfectionism'] },
+  { id: 'anxiety',       filterId: null,            href: 'topic-anxiety.html',       grad: 'var(--g-slate)', name: 'Anxiety & Overthinking', desc: 'Understanding worry, racing thoughts, and finding calm', subs: ['Anxiety', 'Overthinking', 'Panic Attacks'] },
+  { id: 'loneliness',    filterId: null,            href: 'topic-loneliness.html',    grad: 'var(--g-fog)',   name: 'Loneliness & Connection', desc: 'Finding belonging — with others and with yourself',     subs: ['Loneliness', 'Belonging', 'Vulnerability'] },
+  { id: 'relationships', filterId: 'relationships', href: 'topic-relationships.html', grad: 'var(--g-rose)',  name: 'Relationships',          desc: 'How we connect — and why it\'s hard',                    subs: ['Breakups', 'Dating', 'Attachment Styles'] },
+  { id: 'transitions',   filterId: 'transitions',   href: 'topic-transitions.html',   grad: 'var(--g-moss)',  name: 'Life Transitions',       desc: 'When life changes faster than you can keep up',          subs: ['Moving', 'New Job', 'Fresh Starts'] },
+  { id: 'stress',        filterId: null,            href: 'topic-stress.html',        grad: 'var(--g-amber)', name: 'Stress & Burnout',       desc: 'Performance, pressure and the path back to rest',        subs: ['Burnout', 'Overwhelm', 'Recovery'] },
+  { id: 'habits',        filterId: null,            href: 'topic-habits.html',        grad: 'var(--g-gold)',  name: 'Habits & Growth',        desc: 'For when you want to build something new in yourself',    subs: ['Habits', 'Motivation', 'Procrastination'] },
+  { id: 'emotions',      filterId: 'emotions',      href: 'topic-emotions.html',      grad: 'var(--g-sage)',  name: 'Emotions & Resilience',  desc: 'Understanding what you\'re actually feeling',             subs: ['Grief & Loss', 'Inner Critic', 'Shame'] },
+];
+
+// Categories shown as Core cards must not be duplicated in Explore More
+const CORE_EXCLUDE = new Set(['self', 'emotions', 'relationships', 'transitions']);
+
+let activeFilter = 'all';
+let searchQuery  = '';
+
+function tagColor(tag) {
+  if (tag === 'popular') return { bg: 'rgba(90,128,80,.1)', color: '#5A8050' };
+  if (tag === 'beginner') return { bg: 'rgba(106,100,160,.1)', color: '#6A64A0' };
+  return null;
+}
+
+function renderCore() {
+  const grid = document.getElementById('coreGrid');
+  const q = searchQuery.toLowerCase();
+  let visible = 0;
+  grid.innerHTML = '';
+
+  CORE_TOPICS.forEach(ct => {
+    // filter pills: show all, or only the card matching the active pill
+    if (activeFilter !== 'all' && ct.filterId !== activeFilter) return;
+    // search across name, description and subtopics
+    if (q) {
+      const hay = (ct.name + ' ' + ct.desc + ' ' + ct.subs.join(' ')).toLowerCase();
+      if (!hay.includes(q)) return;
+    }
+    visible++;
+    const card = document.createElement('a');
+    card.className = 'core-card anim';
+    card.href = ct.href;
+    card.innerHTML =
+      '<div class="core-card__orb" style="background:' + ct.grad + ';"></div>' +
+      '<div class="core-card__name">' + ct.name + '</div>' +
+      '<div class="core-card__desc">' + ct.desc + '</div>' +
+      '<div class="core-card__subs">' + ct.subs.join(' · ') + '</div>' +
+      '<div class="core-card__cta">Explore <span>→</span></div>';
+    grid.appendChild(card);
+  });
+
+  document.getElementById('coreSection').style.display = visible ? '' : 'none';
+  return visible;
+}
+
+function renderAll() {
+  const coreVisible = renderCore();
+
+  const container = document.getElementById('categoryBlocks');
+  container.innerHTML = '';
+
+  const q = searchQuery.toLowerCase();
+  let anyVisible = false;
+
+  CATEGORIES.forEach(cat => {
+    // skip categories that are already shown as Core cards
+    if (CORE_EXCLUDE.has(cat.id)) return;
+    // filter by category
+    if (activeFilter !== 'all' && cat.id !== activeFilter) return;
+
+    // filter topics by search
+    const visibleTopics = q
+      ? cat.topics.filter(t => t.name.toLowerCase().includes(q) || cat.label.toLowerCase().includes(q))
+      : cat.topics;
+
+    if (visibleTopics.length === 0 && q) return;
+    anyVisible = true;
+
+    const block = document.createElement('div');
+    block.className = 'category-block anim';
+    block.dataset.cat = cat.id;
+
+    const pillsHTML = visibleTopics.map(t => {
+      const tc = tagColor(t.tag);
+      const tagHTML = t.tag && tc
+        ? `<span class="tp-tag" style="background:${tc.bg};color:${tc.color};">${t.tag}</span>`
+        : '';
+      const highlight = q && t.name.toLowerCase().includes(q)
+        ? t.name.replace(new RegExp(q, 'gi'), m => `<mark style="background:rgba(90,128,80,.15);border-radius:3px;">${m}</mark>`)
+        : t.name;
+      return `<a class="topic-pill" href="#">
+        <div class="tp-dot" style="background:${cat.grad};"></div>
+        <span class="tp-name">${highlight}</span>
+        ${tagHTML}
+      </a>`;
+    }).join('');
+
+    const catHref = CAT_PAGE_HREFS[cat.id] || null;
+    block.innerHTML = `
+      <div class="cat-header">
+        <div class="cat-orb" style="background:${cat.grad};"></div>
+        ${catHref
+          ? `<a href="${catHref}" class="cat-title-group cat-title-group--link">
+              <div class="cat-title">${cat.label}</div>
+              <div class="cat-count">${cat.topics.length} topics</div>
+            </a>`
+          : `<div class="cat-title-group">
+              <div class="cat-title">${cat.label}</div>
+              <div class="cat-count">${cat.topics.length} topics</div>
+            </div>`
+        }
+        ${catHref
+          ? `<a href="${catHref}" class="cat-all-link">See all <span>→</span></a>`
+          : ''}
+      </div>
+      <div class="topic-grid">${pillsHTML}</div>`;
+
+    // ── Inject article cards for this category ──
+    const catArts = ARTICLES_BY_CAT[cat.id];
+    if (catArts && catArts.length && !q) {
+      const artSection = document.createElement('div');
+      artSection.className = 'articles-section';
+      artSection.innerHTML = '<div class="articles-section-label">Artikel lesen</div><div class="articles-row" id="arow-' + cat.id + '"></div>';
+      block.appendChild(artSection);
+      const arow = artSection.querySelector('.articles-row');
+      catArts.forEach(art => {
+        const card = document.createElement('a');
+        card.className = 'article-card';
+        card.href = art.url;
+        card.innerHTML = '<div class="article-card__accent" style="background:' + art.accent + '"></div><div class="article-card__tag">Learn</div><div class="article-card__title">' + art.title + '</div><div class="article-card__excerpt">' + art.excerpt + '</div><div class="article-card__read">Lesen <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>';
+        arow.appendChild(card);
+      });
+    }
+    container.appendChild(block);
+  });
+
+  // show/hide sections
+  const noRes = document.getElementById('noResults');
+  const featured = document.getElementById('featuredSection');
+  const crisis = document.getElementById('crisisBanner');
+  const explore = document.getElementById('exploreSection');
+
+  explore.style.display = anyVisible ? '' : 'none';
+  noRes.style.display = (coreVisible || anyVisible) ? 'none' : 'block';
+  featured.style.display = (q || activeFilter !== 'all') ? 'none' : '';
+  crisis.style.display = (q || activeFilter !== 'all') ? 'none' : '';
+}
+
+function handleSearch(val) {
+  searchQuery = val;
+  document.getElementById('searchClear').style.display = val ? 'block' : 'none';
+  renderAll();
+}
+
+function clearSearch() {
+  document.getElementById('searchInput').value = '';
+  document.getElementById('searchClear').style.display = 'none';
+  searchQuery = '';
+  renderAll();
+}
+
+function filterCat(btn, cat) {
+  activeFilter = cat;
+  document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  renderAll();
+}
+
+renderAll();
+</script>
+
+
+</body>
+</html>

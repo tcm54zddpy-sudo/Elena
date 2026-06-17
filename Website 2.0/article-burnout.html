@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mindbloom — What burnout actually feels like</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Mulish:wght@300;400;500&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<script src="nav.js"></script>
+<script src="library.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #F8F7F4; --white: #FFFFFF;
+  --border: rgba(0,0,0,0.08); --border-m: rgba(0,0,0,0.13);
+  --text: #1A1A1A; --muted: #6B6B6B; --faint: #ABABAB;
+  --sage: #5A8050; --dusk: #6A64A0;
+  --serif: "Playfair Display", Georgia, serif;
+  --serif-body: "Lora", Georgia, serif;
+  --sans: "Mulish", sans-serif;
+  --r: 16px; --r-sm: 10px;
+}
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: var(--sans); font-weight: 300; font-size: 15px; line-height: 1.75; -webkit-font-smoothing: antialiased; }
+a { text-decoration: none; color: inherit; }
+.article-wrapper { max-width: 700px; margin: 0 auto; padding: 2.5rem 2.8rem 6rem; }
+.article-back { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--faint); font-weight: 400; margin-bottom: 2rem; transition: color .18s; }
+.article-back:hover { color: var(--muted); }
+.article-cat-label { display: inline-block; font-size: 10.5px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; padding: 4px 12px; border-radius: 100px; margin-bottom: 1.2rem; }
+.read-time { font-size: 11.5px; color: var(--faint); margin-bottom: 2rem; display: block; }
+article h1 { font-family: var(--serif); font-size: clamp(22px, 3.5vw, 32px); font-weight: 400; line-height: 1.3; margin-bottom: 6px; }
+article .subtitle { font-family: var(--serif-body); font-style: italic; font-size: 15px; color: var(--muted); margin-bottom: .5rem; display: block; }
+article hr { border: none; border-top: 1px solid var(--border); margin: 1.8rem 0; }
+article blockquote { border-left: 3px solid var(--border-m); padding-left: 1.2rem; font-family: var(--serif-body); font-style: italic; font-size: 15px; color: var(--muted); margin: 1.5rem 0; line-height: 1.75; }
+article h2 { font-family: var(--serif); font-size: 1.05rem; font-weight: 400; margin: 2rem 0 .6rem; }
+article p { font-family: var(--serif-body); font-size: 15px; line-height: 1.85; margin-bottom: 1.1rem; color: #2A2A2A; }
+article strong { font-weight: 500; color: var(--text); }
+article ul, article ol { padding-left: 1.4rem; margin-bottom: 1.1rem; }
+article li { font-family: var(--serif-body); font-size: 15px; line-height: 1.85; margin-bottom: .4rem; color: #2A2A2A; }
+.script-box { background: #f5f4f0; border: 1px solid var(--border-m); border-radius: var(--r-sm); padding: 1.4rem 1.6rem; margin: 1.5rem 0; }
+.script-box .box-label { font-size: 10px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); display: block; margin-bottom: .9rem; }
+.script-box p { font-size: 14px; margin-bottom: .7rem; }
+.script-box p:last-child { margin-bottom: 0; }
+.journal-box { background: #f0f4ee; border: 1px solid rgba(90,128,80,.18); border-radius: var(--r-sm); padding: 1.4rem 1.6rem; margin: 1.5rem 0; }
+.journal-box .box-label { font-size: 10px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--sage); display: block; margin-bottom: .9rem; }
+.journal-box li { font-size: 14px; color: #3A5030; }
+.article-footer-nav { margin-top: 3.5rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+.footer-back-link { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--faint); padding: 8px 16px; border: 1px solid var(--border); border-radius: 100px; transition: all .18s; }
+.footer-back-link:hover { border-color: var(--border-m); color: var(--muted); }
+</style>
+</head>
+<body>
+<div id="site-nav-placeholder"></div>
+
+<div class="article-wrapper">
+  <a class="article-back" href="topics.html">← Back to Topics</a>
+
+  <div class="article-cat-label" style="background:rgba(122,157,181,.12);color:#4A7A99;">Work &amp; School</div>
+
+  <article>
+    <h1>What burnout actually feels like — and how to know if you have it</h1>
+    <span class="subtitle">Burnout isn't just being tired. Here's how to recognise it and what to do next.</span>
+    <span class="read-time">7 min read</span>
+    <hr>
+    <p>You used to care about your work. Now you drag yourself through the day feeling empty, detached, and so exhausted that even the things that used to restore you — sleep, weekends, holidays — don't seem to help. You wonder if you've just become lazy, or ungrateful, or weak.</p>
+    <p>You're probably burnt out.</p>
+    <hr>
+    <blockquote>"Burnout is not a badge of honour. It is the body's final way of saying: something has to change."</blockquote>
+    <hr>
+    <h2>Burnout vs. being tired</h2>
+    <p>Everyone gets tired. Rest fixes tiredness. Burnout is different — it's a state of <strong>chronic depletion</strong> that rest alone cannot undo. If you've had a full night's sleep and still feel like you have nothing left, that's an important signal.</p>
+    <h2>The three signs of burnout</h2>
+    <p>Research by psychologist Christina Maslach identifies three core dimensions:</p>
+    <ul>
+      <li><strong>Exhaustion</strong> — a profound physical and emotional depletion that doesn't lift with rest.</li>
+      <li><strong>Cynicism (or detachment)</strong> — feeling distant from your work, going through the motions, losing the ability to care.</li>
+      <li><strong>Reduced effectiveness</strong> — a decline in your ability to do your work well, accompanied by a growing sense that nothing you do matters.</li>
+    </ul>
+    <p>You don't need all three to be burning out. Exhaustion alone, sustained over months, is enough to warrant taking it seriously.</p>
+    <h2>What it actually feels like day to day</h2>
+    <p>Burnout is often hard to recognise because it creeps up gradually. Some common experiences: forgetting simple things, finding it hard to concentrate, feeling irritable or numb rather than sad, dreading Sunday evenings, losing interest in things outside of work, getting sick more often.</p>
+    <p>Many people experiencing burnout don't feel dramatic distress — they feel hollow. A quiet flatness where enthusiasm used to live.</p>
+    <h2>Why high achievers are especially vulnerable</h2>
+    <p>Burnout doesn't only happen to people who work too hard. It happens to people who care deeply, who find meaning in what they do, who are unable to say no, who tie their self-worth to their output. The more invested you are, the more you have to lose — and the more a dysfunctional environment can take from you.</p>
+    <h2>What caused it — and why it matters</h2>
+    <p>Burnout is most often caused by systemic factors: unmanageable workload, lack of control, unfairness, poor community, insufficient reward. It is rarely caused by individual weakness. Understanding the source matters because the solution has to match the cause — personal coping strategies cannot fix a broken working environment.</p>
+    <h2>Recovery takes longer than you think</h2>
+    <p>Recovery from burnout is measured in months, not days. It requires genuine rest, reducing demands where possible, rebuilding physical health, and — often — examining what got you here and whether you want to return to the same conditions.</p>
+    <div class="script-box">
+      <span class="box-label">A starting point</span>
+      <p>If you're in burnout: the first step is not to push through. It is to stop, assess honestly, and talk to someone — a GP, a manager you trust, or a therapist. You are not being weak. You are being accurate about your state.</p>
+    </div>
+    <div class="journal-box">
+      <span class="box-label">Journaling questions</span>
+      <ul>
+        <li>When did I last feel genuinely energised by my work — and what was different then?</li>
+        <li>What part of this situation is within my control, and what isn't?</li>
+        <li>What would I need — in terms of time, rest, or change — to feel like myself again?</li>
+      </ul>
+    </div>
+  </article>
+
+  <div class="article-footer-nav">
+    <a class="footer-back-link" href="topics.html">← Back to Topics</a>
+  </div>
+</div>
+</body>
+</html>

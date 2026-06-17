@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mindbloom — Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Mulish:wght@300;400;500&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg:#F8F7F4; --white:#FFFFFF;
+  --border:rgba(0,0,0,0.08); --border-m:rgba(0,0,0,0.13);
+  --text:#1A1A1A; --muted:#6B6B6B; --faint:#ABABAB;
+  --g-sage:linear-gradient(135deg,#C8D8C0,#8FAF88);
+  --g-dusk:linear-gradient(135deg,#C4C0DC,#8A84B8);
+  --g-blush:linear-gradient(135deg,#DEC9C4,#BF9690);
+  --g-slate:linear-gradient(135deg,#B8CCDA,#7A9DB5);
+  --g-amber:linear-gradient(135deg,#DDD0B0,#BCA870);
+  --g-gold:linear-gradient(135deg,#DDD0A8,#B8A050);
+  --sage-tint:#F0F4EE; --sage:#5A8050; --dusk:#6A64A0;
+  --serif:'Playfair Display',Georgia,serif;
+  --serif-body:'Lora',Georgia,serif;
+  --sans:'Mulish',sans-serif;
+  --r:16px; --r-sm:10px;
+}
+html { scroll-behavior:smooth; }
+body { background:var(--bg); color:var(--text); font-family:var(--sans); font-weight:300; font-size:15px; line-height:1.75; -webkit-font-smoothing:antialiased; }
+a { text-decoration:none; color:inherit; }
+button { cursor:pointer; font-family:var(--sans); border:none; }
+
+.page-hero { background:var(--white); border-bottom:1px solid var(--border); padding:52px 2.8rem 48px; text-align:center; }
+.page-hero h1 { font-family:var(--serif); font-size:clamp(26px,3.5vw,42px); font-weight:400; margin-bottom:12px; }
+.page-hero p { font-family:var(--serif-body); font-style:italic; font-size:15px; color:var(--muted); max-width:480px; margin:0 auto; line-height:1.7; }
+
+.page-body { max-width:1100px; margin:0 auto; padding:3rem 2.8rem 6rem; }
+
+.section-label { font-size:10.5px; font-weight:500; letter-spacing:.12em; text-transform:uppercase; color:var(--faint); margin-bottom:1.2rem; }
+
+.tools-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:3rem; }
+
+.tool-card {
+  background:var(--white); border:1px solid var(--border); border-radius:var(--r);
+  overflow:hidden; text-decoration:none; color:var(--text);
+  transition:border-color .2s, box-shadow .2s, transform .18s;
+  display:flex; flex-direction:column;
+}
+.tool-card:hover { border-color:var(--border-m); box-shadow:0 6px 24px rgba(0,0,0,.08); transform:translateY(-2px); }
+.tool-card.coming-soon { opacity:.55; pointer-events:none; }
+
+.tool-card__thumb {
+  height:140px; position:relative; overflow:hidden;
+  display:flex; align-items:center; justify-content:center;
+}
+.tool-card__thumb-bg { position:absolute; inset:0; opacity:.18; }
+.tool-card__icon {
+  width:56px; height:56px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  position:relative; z-index:1;
+}
+.tool-card__body { padding:1.3rem 1.4rem 1.4rem; flex:1; display:flex; flex-direction:column; }
+.tool-card__tag {
+  font-size:10px; font-weight:500; letter-spacing:.07em; text-transform:uppercase;
+  color:var(--faint); margin-bottom:8px;
+  display:flex; align-items:center; gap:6px;
+}
+.tag-badge {
+  font-size:9.5px; font-weight:600; letter-spacing:.04em;
+  padding:2px 7px; border-radius:100px;
+}
+.tool-card__title { font-family:var(--serif); font-size:1.05rem; font-weight:400; margin-bottom:8px; line-height:1.3; }
+.tool-card__desc { font-size:13px; color:var(--muted); font-weight:300; line-height:1.6; flex:1; }
+.tool-card__footer {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-top:1rem; padding-top:.8rem; border-top:1px solid var(--border);
+}
+.tool-card__time { font-size:11.5px; color:var(--faint); font-weight:300; }
+.tool-card__cta { font-size:12px; font-weight:500; color:var(--sage); }
+.tool-card.coming-soon .tool-card__cta { color:var(--faint); }
+
+@media (max-width:800px) { .tools-grid { grid-template-columns:1fr 1fr; } }
+@media (max-width:520px) { .tools-grid { grid-template-columns:1fr; } }
+</style>
+  <script src="nav.js"></script>
+</head>
+<body>
+  <div id="site-nav-placeholder"></div>
+  
+
+<div class="page-hero">
+  <h1>Tools für dein Innenleben</h1>
+  <p>Kleine, gezielte Übungen — keine App nötig, kein Konto erforderlich. Einfach loslegen.</p>
+</div>
+
+<div class="page-body">
+
+  <div class="section-label">Verfügbar jetzt</div>
+  <div class="tools-grid">
+
+    <!-- VALUES FINDER -->
+    <a href="tool-values.html" class="tool-card">
+      <div class="tool-card__thumb">
+        <div class="tool-card__thumb-bg" style="background:var(--g-gold);"></div>
+        <div class="tool-card__icon" style="background:var(--g-gold);">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="1.5" stroke-linecap="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+      </div>
+      <div class="tool-card__body">
+        <div class="tool-card__tag">
+          Selbstkenntnis
+          <span class="tag-badge" style="background:#F5F0E4;color:#907840;">Beliebt</span>
+        </div>
+        <div class="tool-card__title">Values Finder</div>
+        <div class="tool-card__desc">Entdecke, was dir wirklich wichtig ist. Aus 80+ Werten wählst du deine wichtigsten — das Tool erstellt deine persönliche Wertekarte.</div>
+        <div class="tool-card__footer">
+          <span class="tool-card__time">10–15 min</span>
+          <span class="tool-card__cta">Starten →</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- GROUNDING -->
+    <a href="tool-grounding.html" class="tool-card">
+      <div class="tool-card__thumb">
+        <div class="tool-card__thumb-bg" style="background:var(--g-slate);"></div>
+        <div class="tool-card__icon" style="background:var(--g-slate);">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="1.5" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+      </div>
+      <div class="tool-card__body">
+        <div class="tool-card__tag">
+          Angst & Panik
+          <span class="tag-badge" style="background:#EAF0F4;color:#4A7A95;">5-4-3-2-1</span>
+        </div>
+        <div class="tool-card__title">Anxiety Grounding Tool</div>
+        <div class="tool-card__desc">Die 5-4-3-2-1 Methode führt dich Schritt für Schritt durch deine Sinne — und holt dich zurück in den Moment, wenn Angst überwältigend wird.</div>
+        <div class="tool-card__footer">
+          <span class="tool-card__time">3–5 min</span>
+          <span class="tool-card__cta">Starten →</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- CIRCLE OF CONTROL -->
+    <a href="tool-control.html" class="tool-card">
+      <div class="tool-card__thumb">
+        <div class="tool-card__thumb-bg" style="background:linear-gradient(135deg,#C8D8C0,#C4C0DC);"></div>
+        <div class="tool-card__icon" style="background:linear-gradient(135deg,#C8D8C0,#8A84B8);">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="5"/></svg>
+        </div>
+      </div>
+      <div class="tool-card__body">
+        <div class="tool-card__tag">
+          Grübeln & Kontrolle
+          <span class="tag-badge" style="background:#F0F4EE;color:#5A8050;">Beliebt</span>
+        </div>
+        <div class="tool-card__title">Circle of Control</div>
+        <div class="tool-card__desc">Sortiere deine Gedanken per Drag & Drop: Was kannst du beeinflussen — was nicht? Danach: ein kleiner nächster Schritt für jeden kontrollierbaren Punkt.</div>
+        <div class="tool-card__footer">
+          <span class="tool-card__time">5–10 min</span>
+          <span class="tool-card__cta">Starten →</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- CLOUD WATCHING -->
+    <a href="tool-clouds.html" class="tool-card">
+      <div class="tool-card__thumb">
+        <div class="tool-card__thumb-bg" style="background:linear-gradient(135deg,#D4DFF0,#C8D8E8);"></div>
+        <div class="tool-card__icon" style="background:linear-gradient(135deg,#D4DFF0,#9BAFD0);">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="1.5" stroke-linecap="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
+        </div>
+      </div>
+      <div class="tool-card__body">
+        <div class="tool-card__tag">
+          Grübeln & Gedanken
+          <span class="tag-badge" style="background:#EEF2F8;color:#5A70A0;">ACT</span>
+        </div>
+        <div class="tool-card__title">Cloud Watching</div>
+        <div class="tool-card__desc">Schreib deine Gedanken auf — und schau zu, wie sie als Wolken am Himmel vorbeiziehen. Kein Bekämpfen. Nur Beobachten.</div>
+        <div class="tool-card__footer">
+          <span class="tool-card__time">Offen · jederzeit</span>
+          <span class="tool-card__cta">Öffnen →</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- BREATHING -->
+    <a href="tool-breathing.html" class="tool-card">
+      <div class="tool-card__thumb">
+        <div class="tool-card__thumb-bg" style="background:var(--g-sage);"></div>
+        <div class="tool-card__icon" style="background:var(--g-sage);">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+        </div>
+      </div>
+      <div class="tool-card__body">
+        <div class="tool-card__tag">Beruhigung</div>
+        <div class="tool-card__title">Atemübung</div>
+        <div class="tool-card__desc">Die 4-2-4 Atemtechnik — scientifisch belegt, sofort anwendbar. Hilfreich bei Angst, Stress oder wenn alles zu viel wird.</div>
+        <div class="tool-card__footer">
+          <span class="tool-card__time">2–5 min</span>
+          <span class="tool-card__cta">Öffnen →</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- MOOD CHECK -->
+    <a href="index.html#mood" class="tool-card">
+      <div class="tool-card__thumb">
+        <div class="tool-card__thumb-bg" style="background:var(--g-slate);"></div>
+        <div class="tool-card__icon" style="background:var(--g-slate);">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+        </div>
+      </div>
+      <div class="tool-card__body">
+        <div class="tool-card__tag">Selbstwahrnehmung</div>
+        <div class="tool-card__title">Mood Check</div>
+        <div class="tool-card__desc">Wie geht es dir gerade wirklich? Wähle ein Gefühl und erhalte passende Ressourcen — direkt auf dich abgestimmt.</div>
+        <div class="tool-card__footer">
+          <span class="tool-card__time">1 min</span>
+          <span class="tool-card__cta">Öffnen →</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- THOUGHT MIRROR -->
+    <a href="tool-thought-mirror.html" class="tool-card">
+      <div class="tool-card__thumb">
+        <div class="tool-card__thumb-bg" style="background:var(--g-blush);"></div>
+        <div class="tool-card__icon" style="background:var(--g-blush);">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="1.5" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+        </div>
+      </div>
+      <div class="tool-card__body">
+        <div class="tool-card__tag">
+          Gedankenmuster
+          <span class="tag-badge" style="background:#F8F2F0;color:#9A6A64;">8 Schritte</span>
+        </div>
+        <div class="tool-card__title">Thought Mirror</div>
+        <div class="tool-card__desc">Geführte Selbstreflexion in 8 Schritten: Gedanken von Fakten trennen, Perspektive wechseln, freundlicher mit dir selbst werden.</div>
+        <div class="tool-card__footer">
+          <span class="tool-card__time">10–15 min</span>
+          <span class="tool-card__cta">Starten →</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- PREPARE -->
+    <a href="tool-prepare.html" class="tool-card">
+      <div class="tool-card__thumb">
+        <div class="tool-card__thumb-bg" style="background:linear-gradient(135deg,#C0CCDC,#7888A8);"></div>
+        <div class="tool-card__icon" style="background:linear-gradient(135deg,#C0CCDC,#7888A8);">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="1.5" stroke-linecap="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        </div>
+      </div>
+      <div class="tool-card__body">
+        <div class="tool-card__tag">Mentale Vorbereitung</div>
+        <div class="tool-card__title">Prepare</div>
+        <div class="tool-card__desc">Mentale Vorbereitung für Situationen, die dich beschäftigen — schwierige Gespräche, Familientreffen, Dates oder Konflikte. Kein Test, nur Klarheit.</div>
+        <div class="tool-card__footer">
+          <span class="tool-card__time">10–15 min</span>
+          <span class="tool-card__cta">Starten →</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- DIFFICULT DAYS -->
+    <a href="tool-difficult-days.html" class="tool-card">
+      <div class="tool-card__thumb">
+        <div class="tool-card__thumb-bg" style="background:linear-gradient(135deg,#C8C4D8,#8880A8);"></div>
+        <div class="tool-card__icon" style="background:linear-gradient(135deg,#C8C4D8,#8880A8);">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="1.5" stroke-linecap="round"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z"/><path d="M12 6v6l4 2"/></svg>
+        </div>
+      </div>
+      <div class="tool-card__body">
+        <div class="tool-card__tag">Schwere Tage</div>
+        <div class="tool-card__title">Difficult Days</div>
+        <div class="tool-card__desc">Ob Feiertag, Jahrestag oder schwieriges Lebensereignis — du musst schwere Tage nicht allein bewältigen. Mit geführtem Survival-Kit und Plan.</div>
+        <div class="tool-card__footer">
+          <span class="tool-card__time">10–20 min</span>
+          <span class="tool-card__cta">Starten →</span>
+        </div>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="section-label">Demnächst</div>
+  <div class="tools-grid">
+
+    <div class="tool-card coming-soon">
+      <div class="tool-card__thumb">
+        <div class="tool-card__thumb-bg" style="background:var(--g-dusk);"></div>
+        <div class="tool-card__icon" style="background:var(--g-dusk);">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="1.5" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </div>
+      </div>
+      <div class="tool-card__body">
+        <div class="tool-card__tag">Beziehungen <span class="tag-badge" style="background:var(--bg);color:var(--faint);">Bald</span></div>
+        <div class="tool-card__title">Bindungsstil-Test</div>
+        <div class="tool-card__desc">Verstehe dein Muster in Beziehungen — sicher, ängstlich oder vermeidend? Mit Erklärungenund konkreten nächsten Schritten.</div>
+        <div class="tool-card__footer">
+          <span class="tool-card__time">8–12 min</span>
+          <span class="tool-card__cta">Kommt bald</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-card coming-soon">
+      <div class="tool-card__thumb">
+        <div class="tool-card__thumb-bg" style="background:var(--g-blush);"></div>
+        <div class="tool-card__icon" style="background:var(--g-blush);">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="1.5" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </div>
+      </div>
+      <div class="tool-card__body">
+        <div class="tool-card__tag">Selbstwert <span class="tag-badge" style="background:var(--bg);color:var(--faint);">Bald</span></div>
+        <div class="tool-card__title">Innere-Kritiker-Kompass</div>
+        <div class="tool-card__desc">Erkenne, wie dein innerer Kritiker klingt — und lerne, ihm mit Mitgefühl statt Selbstverurteilung zu begegnen.</div>
+        <div class="tool-card__footer">
+          <span class="tool-card__time">10 min</span>
+          <span class="tool-card__cta">Kommt bald</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-card coming-soon">
+      <div class="tool-card__thumb">
+        <div class="tool-card__thumb-bg" style="background:var(--g-amber);"></div>
+        <div class="tool-card__icon" style="background:var(--g-amber);">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+      </div>
+      <div class="tool-card__body">
+        <div class="tool-card__tag">Burnout <span class="tag-badge" style="background:var(--bg);color:var(--faint);">Bald</span></div>
+        <div class="tool-card__title">Burnout-Check</div>
+        <div class="tool-card__desc">Bist du erschöpft oder schon im Burnout? Ein ehrlicher Selbstcheck mit personalisierten Hinweisen zur Erholung.</div>
+        <div class="tool-card__footer">
+          <span class="tool-card__time">5 min</span>
+          <span class="tool-card__cta">Kommt bald</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-card coming-soon">
+      <div class="tool-card__thumb">
+        <div class="tool-card__thumb-bg" style="background:var(--g-sage);"></div>
+        <div class="tool-card__icon" style="background:var(--g-sage);">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="1.5" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+      </div>
+      <div class="tool-card__body">
+        <div class="tool-card__tag">Grenzen <span class="tag-badge" style="background:var(--bg);color:var(--faint);">Bald</span></div>
+        <div class="tool-card__title">Grenzen-Finder</div>
+        <div class="tool-card__desc">Wo überschreitest du deine eigenen Grenzen — und wo die anderer? Mit Übungen zum Setzen gesunder Grenzen.</div>
+        <div class="tool-card__footer">
+          <span class="tool-card__time">12 min</span>
+          <span class="tool-card__cta">Kommt bald</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-card coming-soon">
+      <div class="tool-card__thumb">
+        <div class="tool-card__thumb-bg" style="background:var(--g-slate);"></div>
+        <div class="tool-card__icon" style="background:var(--g-slate);">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="1.5" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+      </div>
+      <div class="tool-card__body">
+        <div class="tool-card__tag">Emotionen <span class="tag-badge" style="background:var(--bg);color:var(--faint);">Bald</span></div>
+        <div class="tool-card__title">Gefühls-Entzifferer</div>
+        <div class="tool-card__desc">Du weißt, dass etwas nicht stimmt — aber nicht was genau. Dieses Tool hilft dir, das Gefühl zu benennen und zu verstehen.</div>
+        <div class="tool-card__footer">
+          <span class="tool-card__time">5–8 min</span>
+          <span class="tool-card__cta">Kommt bald</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

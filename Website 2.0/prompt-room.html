@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mindbloom — Community Prompt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Mulish:wght@300;400;500&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #F8F7F4;
+  --white:     #FFFFFF;
+  --border:    rgba(0,0,0,0.08);
+  --border-m:  rgba(0,0,0,0.13);
+  --text:      #1A1A1A;
+  --muted:     #6B6B6B;
+  --faint:     #ABABAB;
+
+  --g-sage:    linear-gradient(135deg, #C8D8C0 0%, #8FAF88 100%);
+  --g-dusk:    linear-gradient(135deg, #C4C0DC 0%, #8A84B8 100%);
+  --g-blush:   linear-gradient(135deg, #DEC9C4 0%, #BF9690 100%);
+  --g-slate:   linear-gradient(135deg, #B8CCDA 0%, #7A9DB5 100%);
+  --g-amber:   linear-gradient(135deg, #DDD0B0 0%, #BCA870 100%);
+
+  --dusk-tint:  #EEEDF6;
+  --sage-tint:  #F0F4EE;
+  --sage:   #5A8050;
+  --dusk:   #6A64A0;
+
+  --serif:      'Playfair Display', Georgia, serif;
+  --serif-body: 'Lora', Georgia, serif;
+  --sans:       'Mulish', sans-serif;
+  --r: 16px; --r-sm: 10px;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+}
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; font-family: var(--sans); border: none; }
+
+/* ── BREADCRUMB ── */
+.breadcrumb {
+  max-width: 800px; margin: 0 auto;
+  padding: 1.2rem 2.8rem 0;
+  font-size: 12px; color: var(--faint);
+  display: flex; align-items: center; gap: 6px;
+}
+.breadcrumb a { color: var(--faint); transition: color .18s; }
+.breadcrumb a:hover { color: var(--muted); }
+
+/* ── PROMPT HERO ── */
+.prompt-hero {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 2.8rem 0;
+}
+.prompt-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 10.5px; font-weight: 500; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--dusk);
+  margin-bottom: 16px;
+}
+.prompt-tag-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--g-dusk);
+}
+.prompt-question {
+  font-family: var(--serif);
+  font-size: clamp(22px, 3.5vw, 34px);
+  font-weight: 400; line-height: 1.3;
+  margin-bottom: 16px;
+}
+.prompt-desc {
+  font-family: var(--serif-body);
+  font-size: 15px; font-style: italic;
+  color: var(--muted); line-height: 1.7;
+  margin-bottom: 24px;
+}
+.prompt-stats {
+  display: flex; gap: 24px;
+  padding: 16px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2rem;
+}
+.prompt-stat-val {
+  font-family: var(--serif); font-size: 1.3rem; font-weight: 400;
+}
+.prompt-stat-lbl { font-size: 11px; color: var(--faint); font-weight: 300; }
+
+/* ── WRITE BOX ── */
+.write-section {
+  max-width: 800px; margin: 0 auto; padding: 0 2.8rem 2rem;
+}
+.write-box {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+.write-box-top {
+  display: flex; align-items: center; gap: 12px;
+  padding: 1rem 1.4rem;
+  border-bottom: 1px solid var(--border);
+}
+.write-avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--g-dusk); flex-shrink: 0; }
+.write-name { font-size: 13px; font-weight: 500; }
+.write-anon {
+  margin-left: auto;
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; color: var(--faint);
+}
+.anon-toggle {
+  width: 32px; height: 18px; border-radius: 100px;
+  background: var(--border-m); position: relative;
+  border: none; cursor: pointer; transition: background .2s;
+  flex-shrink: 0;
+}
+.anon-toggle.on { background: var(--dusk); }
+.anon-knob {
+  position: absolute; top: 3px; left: 3px;
+  width: 12px; height: 12px; border-radius: 50%; background: #fff;
+  transition: left .2s;
+}
+.anon-toggle.on .anon-knob { left: 17px; }
+
+.write-textarea {
+  width: 100%; min-height: 120px;
+  border: none; outline: none; resize: none;
+  font-family: var(--serif-body); font-size: 15px; font-weight: 400;
+  color: var(--text); background: none; line-height: 1.8;
+  padding: 1.2rem 1.4rem;
+  caret-color: var(--dusk);
+}
+.write-textarea::placeholder { color: var(--faint); font-style: italic; }
+.write-footer {
+  display: flex; align-items: center; justify-content: flex-end; gap: 8px;
+  padding: 0.8rem 1.4rem;
+  border-top: 1px solid var(--border);
+}
+.btn-cancel {
+  padding: 0.45rem 1.1rem; border-radius: 100px;
+  border: 1px solid var(--border-m); background: none;
+  font-size: 13px; color: var(--muted); transition: color .18s, border-color .18s;
+}
+.btn-cancel:hover { color: var(--text); border-color: var(--text); }
+.btn-share {
+  padding: 0.45rem 1.3rem; border-radius: 100px;
+  background: var(--text); color: #fff;
+  font-size: 13px; font-weight: 500; border: none;
+  transition: opacity .18s;
+}
+.btn-share:hover { opacity: .8; }
+
+/* ── SORT BAR ── */
+.sort-bar {
+  max-width: 800px; margin: 0 auto; padding: 0 2.8rem;
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.sort-label { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); font-weight: 500; }
+.sort-options { display: flex; gap: 4px; }
+.sort-btn {
+  padding: 0.25rem 0.7rem; border-radius: 100px;
+  font-size: 12px; color: var(--muted);
+  background: none; border: 1px solid transparent;
+  transition: border-color .18s, color .18s;
+}
+.sort-btn.active { border-color: var(--border-m); color: var(--text); }
+
+/* ── RESPONSES ── */
+.responses { max-width: 800px; margin: 0 auto; padding: 0 2.8rem 5rem; }
+
+.response-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 1.4rem 1.6rem;
+  margin-bottom: 10px;
+  transition: border-color .18s;
+}
+.response-card:hover { border-color: var(--border-m); }
+
+.resp-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.resp-avatar { width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0; }
+.resp-author { font-size: 13px; font-weight: 500; }
+.resp-time   { font-size: 11px; color: var(--faint); font-weight: 300; }
+
+.resp-body {
+  font-family: var(--serif-body); font-size: 15px; font-weight: 400;
+  line-height: 1.8; color: var(--text); margin-bottom: 14px;
+}
+
+.resp-footer { display: flex; align-items: center; gap: 12px; }
+.heart-btn {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 12.5px; color: var(--faint);
+  background: none; border: none; cursor: pointer;
+  transition: color .18s;
+  font-family: var(--sans);
+}
+.heart-btn:hover { color: #BF9690; }
+.heart-btn.liked { color: #BF9690; }
+.reply-btn {
+  font-size: 12.5px; color: var(--faint);
+  background: none; border: none; cursor: pointer;
+  font-family: var(--sans);
+  transition: color .18s;
+}
+.reply-btn:hover { color: var(--muted); }
+
+/* new response highlight */
+.response-card.new-entry {
+  border-color: rgba(90,128,80,.25);
+  background: var(--sage-tint);
+}
+
+@keyframes fadeSlide {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.anim-in { animation: fadeSlide .35s ease forwards; }
+</style>
+  <script src="nav.js"></script>
+</head>
+<body>
+  <div id="site-nav-placeholder"></div>
+
+<!-- NAV -->
+  
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <a href="community.html">Community</a>
+  <span>›</span>
+  <span>Weekly Prompt</span>
+</div>
+
+<!-- PROMPT HERO -->
+<div class="prompt-hero">
+  <div class="prompt-tag"><div class="prompt-tag-dot"></div>Community Prompt · This Week</div>
+  <h1 class="prompt-question">"What's one thing you've stopped being hard on yourself about?"</h1>
+  <p class="prompt-desc">There's no right answer here. Some people share something big, some share something tiny. All of it counts. Write as much or as little as you want — you can also post anonymously.</p>
+  <div class="prompt-stats">
+    <div>
+      <div class="prompt-stat-val">847</div>
+      <div class="prompt-stat-lbl">Responses</div>
+    </div>
+    <div>
+      <div class="prompt-stat-val">4</div>
+      <div class="prompt-stat-lbl">Days left</div>
+    </div>
+    <div>
+      <div class="prompt-stat-val">2,341</div>
+      <div class="prompt-stat-lbl">Hearts given</div>
+    </div>
+  </div>
+</div>
+
+<!-- WRITE BOX -->
+<div class="write-section">
+  <div class="write-box">
+    <div class="write-box-top">
+      <div class="write-avatar"></div>
+      <div class="write-name">You</div>
+      <div class="write-anon">
+        Post anonymously
+        <button class="anon-toggle" id="anonToggle" onclick="this.classList.toggle('on')">
+          <div class="anon-knob"></div>
+        </button>
+      </div>
+    </div>
+    <textarea class="write-textarea" id="writeInput" placeholder="What's one thing you've stopped being hard on yourself about?"></textarea>
+    <div class="write-footer">
+      <button class="btn-cancel" onclick="document.getElementById('writeInput').value=''">Clear</button>
+      <button class="btn-share" onclick="submitResponse()">Share with community</button>
+    </div>
+  </div>
+</div>
+
+<!-- SORT BAR -->
+<div class="sort-bar">
+  <span class="sort-label">847 responses</span>
+  <div class="sort-options">
+    <button class="sort-btn active" onclick="setSort(this,'top')">Top</button>
+    <button class="sort-btn" onclick="setSort(this,'recent')">Recent</button>
+  </div>
+</div>
+
+<!-- RESPONSES -->
+<div class="responses" id="responseFeed"></div>
+
+<script>
+const RESPONSES = [
+  {
+    id: 1, anon: false,
+    author: 'Mira S.', grad: 'var(--g-dusk)',
+    time: '6 hours ago', hearts: 214,
+    body: 'Not being a morning person. I spent years feeling like I was failing at life because I can\'t cheerfully spring out of bed at 6am. I gave myself permission to be slow in the mornings and everything got better. My work didn\'t suffer. I just stopped starting the day already defeated.'
+  },
+  {
+    id: 2, anon: true,
+    author: 'Anonymous', grad: 'var(--g-slate)',
+    time: '8 hours ago', hearts: 187,
+    body: 'Crying. I used to apologise every time I got emotional, like it was an inconvenience to everyone. I\'m not doing that anymore. Crying means something mattered. That\'s not weakness.'
+  },
+  {
+    id: 3, anon: false,
+    author: 'Tom K.', grad: 'var(--g-amber)',
+    time: '10 hours ago', hearts: 143,
+    body: 'Taking longer than others. In school, at work, even in conversations — I always felt behind. Someone once told me I was on my own timeline. I\'m slowly starting to believe it.'
+  },
+  {
+    id: 4, anon: true,
+    author: 'Anonymous', grad: 'var(--g-blush)',
+    time: 'Yesterday', hearts: 98,
+    body: 'My apartment not being perfectly clean. I was raised to believe mess meant failure. Now I see dishes in the sink and think "I cooked for myself today, that\'s enough." It\'s a small thing but it changed the whole tone of how I talk to myself.'
+  },
+  {
+    id: 5, anon: false,
+    author: 'Lea M.', grad: 'var(--g-sage)',
+    time: 'Yesterday', hearts: 76,
+    body: 'Needing rest. I genuinely believed I had to earn the right to do nothing. I was exhausted all the time and still felt guilty for sitting down. Now I try to treat rest like food — something I need, not something I have to deserve.'
+  },
+  {
+    id: 6, anon: false,
+    author: 'Jana R.', grad: 'var(--g-dusk)',
+    time: '2 days ago', hearts: 54,
+    body: 'Not having it all figured out at 27. I thought by now I\'d know exactly who I was and where I was going. I don\'t. And I\'m starting to think that\'s actually fine.'
+  },
+];
+
+let likedIds = new Set();
+
+function setSort(btn, mode) {
+  document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderResponses(mode);
+}
+
+function renderResponses(sort = 'top') {
+  const feed = document.getElementById('responseFeed');
+  const sorted = [...RESPONSES].sort((a, b) =>
+    sort === 'top' ? b.hearts - a.hearts : b.id - a.id
+  );
+  feed.innerHTML = '';
+  sorted.forEach(r => {
+    const el = document.createElement('div');
+    el.className = 'response-card anim-in';
+    el.dataset.id = r.id;
+    const liked = likedIds.has(r.id);
+    el.innerHTML = `
+      <div class="resp-header">
+        <div class="resp-avatar" style="background:${r.grad};"></div>
+        <div>
+          <div class="resp-author">${r.author}</div>
+          <div class="resp-time">${r.time}</div>
+        </div>
+      </div>
+      <div class="resp-body">${r.body}</div>
+      <div class="resp-footer">
+        <button class="heart-btn${liked ? ' liked' : ''}" onclick="toggleHeart(${r.id}, this)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="${liked ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <span>${r.hearts}</span>
+        </button>
+        <button class="reply-btn">Reply</button>
+      </div>`;
+    feed.appendChild(el);
+  });
+}
+
+function toggleHeart(id, btn) {
+  const r = RESPONSES.find(x => x.id === id);
+  if (!r) return;
+  const span = btn.querySelector('span');
+  const svg  = btn.querySelector('svg');
+  if (likedIds.has(id)) {
+    likedIds.delete(id);
+    r.hearts--;
+    btn.classList.remove('liked');
+    svg.setAttribute('fill', 'none');
+  } else {
+    likedIds.add(id);
+    r.hearts++;
+    btn.classList.add('liked');
+    svg.setAttribute('fill', 'currentColor');
+  }
+  span.textContent = r.hearts;
+}
+
+function submitResponse() {
+  const val  = document.getElementById('writeInput').value.trim();
+  if (!val) return;
+  const isAnon = document.getElementById('anonToggle').classList.contains('on');
+  const newResp = {
+    id: Date.now(), anon: isAnon,
+    author: isAnon ? 'Anonymous' : 'You',
+    grad: isAnon ? 'var(--g-slate)' : 'var(--g-dusk)',
+    time: 'Just now', hearts: 0,
+    body: val
+  };
+  RESPONSES.unshift(newResp);
+  document.getElementById('writeInput').value = '';
+  renderResponses('recent');
+  document.querySelector('.sort-btn.active')?.classList.remove('active');
+  document.querySelectorAll('.sort-btn')[1].classList.add('active');
+  // highlight new card
+  const newCard = document.querySelector('.response-card');
+  if (newCard) {
+    newCard.classList.add('new-entry');
+    newCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setTimeout(() => newCard.classList.remove('new-entry'), 3000);
+  }
+  // update count
+  document.querySelector('.sort-label').textContent = `${RESPONSES.length + 846} responses`;
+}
+
+renderResponses();
+</script>
+</body>
+</html>
