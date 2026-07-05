@@ -8,6 +8,157 @@
  *
  * ─────────────────────────────────────────────────────────────────────────── */
 
+// ─── 0. Theme (Dark / Light Mode) ─────────────────────────────────────────────
+// Runs first so the correct theme is set before anything renders.
+// Priority: saved user choice (localStorage) → system preference → light.
+
+function mbGetSavedTheme() {
+  try { return localStorage.getItem('mb-theme'); } catch (e) { return null; }
+}
+
+function mbApplyTheme(theme) {
+  document.documentElement.dataset.theme = theme;
+}
+
+mbApplyTheme(
+  mbGetSavedTheme() ||
+  (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+);
+
+// Follow system changes as long as the user hasn't picked a theme manually
+if (window.matchMedia) {
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+    if (!mbGetSavedTheme()) mbApplyTheme(e.matches ? 'dark' : 'light');
+  });
+}
+
+window.mbToggleTheme = function () {
+  const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+  // brief global transition so the switch fades instead of snapping
+  document.documentElement.classList.add('mb-theme-anim');
+  mbApplyTheme(next);
+  try { localStorage.setItem('mb-theme', next); } catch (e) {}
+  setTimeout(() => document.documentElement.classList.remove('mb-theme-anim'), 350);
+};
+
+function injectThemeCSS() {
+  if (document.getElementById('mb-theme-css')) return;
+  const style = document.createElement('style');
+  style.id = 'mb-theme-css';
+  style.textContent = `
+/* ── Dark theme ──
+   Every page defines its colors as :root variables; html[data-theme="dark"]
+   has higher specificity than :root, so these overrides win on all pages. */
+html[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg:        #2A3141;
+  --white:     #333C4E;
+  --dark:      #14161D;
+  --border:    rgba(255,255,255,0.14);
+  --border-m:  rgba(255,255,255,0.2);
+  --text:      #E6E9EC;
+  --muted:     #AEB4BB;
+  --faint:     #8B929A;
+
+  --sage:   #9FC2D8;
+  --dusk:   #C4BCDD;
+  --amber:  #DBCDB2;
+  --blush:  #DCC2CC;
+  --slate:  #A9C7DA;
+
+  --sage-tint:  #313E48;
+  --dusk-tint:  #333A4E;
+  --amber-tint: #383D48;
+  --blush-tint: #383844;
+  --slate-tint: #303C4A;
+  --t-sage:  #313E48;
+  --t-dusk:  #333A4E;
+  --t-amber: #383D48;
+  --t-blush: #383844;
+  --t-slate: #303C4A;
+
+  --shadow:    0 1px 4px rgba(0,0,0,.3), 0 4px 16px rgba(0,0,0,.25);
+  --shadow-md: 0 4px 8px rgba(0,0,0,.3), 0 16px 40px rgba(0,0,0,.4);
+}
+
+/* Deep blue gradient ground, like the design reference */
+html[data-theme="dark"] body {
+  background: linear-gradient(180deg, #2A3141 0%, #2D3648 46%, #2F3A4C 100%) fixed;
+}
+
+/* Pill buttons, chips & toasts use background:var(--text) with hardcoded
+   white text — in dark mode --text is light, so the label must flip to dark. */
+html[data-theme="dark"] .btn--primary,
+html[data-theme="dark"] .btn--dark,
+html[data-theme="dark"] .btn-primary,
+html[data-theme="dark"] .btn-continue,
+html[data-theme="dark"] .btn-next,
+html[data-theme="dark"] .btn-add,
+html[data-theme="dark"] .btn-sort,
+html[data-theme="dark"] .btn-reflect,
+html[data-theme="dark"] .btn-start,
+html[data-theme="dark"] .btn-save,
+html[data-theme="dark"] .btn-share,
+html[data-theme="dark"] .btn-join,
+html[data-theme="dark"] .btn-leave,
+html[data-theme="dark"] .chip.selected,
+html[data-theme="dark"] .alt-chip.selected,
+html[data-theme="dark"] .sf-chip,
+html[data-theme="dark"] .val-pill.selected,
+html[data-theme="dark"] .filter-pill.active,
+html[data-theme="dark"] .filter-btn.active,
+html[data-theme="dark"] .friend-btn.selected,
+html[data-theme="dark"] .need-btn.selected,
+html[data-theme="dark"] .vt-btn.active,
+html[data-theme="dark"] .cal-day.today,
+html[data-theme="dark"] .att-remove,
+html[data-theme="dark"] .em-save,
+html[data-theme="dark"] .quick-submit,
+html[data-theme="dark"] .chat-send-btn,
+html[data-theme="dark"] .new-entry-btn,
+html[data-theme="dark"] .new-msg-btn,
+html[data-theme="dark"] .step-dot,
+html[data-theme="dark"] .progress-step.active .ps-num,
+html[data-theme="dark"] .msg-row.mine .msg-bubble,
+html[data-theme="dark"] .toast {
+  color: #1A1A1A;
+}
+
+/* Boxes & callouts with hardcoded light backgrounds → translucent dark surfaces */
+html[data-theme="dark"] .journal-box,
+html[data-theme="dark"] .exp-pill.yes,
+html[data-theme="dark"] .tone-easy,
+html[data-theme="dark"] .answer-btn.never { background: rgba(176,203,180,0.1); }
+html[data-theme="dark"] .script-box { background: rgba(255,255,255,0.06); }
+html[data-theme="dark"] .entry-card:hover,
+html[data-theme="dark"] .entry-card.expanded { background: rgba(255,255,255,0.07); }
+html[data-theme="dark"] .exp-pill.no,
+html[data-theme="dark"] .tone-firm,
+html[data-theme="dark"] .answer-btn.often { background: rgba(220,194,204,0.1); }
+html[data-theme="dark"] .answer-btn.sometimes { background: rgba(219,205,178,0.1); }
+html[data-theme="dark"] .callout--crisis { background: rgba(220,140,150,0.12); }
+html[data-theme="dark"] .callout--warning { background: rgba(219,205,178,0.12); }
+html[data-theme="dark"] .placeholder { background: rgba(219,205,178,0.28); }
+
+/* Article & panel body text is hardcoded near-black → lighten */
+html[data-theme="dark"] article p,
+html[data-theme="dark"] article li,
+html[data-theme="dark"] .panel-body p,
+html[data-theme="dark"] .panel-body li { color: #CDD3D9; }
+html[data-theme="dark"] .callout--info,
+html[data-theme="dark"] .journal-box li { color: #B0CBB4; }
+
+/* Smooth cross-fade while switching themes */
+html.mb-theme-anim, html.mb-theme-anim *, html.mb-theme-anim *::before, html.mb-theme-anim *::after {
+  transition: background-color .3s ease, color .3s ease, border-color .3s ease, box-shadow .3s ease !important;
+}
+`;
+  document.head.appendChild(style);
+}
+injectThemeCSS();
+
+
 // ─── 1. Self-inject CSS (runs synchronously, before body renders) ─────────────
 
 function injectNavCSS() {
@@ -150,6 +301,58 @@ body { padding-top: var(--nav-h); }
   transition: border-color 0.14s, color 0.14s;
 }
 .nav-library-btn:hover { border-color: rgba(0,0,0,0.18); color: var(--text); }
+
+/* ── Theme toggle (Dark / Light) ── */
+.nav-theme-toggle {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 0;
+  cursor: pointer;
+  transition: border-color 0.14s, color 0.14s;
+}
+.nav-theme-toggle:hover { border-color: rgba(0,0,0,0.18); color: var(--text); }
+.nav-theme-toggle .mb-icon-sun { display: none; }
+html[data-theme="dark"] .nav-theme-toggle .mb-icon-sun  { display: block; }
+html[data-theme="dark"] .nav-theme-toggle .mb-icon-moon { display: none; }
+
+/* ── Dark theme: nav, menus, backdrop ── */
+html[data-theme="dark"] .site-nav,
+html[data-theme="dark"] .mega-menu,
+html[data-theme="dark"] .mini-menu {
+  --bg:     #2A3141;
+  --white:  #2D3542;
+  --border: rgba(255,255,255,0.14);
+  --text:   #E6E9EC;
+  --muted:  #AEB4BB;
+  --faint:  #8B929A;
+  --sage:   #9FC2D8;
+  --dusk:   #C4BCDD;
+}
+html[data-theme="dark"] .site-nav { background: rgba(18,20,27,0.6); backdrop-filter: blur(20px) saturate(1.4); -webkit-backdrop-filter: blur(20px) saturate(1.4); }
+html[data-theme="dark"] .nav-link:hover,
+html[data-theme="dark"] .nav-item-with-menu.is-open .nav-link { background: rgba(255,255,255,0.07); }
+html[data-theme="dark"] .nav-help { border-color: rgba(159,194,216,0.4); }
+html[data-theme="dark"] .nav-help:hover { background: rgba(159,194,216,0.12); border-color: rgba(159,194,216,0.6); }
+html[data-theme="dark"] .nav-avatar:hover,
+html[data-theme="dark"] .nav-library-btn:hover,
+html[data-theme="dark"] .nav-theme-toggle:hover { border-color: rgba(255,255,255,0.28); }
+html[data-theme="dark"] .mega-menu,
+html[data-theme="dark"] .mini-menu {
+  box-shadow: 0 18px 44px rgba(0,0,0,0.35), 0 4px 12px rgba(0,0,0,0.25);
+}
+html[data-theme="dark"] .mega-cat:hover,
+html[data-theme="dark"] .mega-cat.is-active,
+html[data-theme="dark"] .mega-sub-link:hover,
+html[data-theme="dark"] .mini-item:hover,
+html[data-theme="dark"] .mega-search-btn { background: rgba(255,255,255,0.06); }
+html[data-theme="dark"] .mega-search-btn:hover { background: rgba(255,255,255,0.1); }
+html[data-theme="dark"] .mega-cat__dot { background: rgba(255,255,255,0.15); }
+html[data-theme="dark"] .mega-cat.is-active .mega-cat__dot { background: var(--sage); }
 
 /* ── Shared panel base ── */
 .mega-menu, .mini-menu {
@@ -562,6 +765,14 @@ function buildNav() {
   <a href="${NAV_CONFIG.logo.href}" class="nav-logo">${NAV_CONFIG.logo.label}</a>
   <div class="nav-right">
     <a href="${NAV_CONFIG.helpHref}" class="nav-help">${NAV_CONFIG.helpLabel}</a>
+    <button type="button" class="nav-theme-toggle" onclick="mbToggleTheme()" aria-label="Dark / Light Mode umschalten" title="Dark / Light Mode">
+      <svg class="mb-icon-moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/>
+      </svg>
+      <svg class="mb-icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+      </svg>
+    </button>
     <a href="library.html" class="nav-library-btn" aria-label="My Library" title="My Library">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
         <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
@@ -680,6 +891,7 @@ if (document.readyState === "loading") {
 
 window.addEventListener('pageshow', (e) => {
   if (!e.persisted) return;
+  injectThemeCSS();
   injectNavCSS();
   if (!document.querySelector('.site-nav')) {
     _navInitDone = false;
