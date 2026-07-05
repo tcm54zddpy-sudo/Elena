@@ -6,7 +6,7 @@
 <title>Mindbloom — Atemübung</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Mulish:wght@300;400;500&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -25,9 +25,9 @@
   --g-amber:   linear-gradient(135deg,#DDD0B0,#BCA870);
   --sage-tint: #F0F4EE;
   --sage:      #5A8050;
-  --serif:     'Playfair Display',Georgia,serif;
-  --serif-body:'Lora',Georgia,serif;
-  --sans:      'Mulish',sans-serif;
+  --serif:     'EB Garamond', Georgia, serif,Georgia,serif;
+  --serif-body:'EB Garamond', Georgia, serif,Georgia,serif;
+  --sans:      'Inter', sans-serif;
   --r:16px;
 }
 
@@ -325,7 +325,8 @@ button { cursor: pointer; font-family: var(--sans); border: none; }
   letter-spacing: .06em;
 }
 </style>
-<script src="nav.js"></script>
+<script src="nav.js?v=5"></script>
+  <link rel="stylesheet" href="shared.css">
 </head>
 <body>
 <div id="site-nav-placeholder"></div>
@@ -343,7 +344,7 @@ const TECHNIQUES = [
     name: '4-2-4 Atemübung',
     desc: 'Beruhigt das Nervensystem, ideal bei Stress & Angst',
     rhythm: '4s einatmen · 2s halten · 4s ausatmen',
-    icon: '🌿',
+    color: 'var(--g-sage)',
     phases: [
       { label: 'Einatmen',  duration: 4, scale: 1.35, action: 'inhale' },
       { label: 'Halten',    duration: 2, scale: 1.35, action: 'hold'   },
@@ -357,7 +358,7 @@ const TECHNIQUES = [
     name: '4-7-8 Technik',
     desc: 'Tiefe Entspannung, gut zum Einschlafen',
     rhythm: '4s einatmen · 7s halten · 8s ausatmen',
-    icon: '🌙',
+    color: 'var(--g-dusk)',
     phases: [
       { label: 'Einatmen',  duration: 4, scale: 1.35, action: 'inhale' },
       { label: 'Halten',    duration: 7, scale: 1.35, action: 'hold'   },
@@ -371,7 +372,7 @@ const TECHNIQUES = [
     name: 'Box Breathing',
     desc: 'Fokus & Ausgeglichenheit, von Navy SEALs genutzt',
     rhythm: '4s einatmen · 4s halten · 4s ausatmen · 4s halten',
-    icon: '□',
+    color: 'var(--g-slate)',
     phases: [
       { label: 'Einatmen',  duration: 4, scale: 1.35, action: 'inhale' },
       { label: 'Halten',    duration: 4, scale: 1.35, action: 'hold'   },
@@ -406,7 +407,7 @@ function renderIntro() {
     <div class="technique-grid">
       ${TECHNIQUES.map((tech, i) => `
         <div class="technique-option${i === selectedTechIdx ? ' selected' : ''}" onclick="selectTechnique(${i})">
-          <div class="technique-icon">${tech.icon}</div>
+          <div class="technique-icon" style="background:${tech.color}"></div>
           <div class="technique-info">
             <span class="technique-name">${tech.name}</span>
             <span class="technique-desc">${tech.desc}</span>

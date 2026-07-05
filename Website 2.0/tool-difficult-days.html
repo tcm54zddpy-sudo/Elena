@@ -6,7 +6,7 @@
 <title>Mindbloom — Difficult Days</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Mulish:wght@300;400;500&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -20,9 +20,9 @@
   --g-amber:linear-gradient(135deg,#DDD0B0,#BCA870);
   --g-night:linear-gradient(135deg,#C8C4D8,#8880A8);
   --sage:#5A8050;--dusk:#6A64A0;--blush:#9A6A64;
-  --serif:'Playfair Display',Georgia,serif;
-  --lora:'Lora',Georgia,serif;
-  --sans:'Mulish',sans-serif;
+  --serif:'EB Garamond', Georgia, serif,Georgia,serif;
+  --lora:'EB Garamond', Georgia, serif,Georgia,serif;
+  --sans:'Inter', sans-serif;
   --r:16px;
 }
 html,body{min-height:100%;}
@@ -86,9 +86,9 @@ textarea,input{font-family:var(--lora);}
 .forecast-label-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem;}
 .forecast-name{font-size:13.5px;font-weight:400;}
 .forecast-icon{font-size:1rem;}
-.forecast-track{width:100%;height:6px;background:var(--bg);border:1px solid var(--border-m);border-radius:10px;position:relative;cursor:pointer;}
-.forecast-fill{height:100%;border-radius:10px;transition:width .2s;}
-input.fslider{width:100%;-webkit-appearance:none;height:6px;border-radius:10px;background:transparent;outline:none;position:relative;z-index:2;}
+.forecast-track{width:100%;height:6px;background:var(--bg);border:1px solid var(--border-m);border-radius:10px;position:relative;cursor:pointer;overflow:hidden;}
+.forecast-fill{position:absolute;top:0;left:0;height:100%;border-radius:10px;transition:width .2s;pointer-events:none;}
+input.fslider{width:100%;-webkit-appearance:none;height:6px;border-radius:10px;background:transparent;outline:none;position:relative;z-index:2;display:block;}
 input.fslider::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--text);cursor:pointer;box-shadow:0 1px 6px rgba(0,0,0,.15);}
 .weather-badge{display:inline-flex;align-items:center;gap:.4rem;padding:5px 12px;border-radius:100px;background:var(--bg);border:1px solid var(--border-m);font-size:12px;color:var(--muted);margin-top:.4rem;}
 
@@ -144,7 +144,8 @@ input.fslider::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18
   .anchor-grid{grid-template-columns:repeat(4,1fr);}
 }
 </style>
-  <script src="nav.js"></script>
+  <script src="nav.js?v=5"></script>
+  <link rel="stylesheet" href="shared.css">
 </head>
 <body>
   <div id="site-nav-placeholder"></div>
@@ -312,16 +313,21 @@ function renderForecast(root){
     <div class="step-q">Wie fühlt sich dieser Tag gerade an?</div>
     <div class="step-sub">Keine richtigen oder falschen Antworten. Schieb einfach, was sich stimmig anfühlt.</div>
     <div class="forecast-list" id="fcList">
-      ${FORECAST_FIELDS.map(f=>`
+      ${FORECAST_FIELDS.map(f=>{
+        const fillColor = f.key==='hoffnung' ? '#8FAF88' : '#BF9690';
+        return `
         <div class="forecast-row">
           <div class="forecast-label-row">
             <span class="forecast-name">${f.label}</span>
-            
           </div>
-          <input class="fslider" type="range" min="0" max="100" value="${S.forecast[f.key]}"
-            oninput="S.forecast['${f.key}']=+this.value;document.getElementById('icon_${f.key}').textContent=weatherIcon('${f.key}',+this.value);document.getElementById('badge_${f.key}').textContent=weatherLabel(+this.value,'${f.key}')">
+          <div class="forecast-track">
+            <div class="forecast-fill" id="fill_${f.key}" style="width:${S.forecast[f.key]}%;background:${fillColor};"></div>
+            <input class="fslider" type="range" min="0" max="100" value="${S.forecast[f.key]}"
+              oninput="S.forecast['${f.key}']=+this.value;document.getElementById('fill_${f.key}').style.width=this.value+'%';document.getElementById('badge_${f.key}').textContent=weatherLabel(+this.value,'${f.key}')">
+          </div>
           <div class="weather-badge" id="badge_${f.key}">${weatherLabel(S.forecast[f.key], f.key)}</div>
-        </div>`).join('')}
+        </div>`;
+      }).join('')}
     </div>
     ${foot("go('kit')","go('step2')")}
   </div>`;

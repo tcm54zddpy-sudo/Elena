@@ -21,9 +21,9 @@ function injectCSS() {
   --text:      #1A1A1A;
   --muted:     #6B6B6B;
   --faint:     #ABABAB;
-  --serif:     'Playfair Display', Georgia, serif;
-  --serif-body:'Lora', Georgia, serif;
-  --sans:      'Mulish', sans-serif;
+  --serif:     'EB Garamond', Georgia, serif;
+  --serif-body:'EB Garamond', Georgia, serif;
+  --sans:      'Inter', sans-serif;
   --r: 16px; --r-sm: 10px;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }

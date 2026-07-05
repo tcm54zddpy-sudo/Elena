@@ -24,9 +24,9 @@
   --dusk:   #6A64A0;
   --amber:  #907840;
 
-  --serif:       'Playfair Display', Georgia, serif;
-  --serif-body:  'Lora', Georgia, serif;
-  --sans:        'Mulish', sans-serif;
+  --serif:       'EB Garamond', Georgia, serif;
+  --serif-body:  'EB Garamond', Georgia, serif;
+  --sans:        'Inter', sans-serif;
 
   --r:    16px;
   --r-sm: 10px;
@@ -38,7 +38,7 @@ html { scroll-behavior: smooth; }
 
 body {
   font-family: var(--sans);
-  font-weight: 300;
+  font-weight: 400;
   font-size: 15px;
   line-height: 1.75;
   color: var(--text);
@@ -121,7 +121,7 @@ button { cursor: pointer; font-family: var(--sans); border: none; }
 .hero__headline {
   font-family: var(--serif);
   font-size: clamp(36px, 5.5vw, 64px);
-  font-weight: 300;
+  font-weight: 500;
   line-height: 1.15;
   color: var(--text);
   margin-bottom: 28px;
@@ -598,7 +598,7 @@ cite span { font-weight: 300; }
   text-align: center;
 }
 .alone__inner { max-width: 640px; margin: 0 auto; }
-.alone .section__title { color: #fff; font-weight: 300; }
+.alone .section__title { color: #fff; font-weight: 400; }
 .alone .section__sub { color: rgba(255,255,255,.55); margin-left: auto; margin-right: auto; }
 
 /* ── Blog ── */

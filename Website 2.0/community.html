@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mindbloom — Community</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Mulish:wght@300;400;500&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Mulish:wght@300;400;500&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<script src="nav.js?v=5"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -27,16 +28,21 @@
 
   --sage-tint:  #F0F4EE;
   --dusk-tint:  #EEEDF6;
+  --blush-tint: #F5EEEE;
   --amber-tint: #F5F0E4;
+  --slate-tint: #EAF0F4;
   --sage:   #5A8050;
   --dusk:   #6A64A0;
+  --blush:  #9A6A64;
   --amber:  #907840;
+  --slate:  #4A7A95;
 
   --serif:      'Playfair Display', Georgia, serif;
   --serif-body: 'Lora', Georgia, serif;
   --sans:       'Mulish', sans-serif;
   --r:    16px;
   --r-sm: 10px;
+  --r-lg: 22px;
 }
 
 html { scroll-behavior: smooth; }
@@ -52,11 +58,11 @@ body {
 a { text-decoration: none; color: inherit; }
 button { cursor: pointer; font-family: var(--sans); border: none; }
 
-/* ── PAGE LAYOUT ── */
+/* ── PAGE HEADER ── */
 .page-header {
   background: var(--white);
   border-bottom: 1px solid var(--border);
-  padding: 48px 2.8rem 40px;
+  padding: 46px 2.8rem 38px;
   text-align: center;
 }
 .page-header h1 {
@@ -69,502 +75,423 @@ button { cursor: pointer; font-family: var(--sans); border: none; }
   font-family: var(--serif-body); font-style: italic;
 }
 
-.page-body {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2.5rem 2.8rem 5rem;
-  display: grid;
-  grid-template-columns: 1fr 320px;
-  gap: 2rem;
-  align-items: start;
+/* ── SEGMENT NAV (replaces feed tabs) ── */
+.segments {
+  max-width: 760px; margin: 0 auto;
+  padding: 2rem 2.8rem 0.5rem;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+}
+.segment {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 1rem 0.9rem 1.05rem;
+  text-align: left; transition: border-color .18s, box-shadow .18s, transform .18s;
+  display: flex; flex-direction: column; gap: 7px;
+}
+.segment:hover { border-color: var(--border-m); box-shadow: 0 3px 14px rgba(0,0,0,.05); transform: translateY(-1px); }
+.segment.active { border-color: var(--text); box-shadow: 0 3px 16px rgba(0,0,0,.06); }
+.segment-orb { width: 30px; height: 30px; border-radius: 50%; }
+.segment-verb {
+  font-family: var(--serif); font-size: 1.05rem; font-weight: 400;
+}
+.segment-desc { font-size: 11px; color: var(--faint); font-weight: 300; line-height: 1.4; }
+
+/* ── PANEL SHELL ── */
+.panel-wrap { max-width: 760px; margin: 0 auto; padding: 1.6rem 2.8rem 5rem; }
+.panel { display: none; }
+.panel.active { display: block; animation: fadeSlide .35s ease forwards; }
+
+.panel-intro { text-align: center; margin-bottom: 1.8rem; }
+.panel-intro .eyebrow {
+  font-size: 10.5px; font-weight: 500; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--faint); margin-bottom: 9px;
+}
+.panel-intro h2 {
+  font-family: var(--serif); font-weight: 400;
+  font-size: 1.7rem; margin-bottom: 8px;
+}
+.panel-intro p {
+  font-family: var(--serif-body); font-style: italic;
+  color: var(--muted); font-size: 14px; max-width: 460px; margin: 0 auto;
 }
 
-/* ── SECTION LABEL ── */
-.sec-label {
-  font-size: 10.5px; font-weight: 500; letter-spacing: .12em;
-  text-transform: uppercase; color: var(--faint); margin-bottom: 1rem;
+/* ── GIVE: write a note ── */
+.note-composer {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--r-lg); padding: 1.6rem 1.7rem 1.4rem;
+  box-shadow: 0 4px 22px rgba(0,0,0,.04);
 }
-
-/* ── CHALLENGE BANNER ── */
-.challenge-banner {
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  padding: 1.4rem 1.6rem;
-  display: flex; align-items: center; gap: 1.4rem;
-  margin-bottom: 1.6rem;
+.composer-prompt-chips { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 1.1rem; }
+.prompt-chip {
+  font-size: 12px; color: var(--muted); font-family: var(--serif-body);
+  font-style: italic; background: var(--bg);
+  border: 1px solid var(--border); border-radius: 100px;
+  padding: 0.35rem 0.85rem; transition: border-color .18s, color .18s;
 }
-.challenge-orb {
-  width: 52px; height: 52px; border-radius: 50%;
-  background: var(--g-amber); flex-shrink: 0;
+.prompt-chip:hover { border-color: var(--border-m); color: var(--text); }
+.note-field {
+  width: 100%; min-height: 130px; resize: vertical;
+  border: none; outline: none; background: none;
+  font-family: var(--serif-body); font-size: 1.05rem; line-height: 1.7;
+  color: var(--text); padding: 0.2rem 0;
 }
-.challenge-body { flex: 1; }
-.challenge-title {
-  font-family: var(--serif); font-size: 1rem; font-weight: 400;
-  margin-bottom: 3px;
+.note-field::placeholder { color: var(--faint); font-style: italic; }
+.composer-foot {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 1.1rem; padding-top: 1rem; border-top: 1px solid var(--border);
 }
-.challenge-sub { font-size: 12.5px; color: var(--muted); font-weight: 300; }
-.challenge-meta { font-size: 11px; color: var(--faint); margin-top: 4px; }
-.btn-join {
-  padding: 0.45rem 1.2rem; border-radius: 100px;
-  background: var(--text); color: #fff;
-  font-size: 12.5px; font-weight: 500;
-  border: none; cursor: pointer; flex-shrink: 0;
+.composer-note { font-size: 11.5px; color: var(--faint); display: flex; align-items: center; gap: 6px; }
+.btn-primary {
+  padding: 0.55rem 1.4rem; border-radius: 100px;
+  background: var(--text); color: #fff; font-size: 13px; font-weight: 500;
   transition: opacity .18s;
 }
-.btn-join:hover { opacity: .8; }
-.btn-join.joined { background: var(--sage-tint); color: var(--sage); }
+.btn-primary:hover { opacity: .82; }
+.btn-primary:disabled { opacity: .35; cursor: default; }
 
-/* ── TABS ── */
-.tabs {
-  display: flex; gap: 4px;
-  margin-bottom: 1.2rem;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 0;
+.give-thanks {
+  text-align: center; padding: 2.4rem 1rem;
+  font-family: var(--serif-body); font-style: italic;
+  color: var(--muted); font-size: 1.05rem;
 }
-.tab {
-  padding: 0.5rem 1rem 0.65rem;
-  font-size: 13px; font-weight: 400; color: var(--muted);
-  background: none; border: none; cursor: pointer;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -1px;
-  transition: color .18s, border-color .18s;
-}
-.tab:hover { color: var(--text); }
-.tab.active { color: var(--text); border-bottom-color: var(--text); font-weight: 500; }
+.give-thanks .seed { font-size: 2rem; margin-bottom: 0.6rem; }
 
-/* ── POST CARD ── */
-.post-card {
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  padding: 1.4rem 1.6rem;
-  margin-bottom: 10px;
-  transition: border-color .18s, box-shadow .18s;
-  cursor: pointer;
-}
-.post-card:hover { border-color: var(--border-m); box-shadow: 0 2px 12px rgba(0,0,0,.05); }
-
-.post-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-.post-avatar {
-  width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
-}
-.post-meta { flex: 1; }
-.post-author { font-size: 13px; font-weight: 500; }
-.post-time   { font-size: 11px; color: var(--faint); font-weight: 300; }
-.post-topic-tag {
-  font-size: 10px; font-weight: 500; letter-spacing: .06em;
-  text-transform: uppercase; padding: 3px 9px; border-radius: 100px;
-}
-
-.post-title {
-  font-family: var(--serif); font-size: 1rem; font-weight: 400;
-  line-height: 1.35; margin-bottom: 7px;
-}
-.post-preview {
-  font-size: 13.5px; color: var(--muted); font-weight: 300;
-  line-height: 1.65;
-  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
-  overflow: hidden;
-  margin-bottom: 12px;
-}
-.post-footer { display: flex; align-items: center; gap: 14px; }
-.post-stat {
-  font-size: 12px; color: var(--faint); display: flex; align-items: center; gap: 4px;
-}
-.post-stat svg { opacity: .5; }
-
-/* ── WRITE POST BAR ── */
-.write-bar {
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  padding: 1rem 1.4rem;
-  display: flex; align-items: center; gap: 12px;
-  margin-bottom: 1.4rem;
-  cursor: text;
-  transition: border-color .18s;
-}
-.write-bar:hover { border-color: var(--border-m); }
-.write-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--g-dusk); flex-shrink: 0; }
-.write-placeholder { font-size: 13.5px; color: var(--faint); font-weight: 300; flex: 1; }
-.write-actions { display: flex; gap: 6px; }
-.write-btn {
-  padding: 0.35rem 0.9rem; border-radius: 100px;
-  border: 1px solid var(--border); background: none;
-  font-size: 12px; color: var(--muted); cursor: pointer;
-  transition: border-color .18s, color .18s;
-}
-.write-btn:hover { border-color: var(--border-m); color: var(--text); }
-
-/* ── RIGHT SIDEBAR ── */
-.sidebar { display: flex; flex-direction: column; gap: 1rem; position: sticky; top: 88px; }
-.sidebar-card {
+/* ── RECEIVE: one note, like a letter ── */
+.letter {
   background: var(--white); border: 1px solid var(--border);
-  border-radius: var(--r); padding: 1.3rem 1.4rem;
+  border-radius: var(--r-lg); padding: 2.6rem 2.4rem;
+  text-align: center; box-shadow: 0 4px 22px rgba(0,0,0,.04);
+  position: relative; min-height: 240px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
 }
-.sidebar-card h3 {
-  font-size: 11px; font-weight: 500; letter-spacing: .12em;
-  text-transform: uppercase; color: var(--faint); margin-bottom: 1rem;
+.letter-sealed { cursor: pointer; }
+.letter-seal {
+  width: 64px; height: 64px; border-radius: 50%;
+  background: var(--g-blush); margin-bottom: 1.2rem;
+  display: flex; align-items: center; justify-content: center; color: #fff;
+  transition: transform .2s;
 }
-
-/* Groups */
-.group-list { display: flex; flex-direction: column; gap: 6px; }
-.group-item {
-  display: flex; align-items: center; gap: 10px;
-  padding: 0.55rem 0.7rem; border-radius: var(--r-sm);
-  cursor: pointer; transition: background .15s;
-}
-.group-item:hover { background: var(--bg); }
-.group-orb { width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0; }
-.group-name { font-size: 13px; font-weight: 400; }
-.group-count { font-size: 11px; color: var(--faint); font-weight: 300; }
-.group-join {
-  margin-left: auto; font-size: 11px; font-weight: 500;
-  color: var(--sage); background: var(--sage-tint);
-  padding: 2px 8px; border-radius: 100px;
-  border: none; cursor: pointer; font-family: var(--sans);
-}
-
-/* Weekly prompt */
-.prompt-box {
-  background: var(--dusk-tint);
-  border: 1px solid rgba(106,100,160,.15);
-  border-radius: var(--r-sm); padding: 1rem 1.1rem;
-}
-.prompt-label {
-  font-size: 10.5px; font-weight: 500; letter-spacing: .1em;
-  text-transform: uppercase; color: var(--dusk); margin-bottom: 6px;
-}
-.prompt-text {
-  font-family: var(--serif-body); font-size: 13.5px;
-  font-style: italic; color: var(--text); line-height: 1.65;
-}
-.prompt-cta {
-  margin-top: 0.8rem; font-size: 12px; color: var(--dusk);
-  background: none; border: none; cursor: pointer;
-  font-family: var(--sans); padding: 0; transition: opacity .18s;
-}
-.prompt-cta:hover { opacity: .7; }
-
-/* Active members */
-.members-row { display: flex; gap: 6px; flex-wrap: wrap; }
-.member-chip {
+.letter-sealed:hover .letter-seal { transform: scale(1.05); }
+.letter-sealed .sealed-text { font-family: var(--serif); font-size: 1.2rem; margin-bottom: 6px; }
+.letter-sealed .sealed-sub { font-size: 12.5px; color: var(--faint); }
+.letter-body { font-family: var(--serif-body); font-size: 1.15rem; line-height: 1.8; color: var(--text); }
+.letter-from { margin-top: 1.4rem; font-size: 12px; color: var(--faint); letter-spacing: .04em; }
+.letter-actions { margin-top: 1.8rem; display: none; gap: 10px; }
+.letter.opened .letter-actions { display: flex; }
+.btn-soft {
+  padding: 0.5rem 1.15rem; border-radius: 100px;
+  background: var(--bg); border: 1px solid var(--border);
+  font-size: 12.5px; color: var(--muted);
   display: flex; align-items: center; gap: 6px;
-  padding: 0.3rem 0.8rem 0.3rem 0.3rem;
-  border: 1px solid var(--border); border-radius: 100px;
-  font-size: 12px; color: var(--muted);
+  transition: border-color .18s, color .18s, background .18s;
 }
-.member-dot { width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0; }
+.btn-soft:hover { border-color: var(--border-m); color: var(--text); }
+.btn-soft.given { background: var(--blush-tint); color: var(--blush); border-color: transparent; }
+.private-hint {
+  margin-top: 1.1rem; font-size: 11px; color: var(--faint);
+  font-style: italic; font-family: var(--serif-body);
+  display: none;
+}
+.letter.opened .private-hint { display: block; }
+
+/* ── EXPLORE: boards ── */
+.boards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.board {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 1.4rem 1.5rem;
+  transition: border-color .18s, box-shadow .18s, transform .18s;
+}
+.board:hover { border-color: var(--border-m); box-shadow: 0 3px 14px rgba(0,0,0,.05); transform: translateY(-1px); }
+.board-orb { width: 38px; height: 38px; border-radius: 50%; margin-bottom: 0.9rem; }
+.board-name { font-family: var(--serif); font-size: 1.15rem; font-weight: 400; margin-bottom: 5px; }
+.board-desc { font-size: 12.5px; color: var(--muted); font-weight: 300; line-height: 1.6; margin-bottom: 1rem; }
+.board-foot { font-size: 11px; color: var(--faint); letter-spacing: .03em; }
+
+/* ── CONNECT: rooms ── */
+.rooms-list { display: flex; flex-direction: column; gap: 0.9rem; }
+.room {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 1.3rem 1.5rem;
+  display: flex; align-items: center; gap: 1.2rem;
+  transition: border-color .18s, box-shadow .18s;
+}
+.room:hover { border-color: var(--border-m); box-shadow: 0 3px 14px rgba(0,0,0,.05); }
+.room-orb { width: 46px; height: 46px; border-radius: 50%; flex-shrink: 0; }
+.room-body { flex: 1; }
+.room-name { font-family: var(--serif); font-size: 1.1rem; font-weight: 400; margin-bottom: 3px; }
+.room-desc { font-size: 12.5px; color: var(--muted); font-weight: 300; }
+.room-when { font-size: 11px; color: var(--faint); margin-top: 5px; display: flex; align-items: center; gap: 6px; }
+.room-live { color: var(--sage); font-weight: 500; }
+.live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--sage); display: inline-block; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+.btn-room {
+  padding: 0.5rem 1.15rem; border-radius: 100px;
+  background: var(--text); color: #fff; font-size: 12.5px; font-weight: 500;
+  flex-shrink: 0; transition: opacity .18s;
+}
+.btn-room:hover { opacity: .82; }
+.btn-room.soon { background: var(--bg); color: var(--muted); border: 1px solid var(--border); }
+.room-cap { font-size: 11px; color: var(--faint); font-style: italic; font-family: var(--serif-body); }
+
+.rooms-note {
+  margin-top: 1.4rem; text-align: center;
+  font-size: 12px; color: var(--faint); font-style: italic; font-family: var(--serif-body);
+}
 
 @keyframes fadeSlide {
   from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-.anim-in { animation: fadeSlide .3s ease forwards; }
 
-/* ── NOTES TO STRANGERS TEASER ── */
-.nts-teaser {
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  padding: 1.3rem 1.5rem;
-  display: flex; align-items: center; gap: 1.2rem;
-  transition: border-color .18s, box-shadow .18s, transform .18s;
+/* ── RESPONSIVE ── */
+@media (max-width: 720px) {
+  .segments { grid-template-columns: 1fr 1fr; padding: 1.4rem 1.2rem 0.4rem; }
+  .panel-wrap { padding: 1.4rem 1.2rem 4rem; }
+  .boards-grid { grid-template-columns: 1fr; }
+  .room { flex-wrap: wrap; }
 }
-.nts-teaser:hover {
-  border-color: var(--border-m);
-  box-shadow: 0 3px 18px rgba(0,0,0,.06);
-  transform: translateY(-1px);
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  html { scroll-behavior: auto; }
 }
-.nts-teaser-left { flex-shrink: 0; }
-.nts-teaser-orb {
-  width: 46px; height: 46px; border-radius: 50%;
-  background: linear-gradient(135deg, #C8D8C0 0%, #8FAF88 50%, #C4C0DC 100%);
-}
-.nts-teaser-body { flex: 1; }
-.nts-teaser-label {
-  display: inline-block;
-  font-size: 9.5px; font-weight: 600; letter-spacing: .12em;
-  text-transform: uppercase;
-  background: var(--sage-tint); color: var(--sage);
-  padding: 2px 8px; border-radius: 100px;
-  margin-bottom: 5px;
-}
-.nts-teaser-title {
-  font-family: var(--serif); font-size: 1rem; font-weight: 400;
-  margin-bottom: 3px; line-height: 1.3;
-}
-.nts-teaser-sub {
-  font-size: 12.5px; color: var(--muted); font-weight: 300; line-height: 1.55;
-}
-.nts-teaser-arrow {
-  font-size: 16px; color: var(--faint); flex-shrink: 0;
-  transition: transform .18s, color .18s;
-}
-.nts-teaser:hover .nts-teaser-arrow { transform: translateX(3px); color: var(--muted); }
+
+:focus-visible { outline: 2px solid var(--dusk); outline-offset: 2px; border-radius: 4px; }
 </style>
-  <script src="nav.js"></script>
+  <link rel="stylesheet" href="shared.css">
 </head>
 <body>
-  <div id="site-nav-placeholder"></div>
 
-<!-- NAV -->
-  
+<div id="site-nav-placeholder"></div>
 
 <!-- PAGE HEADER -->
 <div class="page-header">
   <h1>Community</h1>
-  <p>A space to share, reflect, and feel less alone — one story at a time.</p>
+  <p>Kein Feed. Keine Zahlen. Nur Menschen, die füreinander da sind.</p>
 </div>
 
-<!-- PAGE BODY -->
-<div class="page-body">
+<!-- SEGMENTS -->
+<div class="segments" role="tablist" aria-label="Community-Bereiche">
+  <button class="segment active" role="tab" aria-selected="true" onclick="showPanel(this,'give')">
+    <div class="segment-orb" style="background:var(--g-sage);"></div>
+    <span class="segment-verb">Geben</span>
+    <span class="segment-desc">Hinterlasse eine Notiz für jemanden, den du nie triffst</span>
+  </button>
+  <button class="segment" role="tab" aria-selected="false" onclick="showPanel(this,'receive')">
+    <div class="segment-orb" style="background:var(--g-blush);"></div>
+    <span class="segment-verb">Empfangen</span>
+    <span class="segment-desc">Öffne eine Notiz, die für dich da ist</span>
+  </button>
+  <button class="segment" role="tab" aria-selected="false" onclick="showPanel(this,'explore')">
+    <div class="segment-orb" style="background:var(--g-slate);"></div>
+    <span class="segment-verb">Entdecken</span>
+    <span class="segment-desc">Sammlungen rund um das, was dich gerade bewegt</span>
+  </button>
+  <button class="segment" role="tab" aria-selected="false" onclick="showPanel(this,'connect')">
+    <div class="segment-orb" style="background:var(--g-dusk);"></div>
+    <span class="segment-verb">Verbinden</span>
+    <span class="segment-desc">Kleine Kreise, die sich für eine Weile treffen</span>
+  </button>
+</div>
 
-  <!-- ── MAIN FEED ── -->
-  <main>
+<div class="panel-wrap">
 
-    <!-- Notes to Strangers entry -->
-    <a href="notes-to-strangers.html" style="display:block;text-decoration:none;color:inherit;margin-bottom:1.6rem;">
-      <div class="nts-teaser">
-        <div class="nts-teaser-left">
-          <div class="nts-teaser-orb"></div>
-        </div>
-        <div class="nts-teaser-body">
-          <div class="nts-teaser-label">New</div>
-          <div class="nts-teaser-title">Notes to Strangers</div>
-          <div class="nts-teaser-sub">A quiet board for small thoughts, gentle reminders, and moments worth sharing. No names, no metrics — just words.</div>
-        </div>
-        <div class="nts-teaser-arrow">→</div>
-      </div>
-    </a>
-
-    <!-- Weekly Challenge -->
-    <div class="sec-label">This week's challenge</div>
-    <div class="challenge-banner">
-      <div class="challenge-orb"></div>
-      <div class="challenge-body">
-        <div class="challenge-title">5-Day Mood Journal Challenge</div>
-        <div class="challenge-sub">Write one honest sentence about how you're feeling — every day this week. No polish needed.</div>
-        <div class="challenge-meta">1,243 people joined · 4 days left</div>
-      </div>
-      <button class="btn-join" onclick="this.textContent = this.classList.toggle('joined') ? '✓ Joined' : 'Join'">Join</button>
+  <!-- ── GIVE ── -->
+  <section class="panel active" id="panel-give" role="tabpanel">
+    <div class="panel-intro">
+      <div class="eyebrow">Geben</div>
+      <h2>Schreib etwas, das jemand heute brauchen könnte</h2>
+      <p>Deine Notiz geht an keinen bestimmten Menschen. Sie wartet, bis jemand sie öffnet, der sie gerade braucht.</p>
     </div>
 
-    <!-- Write bar -->
-    <div class="write-bar" onclick="document.getElementById('writeModal').style.display='flex'">
-      <div class="write-avatar"></div>
-      <span class="write-placeholder">Share something with the community…</span>
-      <div class="write-actions">
-        <button class="write-btn">Story</button>
-        <button class="write-btn">Question</button>
+    <div id="composerCard" class="note-composer">
+      <div class="composer-prompt-chips">
+        <button class="prompt-chip" onclick="seed(this)">Was du an einem schweren Tag gern gehört hättest</button>
+        <button class="prompt-chip" onclick="seed(this)">Eine kleine Sache, die dir heute geholfen hat</button>
+        <button class="prompt-chip" onclick="seed(this)">Woran du dich erinnerst, wenn es dir schlecht geht</button>
+      </div>
+      <textarea class="note-field" id="noteField" placeholder="Schreib hier… kein Name, kein Profil, keine Antwort zurück. Nur etwas Freundliches, das du loslässt." oninput="checkNote()"></textarea>
+      <div class="composer-foot">
+        <span class="composer-note">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2a7 7 0 0 0-4 12.7V17a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-2.3A7 7 0 0 0 12 2z"/><path d="M9 21h6"/></svg>
+          Anonym · wird kurz gelesen, bevor sie weitergegeben wird
+        </span>
+        <button class="btn-primary" id="sendNote" disabled onclick="sendNote()">Loslassen</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── RECEIVE ── -->
+  <section class="panel" id="panel-receive" role="tabpanel">
+    <div class="panel-intro">
+      <div class="eyebrow">Empfangen</div>
+      <h2>Eine Notiz, geschrieben von jemandem, der dich nicht kennt</h2>
+      <p>Du bekommst genau eine. Keine Liste zum Durchscrollen — nur diesen einen Brief.</p>
+    </div>
+
+    <div class="letter letter-sealed" id="letter" onclick="openLetter()">
+      <div class="letter-seal">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+      </div>
+      <div class="sealed-text">Eine Notiz wartet auf dich</div>
+      <div class="sealed-sub">Tippe, um sie zu öffnen</div>
+
+      <div class="letter-content" style="display:none;">
+        <div class="letter-body" id="letterBody"></div>
+        <div class="letter-from">— jemand, der auch schon mal da war</div>
+        <div class="letter-actions">
+          <button class="btn-soft" id="keepBtn" onclick="event.stopPropagation(); keepNote(this)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            Ins Herz nehmen
+          </button>
+          <button class="btn-soft" onclick="event.stopPropagation(); nextLetter()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            Eine andere öffnen
+          </button>
+        </div>
+        <div class="private-hint">Nur der Mensch, der sie geschrieben hat, erfährt, dass sie angekommen ist.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── EXPLORE ── -->
+  <section class="panel" id="panel-explore" role="tabpanel">
+    <div class="panel-intro">
+      <div class="eyebrow">Entdecken</div>
+      <h2>Sammlungen statt Timeline</h2>
+      <p>Jedes Board ist eine ruhige Sammlung von Gedanken und Erfahrungen — geordnet nach Thema, nicht nach Uhrzeit.</p>
+    </div>
+
+    <div class="boards-grid">
+      <a class="board" href="#">
+        <div class="board-orb" style="background:var(--g-sage);"></div>
+        <div class="board-name">Wenn der Kopf nicht ruhig wird</div>
+        <div class="board-desc">Geteilte Erfahrungen über Sorgen, Grübeln und das Suchen nach Ruhe.</div>
+        <div class="board-foot">Stetig gepflegt · zuletzt ergänzt vor 2 Std.</div>
+      </a>
+      <a class="board" href="#">
+        <div class="board-orb" style="background:var(--g-slate);"></div>
+        <div class="board-name">Schwere Tage</div>
+        <div class="board-desc">Für die Phasen, in denen alles zu viel ist. Du musst nichts beitragen, um hier zu sein.</div>
+        <div class="board-foot">Stetig gepflegt · zuletzt ergänzt heute</div>
+      </a>
+      <a class="board" href="#">
+        <div class="board-orb" style="background:var(--g-amber);"></div>
+        <div class="board-name">Kleine Wendepunkte</div>
+        <div class="board-desc">Momente, in denen sich etwas — leise — zum Besseren gedreht hat.</div>
+        <div class="board-foot">Stetig gepflegt · zuletzt ergänzt gestern</div>
+      </a>
+      <a class="board" href="#">
+        <div class="board-orb" style="background:var(--g-blush);"></div>
+        <div class="board-name">Sich selbst freundlicher begegnen</div>
+        <div class="board-desc">Gedanken darüber, wie man aufhört, der härteste Kritiker zu sein.</div>
+        <div class="board-foot">Stetig gepflegt · zuletzt ergänzt vor 5 Std.</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ── CONNECT ── -->
+  <section class="panel" id="panel-connect" role="tabpanel">
+    <div class="panel-intro">
+      <div class="eyebrow">Verbinden</div>
+      <h2>Kleine Kreise, die sich für eine Weile treffen</h2>
+      <p>Räume sind themenbezogen und zeitlich begrenzt. Kein Beitreten auf Dauer, kein Folgen, keine Bühne — nur ein Gespräch, das beginnt und endet.</p>
+    </div>
+
+    <div class="rooms-list">
+      <div class="room">
+        <div class="room-orb" style="background:var(--g-sage);"></div>
+        <div class="room-body">
+          <div class="room-name">Gemeinsam zur Ruhe kommen</div>
+          <div class="room-desc">Ein ruhiger Kreis zum Ankommen am Abend. Reden ist erlaubt, Zuhören auch.</div>
+          <div class="room-when"><span class="live-dot"></span><span class="room-live">Gerade offen</span> · noch 40 Min · <span class="room-cap">kleiner Kreis, max. 8</span></div>
+        </div>
+        <button class="btn-room" onclick="this.textContent='Du bist dabei'; this.style.opacity=.6;">Beitreten</button>
+      </div>
+
+      <div class="room">
+        <div class="room-orb" style="background:var(--g-slate);"></div>
+        <div class="room-body">
+          <div class="room-name">Schwere Tage, gemeinsam</div>
+          <div class="room-desc">Für alle, die heute wenig Kraft haben. Niemand muss reden.</div>
+          <div class="room-when">Heute Abend, 20:00 · <span class="room-cap">kleiner Kreis, max. 8</span></div>
+        </div>
+        <button class="btn-room soon" onclick="this.textContent='Erinnerung an'; this.style.opacity=.7;">Erinnere mich</button>
+      </div>
+
+      <div class="room">
+        <div class="room-orb" style="background:var(--g-amber);"></div>
+        <div class="room-body">
+          <div class="room-name">Morgenanker</div>
+          <div class="room-desc">Ein kurzer Kreis zum Tagesstart — ein Satz, mit dem du in den Tag gehst.</div>
+          <div class="room-when">Morgen, 08:00 · <span class="room-cap">kleiner Kreis, max. 8</span></div>
+        </div>
+        <button class="btn-room soon" onclick="this.textContent='Erinnerung an'; this.style.opacity=.7;">Erinnere mich</button>
       </div>
     </div>
 
-    <!-- Tabs -->
-    <div class="tabs">
-      <button class="tab active" onclick="switchTab(this,'all')">All</button>
-      <button class="tab" onclick="switchTab(this,'stories')">Stories</button>
-      <button class="tab" onclick="switchTab(this,'questions')">Questions</button>
-      <button class="tab" onclick="switchTab(this,'challenge')">Challenge</button>
-    </div>
+    <div class="rooms-note">Räume werden nicht aufgezeichnet. Was hier gesagt wird, bleibt im Moment.</div>
+  </section>
 
-    <!-- Posts -->
-    <div id="postFeed"></div>
-
-  </main>
-
-  <!-- ── SIDEBAR ── -->
-  <aside class="sidebar">
-
-    <!-- Weekly Prompt -->
-    <div class="sidebar-card">
-      <div class="prompt-box">
-        <div class="prompt-label">Community Prompt</div>
-        <div class="prompt-text">"What's one thing you've stopped being hard on yourself about?"</div>
-      </div>
-      <a href="prompt-room.html" class="prompt-cta">Answer this prompt →</a>
-    </div>
-
-    <!-- Groups -->
-    <div class="sidebar-card">
-      <h3>Topic Groups</h3>
-      <div class="group-list">
-        <div class="group-item">
-          <div class="group-orb" style="background:var(--g-sage);"></div>
-          <div>
-            <div class="group-name">Anxiety & Worry</div>
-            <div class="group-count">3,412 members</div>
-          </div>
-          <button class="group-join">Join</button>
-        </div>
-        <div class="group-item">
-          <div class="group-orb" style="background:var(--g-slate);"></div>
-          <div>
-            <div class="group-name">Low Mood</div>
-            <div class="group-count">2,187 members</div>
-          </div>
-          <button class="group-join">Join</button>
-        </div>
-        <div class="group-item">
-          <div class="group-orb" style="background:var(--g-amber);"></div>
-          <div>
-            <div class="group-name">Stress & Burnout</div>
-            <div class="group-count">1,904 members</div>
-          </div>
-          <button class="group-join">Join</button>
-        </div>
-        <div class="group-item">
-          <div class="group-orb" style="background:var(--g-dusk);"></div>
-          <div>
-            <div class="group-name">Relationships</div>
-            <div class="group-count">1,560 members</div>
-          </div>
-          <button class="group-join">Join</button>
-        </div>
-        <div class="group-item">
-          <div class="group-orb" style="background:var(--g-blush);"></div>
-          <div>
-            <div class="group-name">Sleep & Rest</div>
-            <div class="group-count">980 members</div>
-          </div>
-          <button class="group-join">Join</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Active now -->
-    <div class="sidebar-card">
-      <h3>Active now</h3>
-      <div class="members-row">
-        <div class="member-chip"><div class="member-dot" style="background:var(--g-sage);"></div>Lea</div>
-        <div class="member-chip"><div class="member-dot" style="background:var(--g-dusk);"></div>Mira</div>
-        <div class="member-chip"><div class="member-dot" style="background:var(--g-blush);"></div>Tom</div>
-        <div class="member-chip"><div class="member-dot" style="background:var(--g-amber);"></div>Jana</div>
-        <div class="member-chip"><div class="member-dot" style="background:var(--g-slate);"></div>Sam</div>
-        <div class="member-chip"><div class="member-dot" style="background:var(--g-sage);"></div>Noa</div>
-      </div>
-    </div>
-
-  </aside>
 </div>
 
 <script>
-const POSTS = [
-  {
-    id: 1, type: 'story',
-    author: 'Lea M.', time: '2 hours ago',
-    avatarGrad: 'var(--g-sage)',
-    topic: 'Anxiety', topicColor: '#F0F4EE', topicText: '#5A8050',
-    title: 'I finally told someone how I was really feeling',
-    preview: 'For months I kept saying I was "fine". Yesterday I just said the truth out loud to my sister — that I\'ve been really struggling. She didn\'t fix anything, but I felt lighter than I have in weeks.',
-    replies: 24, hearts: 61
-  },
-  {
-    id: 2, type: 'question',
-    author: 'Anonymous', time: '4 hours ago',
-    avatarGrad: 'var(--g-slate)',
-    topic: 'Sleep', topicColor: '#EAF0F4', topicText: '#4A7A95',
-    title: 'Does anyone else\'s mind just refuse to turn off at night?',
-    preview: 'I lie down and suddenly I\'m replaying every awkward thing I\'ve said this week. I\'ve tried the breathing exercises but my brain just keeps going. What actually helps you?',
-    replies: 38, hearts: 47
-  },
-  {
-    id: 3, type: 'challenge',
-    author: 'Tom K.', time: '5 hours ago',
-    avatarGrad: 'var(--g-amber)',
-    topic: 'Challenge', topicColor: '#F5F0E4', topicText: '#907840',
-    title: 'Day 3 of the mood journal challenge',
-    preview: '"Today I felt frustrated but I noticed it early, before it became the whole day. That\'s new." Small wins count.',
-    replies: 12, hearts: 89
-  },
-  {
-    id: 4, type: 'story',
-    author: 'Mira S.', time: 'Yesterday',
-    avatarGrad: 'var(--g-dusk)',
-    topic: 'Burnout', topicColor: '#EEEDF6', topicText: '#6A64A0',
-    title: 'I took a day off and didn\'t feel guilty — here\'s how',
-    preview: 'I used to fill every hour of every day. Taking time off felt selfish. This week I did nothing for a whole Saturday and it was the most productive thing I\'ve done for my mental health in months.',
-    replies: 55, hearts: 134
-  },
-  {
-    id: 5, type: 'question',
-    author: 'Anonymous', time: 'Yesterday',
-    avatarGrad: 'var(--g-blush)',
-    topic: 'Low Mood', topicColor: '#F5EEEE', topicText: '#9A6A64',
-    title: 'How do you get started when everything feels pointless?',
-    preview: 'I know I should go for a walk, journal, do the things that help. But when I\'m really low, I can\'t make myself do any of it. It\'s like knowing the answer but not being able to move.',
-    replies: 71, hearts: 203
-  },
-  {
-    id: 6, type: 'story',
-    author: 'Jana R.', time: '2 days ago',
-    avatarGrad: 'var(--g-sage)',
-    topic: 'Self-awareness', topicColor: '#F0F4EE', topicText: '#5A8050',
-    title: 'What the mood tracker taught me about myself',
-    preview: 'I didn\'t expect logging "okay" and "tired" every day to reveal anything. But after 3 weeks I could see I crash every Thursday. Turns out it\'s my most back-to-back meeting day. Small insight, big shift.',
-    replies: 29, hearts: 96
-  },
+/* ── Segment switching ── */
+function showPanel(btn, id) {
+  document.querySelectorAll('.segment').forEach(s => { s.classList.remove('active'); s.setAttribute('aria-selected','false'); });
+  btn.classList.add('active'); btn.setAttribute('aria-selected','true');
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+}
+
+/* ── GIVE ── */
+function seed(chip) {
+  const f = document.getElementById('noteField');
+  if (!f.value.trim()) { f.value = ''; }
+  f.focus();
+  f.setAttribute('placeholder', chip.textContent + '…');
+}
+function checkNote() {
+  const v = document.getElementById('noteField').value.trim();
+  document.getElementById('sendNote').disabled = v.length < 4;
+}
+function sendNote() {
+  const card = document.getElementById('composerCard');
+  card.innerHTML = '<div class="give-thanks"><div class="seed">🌱</div>Deine Notiz ist losgelassen.<br>Irgendwann öffnet sie jemand, der sie braucht.</div>';
+}
+
+/* ── RECEIVE ── */
+const NOTES = [
+  "Du musst heute nicht stark sein. Es reicht, dass du da bist.",
+  "Der Tag, an dem du diese Notiz liest, geht auch vorbei. Atme. Du bist nicht allein damit.",
+  "Es ist okay, langsam zu sein. Wachsen passiert auch im Stillstand.",
+  "Jemand hat sich gefreut, dich heute zu sehen — auch wenn er es nicht gesagt hat.",
+  "Du bist nicht ‚zu viel‘. Du fühlst eben tief, und das ist eine Stärke.",
+  "Wenn alles zu groß wirkt: nur der nächste kleine Schritt. Mehr nicht."
 ];
+let noteIdx = Math.floor(Math.random() * NOTES.length);
 
-let activeTab = 'all';
-
-function switchTab(btn, tab) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  btn.classList.add('active');
-  activeTab = tab;
-  renderPosts();
+function openLetter() {
+  const l = document.getElementById('letter');
+  if (l.classList.contains('opened')) return;
+  l.querySelector('.letter-seal').style.display = 'none';
+  l.querySelector('.sealed-text').style.display = 'none';
+  l.querySelector('.sealed-sub').style.display = 'none';
+  document.getElementById('letterBody').textContent = NOTES[noteIdx];
+  l.querySelector('.letter-content').style.display = 'block';
+  l.classList.remove('letter-sealed');
+  l.classList.add('opened');
 }
-
-function renderPosts() {
-  const feed = document.getElementById('postFeed');
-  const visible = activeTab === 'all'
-    ? POSTS
-    : POSTS.filter(p => p.type === activeTab);
-
-  feed.innerHTML = '';
-  visible.forEach(p => {
-    const el = document.createElement('div');
-    el.className = 'post-card anim-in';
-    el.innerHTML = `
-      <div class="post-header">
-        <div class="post-avatar" style="background:${p.avatarGrad};"></div>
-        <div class="post-meta">
-          <div class="post-author">${p.author}</div>
-          <div class="post-time">${p.time}</div>
-        </div>
-        <span class="post-topic-tag" style="background:${p.topicColor};color:${p.topicText};">${p.topic}</span>
-      </div>
-      <div class="post-title">${p.title}</div>
-      <div class="post-preview">${p.preview}</div>
-      <div class="post-footer">
-        <span class="post-stat">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          ${p.replies} replies
-        </span>
-        <span class="post-stat">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          ${p.hearts}
-        </span>
-      </div>`;
-    feed.appendChild(el);
-  });
+function nextLetter() {
+  noteIdx = (noteIdx + 1) % NOTES.length;
+  document.getElementById('letterBody').textContent = NOTES[noteIdx];
+  const kb = document.getElementById('keepBtn');
+  kb.classList.remove('given');
+  kb.childNodes[kb.childNodes.length-1].textContent = ' Ins Herz nehmen';
 }
-
-// Group join toggle
-document.querySelectorAll('.group-join').forEach(btn => {
-  btn.addEventListener('click', () => {
-    if (btn.textContent === 'Join') {
-      btn.textContent = '✓';
-      btn.style.background = 'var(--sage-tint)';
-    } else {
-      btn.textContent = 'Join';
-      btn.style.background = '';
-    }
-  });
-});
-
-renderPosts();
+function keepNote(btn) {
+  btn.classList.add('given');
+  btn.childNodes[btn.childNodes.length-1].textContent = ' Im Herzen';
+}
 </script>
 </body>
 </html>

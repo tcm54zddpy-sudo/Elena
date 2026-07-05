@@ -1,0 +1,375 @@
+/* ── Mindbloom · Shared Design System — Liquid Glass v2.0 ────────────────────
+   Loaded AFTER page inline styles — overrides common components site-wide.
+   Design direction: Apple-inspired "Liquid Glass" — translucent, blurred,
+   soft-radiused surfaces floating over a quiet atmospheric background.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+/* ── Design tokens ── */
+:root {
+  --sky:        #8FADC2;
+  --horizon:    #689FBF;
+  --sunkissed:  #D1A791;
+  --midnight:   #1A2D40;
+
+  /* Atmospheric gradient backgrounds */
+  --g-atm-hero: linear-gradient(160deg, #7A9CB8 0%, #B0C4D4 45%, #D4C0BC 100%);
+  --g-ocean:    linear-gradient(160deg, #1A2D40 0%, #0E1E2C 100%);
+  --g-dawn:     linear-gradient(160deg, #EEF2F8 0%, #F5EFF8 45%, #F8F0EC 100%);
+
+  /* Color-tinted shadows — replace gray-only shadows globally */
+  --shadow:    0 2px 8px rgba(100,110,160,.10), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-md: 0 8px 32px rgba(100,110,160,.16), 0 2px 8px rgba(0,0,0,.06);
+
+  /* Soft, generous radii */
+  --r:    22px;
+  --r-sm: 14px;
+  --r-lg: 30px;
+  --r-xl: 34px;
+
+  /* ── Liquid Glass tokens ── */
+  --glass-blur:      blur(22px) saturate(180%);
+  --glass-blur-sm:   blur(14px) saturate(160%);
+  --glass-bg:        rgba(255,255,255,.50);
+  --glass-bg-hover:  rgba(255,255,255,.68);
+  --glass-bg-soft:   rgba(255,255,255,.34);
+  --glass-bg-dark:   rgba(24,32,46,.42);
+  --glass-border:    rgba(255,255,255,.55);
+  --glass-border-hi: rgba(255,255,255,.75);
+  --glass-shadow:       0 8px 30px rgba(31,38,80,.10), 0 2px 8px rgba(31,38,80,.05), inset 0 1px 0 rgba(255,255,255,.55);
+  --glass-shadow-hover: 0 18px 48px rgba(31,38,80,.16), 0 4px 14px rgba(31,38,80,.08), inset 0 1px 0 rgba(255,255,255,.65);
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   ATMOSPHERE — soft ambient light behind every page, so glass has something
+   to blur. Fixed + subtle, never a busy pattern.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+body {
+  position: relative;
+  background-color: #F8F7F4 !important;
+  background-image:
+    radial-gradient(ellipse 60vw 50vh at 12% -8%, rgba(150,185,220,.30), transparent 60%),
+    radial-gradient(ellipse 55vw 55vh at 105% 8%,  rgba(225,195,205,.24), transparent 60%),
+    radial-gradient(ellipse 50vw 45vh at 20% 105%, rgba(190,215,200,.22), transparent 60%) !important;
+  background-attachment: fixed, fixed, fixed;
+  background-repeat: no-repeat;
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   HERO — Atmospheric Sky Gradient
+   ─────────────────────────────────────────────────────────────────────────── */
+
+.hero {
+  background: var(--g-atm-hero) !important;
+  border-bottom: none !important;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Gradient orbs — peach (top-right) + blue (bottom-left) */
+.hero::before {
+  content: '';
+  position: absolute;
+  width: 620px; height: 620px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,205,185,.30) 0%, transparent 65%);
+  top: -160px; right: -120px;
+  pointer-events: none; z-index: 0;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  width: 520px; height: 520px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(165,195,230,.32) 0%, transparent 65%);
+  bottom: -120px; left: -80px;
+  pointer-events: none; z-index: 0;
+}
+
+/* Everything inside hero sits above orbs */
+.hero > * { position: relative; z-index: 1; }
+
+/* ── Light text on gradient ── */
+.hero__eyebrow { color: rgba(255,255,255,.52) !important; }
+.hero__headline { color: rgba(255,255,255,.94) !important; }
+.hero__sub      { color: rgba(255,255,255,.68) !important; }
+
+/* ── Hero entry cards → glass ── */
+.hero .entry-card {
+  background: rgba(255,255,255,.20) !important;
+  backdrop-filter: var(--glass-blur) !important;
+  -webkit-backdrop-filter: var(--glass-blur) !important;
+  border: 1px solid rgba(255,255,255,.34) !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,.08) !important;
+}
+.hero .entry-card:hover {
+  background: rgba(255,255,255,.30) !important;
+  border-color: rgba(255,255,255,.52) !important;
+  box-shadow: 0 14px 46px rgba(0,0,0,.14) !important;
+  transform: translateY(-5px) scale(1.01) !important;
+}
+.hero .entry-card__bg    { opacity: 0 !important; }
+.hero .entry-card__label { color: rgba(255,255,255,.50) !important; }
+.hero .entry-card__title { color: rgba(255,255,255,.94) !important; }
+.hero .entry-card__desc  { color: rgba(255,255,255,.65) !important; }
+.hero .entry-card__arrow { color: rgba(255,255,255,.52) !important; }
+.hero .entry-card:hover .entry-card__arrow { color: rgba(255,255,255,.90) !important; transform: translateX(4px); }
+
+/* ────────────────────────────────────────────────────────────────────────────
+   SECTION BACKGROUNDS
+   ─────────────────────────────────────────────────────────────────────────── */
+
+.daily-quote {
+  background: var(--g-dawn) !important;
+  border-top: none !important;
+  border-bottom: none !important;
+}
+.final-cta {
+  background: var(--g-dawn) !important;
+  border-top: none !important;
+}
+
+.section--tint-sage  { background: linear-gradient(160deg, #EFF4ED 0%, #E8EFF6 100%) !important; }
+.section--tint-dusk  { background: linear-gradient(160deg, #EDECF6 0%, #E8EBF7 100%) !important; }
+.section--tint-amber { background: linear-gradient(160deg, #F5F0E6 0%, #F0EBE0 100%) !important; }
+.section--tint-blush { background: linear-gradient(160deg, #F6F0EE 0%, #F0EBE9 100%) !important; }
+
+/* ── Dark sections: deep ocean instead of flat black ── */
+.alone,
+.section--dark {
+  background: var(--g-ocean) !important;
+  position: relative;
+  overflow: hidden;
+}
+.alone::before,
+.section--dark::before {
+  content: '';
+  position: absolute;
+  width: 520px; height: 520px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(100,150,200,.14) 0%, transparent 65%);
+  top: -100px; right: -70px;
+  pointer-events: none; z-index: 0;
+}
+.alone > *,
+.section--dark > * { position: relative; z-index: 1; }
+
+/* ────────────────────────────────────────────────────────────────────────────
+   LIQUID GLASS — CARDS, PANELS, MODALS, BOXES
+   Matched by naming convention (*-card, *card, *-panel, *-modal, *-box) so
+   every card-like surface across all pages picks up the same glass material,
+   regardless of which page authored it.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+/* :not([class*="__"]) excludes BEM child elements (e.g. .article-card__tag,
+   .feat-card__title) from matching their parent block's glass treatment —
+   only the card/panel/box block itself should get blur+glass, not its
+   inner labels, tags or excerpts.
+   :not([class^="btn"]) guards against incidental substring matches like
+   .btn-discard (ends in "…card" but is a button, styled separately below). */
+
+[class*="-card"]:not([class*="__"]):not([class^="btn"]), [class$="card"]:not([class*="__"]):not([class^="btn"]),
+[class*="-panel"]:not([class*="__"]), [class$="panel"]:not([class*="__"]),
+[class*="-modal"]:not([class*="__"]), [class$="modal"]:not([class*="__"]),
+[class*="-box"]:not([class*="__"]), [class$="box"]:not([class*="__"]),
+.hero-card, .chat-card, .step-list, .prompt-box, .sidebar-card {
+  background: var(--glass-bg) !important;
+  backdrop-filter: var(--glass-blur) !important;
+  -webkit-backdrop-filter: var(--glass-blur) !important;
+  border: 1px solid var(--glass-border) !important;
+  box-shadow: var(--glass-shadow) !important;
+  transition: transform .32s cubic-bezier(.2,.8,.2,1), box-shadow .32s ease, background .32s ease, border-color .32s ease !important;
+}
+
+[class*="-card"]:not([class*="__"]):not([class^="btn"]):hover, [class$="card"]:not([class*="__"]):not([class^="btn"]):hover,
+[class*="-panel"]:not([class*="__"]):hover, [class$="panel"]:not([class*="__"]):hover,
+[class*="-box"]:not([class*="__"]):hover, [class$="box"]:not([class*="__"]):hover,
+.hero-card:hover, .chat-card:hover, .sidebar-card:hover {
+  background: var(--glass-bg-hover) !important;
+  border-color: var(--glass-border-hi) !important;
+  box-shadow: var(--glass-shadow-hover) !important;
+  transform: translateY(-4px) !important;
+}
+
+/* Modals float above a dimmed, blurred backdrop */
+[class*="-modal"]:not([class*="__"]), [class$="modal"]:not([class*="__"]) {
+  background: rgba(255,255,255,.72) !important;
+  box-shadow: 0 30px 80px rgba(31,38,80,.22), inset 0 1px 0 rgba(255,255,255,.65) !important;
+}
+
+/* Generous, consistent radii on the primary structural components */
+:where(
+  .tool-card, .blog-card, .topic-card, .entry-card, .hero-card, .chat-card,
+  .mood__pill, .step, .testimonial, .lib-card, .result-card, .prepare-card,
+  .core-card, .plan-card, .resource-card, .insight-card, .quiz-card,
+  .note-card, .article-card, .feat-card, .preview-card, .response-card,
+  .day-card, .zone-card, .values-card, .att-card, .ip-card, .rs-card
+) {
+  border-radius: var(--r-lg) !important;
+}
+
+/* Nested items keep a slightly smaller radius so the hierarchy still reads */
+:where(.suggestion-item, .sug-item, .chat-bubble, .mini-item, .mega-cat) {
+  border-radius: var(--r-sm) !important;
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   PILLS — structural selection UI (mood, situation, check-in, filters)
+   Full glass treatment. Colour-coded tags/badges keep their tint (below).
+   ─────────────────────────────────────────────────────────────────────────── */
+
+.situation-pill, .ci-pill, .ci-pill--soft, .mood__pill, .filter-pill,
+[class*="-pill"]:not([class*="__"]):not(.tag-pill):not(.lib-type-pill):not(.lib-type-pill--card):not(.topic-pill):not(.core-pill):not(.exp-pill):not(.vc-pill):not(.val-pill):not(.weather-pill) {
+  background: var(--glass-bg) !important;
+  backdrop-filter: var(--glass-blur-sm) !important;
+  -webkit-backdrop-filter: var(--glass-blur-sm) !important;
+  border: 1px solid var(--glass-border) !important;
+  transition: transform .25s ease, box-shadow .25s ease, background .25s ease, border-color .25s ease !important;
+}
+.situation-pill:hover { background: rgba(138,132,184,.14) !important; border-color: rgba(138,132,184,.35) !important; color: #6A64A0 !important; box-shadow: 0 6px 20px rgba(138,132,184,.18) !important; transform: translateY(-2px) !important; }
+.ci-pill.selected, .ci-pill--soft.selected { background: rgba(106,100,160,.16) !important; border-color: rgba(106,100,160,.38) !important; border-style: solid !important; color: #6A64A0 !important; }
+.ci-pill:hover, .mood__pill:hover, .filter-pill:hover { border-color: var(--glass-border-hi) !important; box-shadow: 0 6px 22px rgba(100,110,160,.14) !important; transform: translateY(-2px) !important; }
+
+/* Colour-tinted tags/badges: keep identity colour, add a light glass edge */
+.tag, .tag-pill, .tag-badge, .lib-type-pill, .lib-type-pill--card, .topic-pill,
+.core-pill, .exp-pill, .vc-pill, .val-pill, .weather-pill, .weather-badge,
+[class*="-badge"]:not([class*="__"]), [class$="badge"]:not([class*="__"]) {
+  backdrop-filter: blur(6px) !important;
+  -webkit-backdrop-filter: blur(6px) !important;
+  border: 1px solid rgba(255,255,255,.32);
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   BUTTONS — pill-shaped glass, gentle scale + glow on hover
+   ─────────────────────────────────────────────────────────────────────────── */
+
+.btn, [class^="btn"], [class*=" btn"], [class*="-btn"], .checkin-trigger-btn, button:not(.mb-cookie-banner button) {
+  border-radius: 100px;
+  transition: transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s ease, background .25s ease, border-color .25s ease;
+}
+
+.btn--ghost, .btn--outline, .btn--outline-light,
+[class*="btn--outline"], [class*="btn-outline"] {
+  background: rgba(255,255,255,.30) !important;
+  backdrop-filter: blur(14px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(160%) !important;
+  border-color: rgba(255,255,255,.55) !important;
+}
+.btn--ghost:hover, .btn--outline:hover, .btn--outline-light:hover,
+[class*="btn--outline"]:hover, [class*="btn-outline"]:hover {
+  background: rgba(255,255,255,.48) !important;
+  transform: scale(1.035);
+  box-shadow: var(--shadow-md);
+}
+
+.btn--primary, .btn--dark, .btn--sage,
+[class*="btn--dark"], [class*="btn-dark"], [class*="btn--primary"] {
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(0,0,0,.14), inset 0 1px 0 rgba(255,255,255,.16);
+}
+.btn--primary::before, .btn--dark::before, .btn--sage::before,
+[class*="btn--dark"]::before, [class*="btn-dark"]::before, [class*="btn--primary"]::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,0) 55%);
+  pointer-events: none;
+}
+.btn--primary:hover, .btn--dark:hover, .btn--sage:hover,
+[class*="btn--dark"]:hover, [class*="btn-dark"]:hover, [class*="btn--primary"]:hover {
+  transform: scale(1.035);
+  box-shadow: 0 10px 28px rgba(0,0,0,.20), inset 0 1px 0 rgba(255,255,255,.2);
+}
+
+.checkin-trigger-btn {
+  background: var(--glass-bg) !important;
+  backdrop-filter: var(--glass-blur-sm) !important;
+  -webkit-backdrop-filter: var(--glass-blur-sm) !important;
+}
+.checkin-trigger-btn:hover {
+  border-color: rgba(106,100,160,.4) !important;
+  box-shadow: 0 6px 22px rgba(100,110,160,.16) !important;
+  transform: translateY(-1px) scale(1.02);
+}
+
+/* ── Situation pills: atmospheric hover (kept for compatibility) ── */
+/* ── Check-in trigger button — see .checkin-trigger-btn above ── */
+
+/* Step border accent */
+.step { border-left-color: rgba(138,132,184,.25) !important; }
+.step__num { color: var(--dusk) !important; }
+
+/* ────────────────────────────────────────────────────────────────────────────
+   TYPOGRAPHY REFINEMENTS
+   ─────────────────────────────────────────────────────────────────────────── */
+
+.hero__headline {
+  font-size: clamp(42px, 6.5vw, 80px) !important;
+  font-weight: 300 !important;
+  letter-spacing: -.025em !important;
+}
+.section-title {
+  font-size: clamp(28px, 4vw, 46px) !important;
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   ARTICLE & CONTENT PAGE HEROES (cat-hero / article-hero)
+   ─────────────────────────────────────────────────────────────────────────── */
+
+body.atm-hero .cat-hero {
+  background: var(--g-atm-hero) !important;
+  position: relative;
+  overflow: hidden;
+}
+body.atm-hero .cat-hero::before {
+  content: '';
+  position: absolute;
+  width: 500px; height: 500px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,205,185,.28) 0%, transparent 65%);
+  top: -120px; right: -80px;
+  pointer-events: none;
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   FOOTER
+   ─────────────────────────────────────────────────────────────────────────── */
+
+.site-footer {
+  background: linear-gradient(160deg, #1A2D40 0%, #0E1E2C 100%) !important;
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   ACCESSIBILITY FALLBACKS
+   ─────────────────────────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-transparency: reduce) {
+  [class*="-card"], [class$="card"], [class*="-panel"], [class$="panel"],
+  [class*="-modal"], [class$="modal"], [class*="-box"], [class$="box"],
+  .hero-card, .chat-card, .situation-pill, .ci-pill, .mood__pill,
+  .btn--ghost, .btn--outline, .btn--outline-light {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: #FFFFFF !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [class*="-card"], [class$="card"], [class*="-panel"], [class$="panel"],
+  [class*="-box"], [class$="box"], .btn, [class*="-btn"], [class*="-pill"],
+  .situation-pill, .ci-pill, .mood__pill {
+    transition: none !important;
+  }
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   RESPONSIVE
+   ─────────────────────────────────────────────────────────────────────────── */
+
+@media (max-width: 680px) {
+  .hero::before { width: 300px; height: 300px; top: -80px; right: -60px; }
+  .hero::after  { width: 260px; height: 260px; bottom: -60px; left: -40px; }
+  .hero__headline { font-size: clamp(36px, 9vw, 56px) !important; }
+
+  /* Lighter blur on mobile GPUs for smoother scrolling */
+  [class*="-card"], [class$="card"], [class*="-panel"], [class$="panel"] {
+    backdrop-filter: blur(14px) saturate(160%) !important;
+    -webkit-backdrop-filter: blur(14px) saturate(160%) !important;
+  }
+}

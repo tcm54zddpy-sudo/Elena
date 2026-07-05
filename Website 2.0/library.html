@@ -3,106 +3,211 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mindbloom — My Library</title>
+<title>Mindbloom — Meine Bibliothek</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Mulish:wght@300;400;500&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
-<script src="nav.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="nav.js?v=5"></script>
 <script src="library.js"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
 :root {
-  --bg: #F8F7F4; --white: #FFFFFF;
-  --border: rgba(0,0,0,0.08); --border-m: rgba(0,0,0,0.13);
-  --text: #1A1A1A; --muted: #6B6B6B; --faint: #ABABAB;
-  --sage: #5A8050; --dusk: #6A64A0;
+  --bg: #F8F7F4;
+  --white: #FFFFFF;
+  --border: rgba(0,0,0,0.07);
+  --border-m: rgba(0,0,0,0.13);
+  --text: #1A1A1A;
+  --muted: #6B6B6B;
+  --faint: #ABABAB;
+  --sage: #5A8050;
   --sage-tint: #F0F4EE;
-  --serif: 'Playfair Display', Georgia, serif;
-  --serif-body: 'Lora', Georgia, serif;
-  --sans: 'Mulish', sans-serif;
-  --r: 16px; --r-sm: 10px;
+  --dusk: #6A64A0;
+  --dusk-tint: #F1F0F8;
+  --amber: #907840;
+  --amber-tint: #F5F1E8;
+  --blush: #A06060;
+  --blush-tint: #F8F1F0;
+  --serif: 'EB Garamond', Georgia, serif;
+  --sans: 'Inter', sans-serif;
+  --r: 14px;
+  --r-sm: 8px;
 }
-body { background: var(--bg); color: var(--text); font-family: var(--sans); font-weight: 300; font-size: 15px; line-height: 1.75; -webkit-font-smoothing: antialiased; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+}
 a { text-decoration: none; color: inherit; }
-button { cursor: pointer; font-family: var(--sans); border: none; }
+button { cursor: pointer; font-family: var(--sans); border: none; background: none; }
 
-/* ── Page layout ── */
+/* ── Page ── */
 .lib-page {
-  max-width: 1100px;
+  max-width: 1060px;
   margin: 0 auto;
-  padding: 3rem 2.8rem 6rem;
+  padding: 2.8rem 2.4rem 7rem;
 }
 
-/* ── Page header ── */
-.lib-page-header {
+/* ── Header ── */
+.lib-header {
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   justify-content: space-between;
+  gap: 1rem;
   margin-bottom: 2rem;
 }
-.lib-page-heading {
+.lib-heading {
   font-family: var(--serif);
-  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-size: clamp(1.55rem, 3vw, 2.1rem);
   font-weight: 400;
-  margin-bottom: 5px;
+  letter-spacing: -.01em;
+  margin-bottom: 4px;
 }
-.lib-page-sub {
-  font-family: var(--serif-body);
+.lib-sub {
+  font-family: var(--serif);
   font-style: italic;
   font-size: 14px;
   color: var(--muted);
 }
-.lib-saved-count {
-  font-size: 12px;
-  color: var(--faint);
-  padding-bottom: 4px;
+.lib-new-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  font-size: 12.5px;
+  font-weight: 400;
+  color: var(--muted);
+  border: 1px solid var(--border-m);
+  border-radius: 100px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-top: 6px;
+  transition: color .18s, border-color .18s;
 }
+.lib-new-btn:hover { color: var(--text); border-color: rgba(0,0,0,.22); }
 
-/* ── Type filter nav ── */
-.lib-nav {
+/* ── Tabs ── */
+.lib-tabs {
   display: flex;
-  gap: 2px;
-  margin-bottom: 2rem;
+  gap: 0;
   border-bottom: 1px solid var(--border);
+  margin-bottom: 2rem;
+  overflow-x: auto;
+  scrollbar-width: none;
 }
-.lib-nav-btn {
-  padding: 0.6rem 1rem;
+.lib-tabs::-webkit-scrollbar { display: none; }
+
+.lib-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: .55rem 1rem;
   font-size: 13px;
   font-weight: 400;
   color: var(--muted);
   background: none;
   border: none;
-  cursor: pointer;
-  font-family: var(--sans);
   border-bottom: 2px solid transparent;
   margin-bottom: -1px;
+  white-space: nowrap;
   transition: color .18s, border-color .18s;
+}
+.lib-tab:hover { color: var(--text); }
+.lib-tab.active { color: var(--text); border-bottom-color: var(--text); font-weight: 500; }
+
+.lib-tab-count {
+  display: none;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 100px;
+  background: rgba(0,0,0,.06);
+  color: var(--muted);
+}
+.lib-tab-count.visible { display: inline-block; }
+
+/* ── Compose (Reflections) ── */
+.lib-compose {
+  display: none;
+  background: var(--white);
+  border: 1px solid var(--border-m);
+  border-radius: var(--r);
+  padding: 1.1rem 1.3rem 1rem;
+  margin-bottom: 1.2rem;
+}
+.lib-compose.open { display: block; }
+.lib-compose-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-bottom: .6rem;
+}
+.lib-compose-textarea {
+  width: 100%;
+  border: none;
+  background: none;
+  font-family: var(--serif);
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--text);
+  resize: none;
+  outline: none;
+  min-height: 88px;
+}
+.lib-compose-textarea::placeholder { color: var(--faint); font-style: italic; }
+.lib-compose-footer {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: .5rem;
+  margin-top: .75rem;
+  padding-top: .75rem;
+  border-top: 1px solid var(--border);
 }
-.lib-nav-btn:hover:not(:disabled) { color: var(--text); }
-.lib-nav-btn.active { color: var(--text); border-bottom-color: var(--text); font-weight: 500; }
-.lib-nav-btn:disabled { opacity: .35; cursor: default; }
-.lib-soon {
-  font-size: 9px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
-  color: var(--faint); background: var(--border); padding: 2px 5px; border-radius: 100px;
+.lib-compose-save {
+  padding: 6px 16px;
+  font-size: 12.5px;
+  font-weight: 500;
+  background: var(--text);
+  color: #fff;
+  border-radius: 100px;
+  transition: opacity .18s;
 }
-.lib-nav-count {
-  font-size: 10px; font-weight: 600;
-  background: var(--sage-tint); color: var(--sage);
-  padding: 2px 6px; border-radius: 100px;
+.lib-compose-save:hover { opacity: .78; }
+.lib-compose-cancel {
+  padding: 6px 10px;
+  font-size: 12.5px;
+  color: var(--faint);
+  transition: color .18s;
 }
+.lib-compose-cancel:hover { color: var(--muted); }
 
-/* ── Card grid ── */
+/* ── Grids (per type) ── */
 .lib-grid {
   display: grid;
+  gap: .9rem;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
 }
-@media (max-width: 860px) { .lib-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 560px) { .lib-grid { grid-template-columns: 1fr; } }
+.lib-grid--article,
+.lib-grid--tool,
+.lib-grid--prompt,
+.lib-grid--reflection {
+  grid-template-columns: repeat(2, 1fr);
+}
+@media (max-width: 860px) {
+  .lib-grid { grid-template-columns: repeat(2, 1fr) !important; }
+}
+@media (max-width: 560px) {
+  .lib-grid { grid-template-columns: 1fr !important; }
+}
 
+/* ── Card base ── */
 .lib-card {
   background: var(--white);
   border: 1px solid var(--border);
@@ -110,17 +215,70 @@ button { cursor: pointer; font-family: var(--sans); border: none; }
   display: flex;
   flex-direction: column;
   transition: border-color .18s, box-shadow .18s;
+  position: relative;
+  overflow: hidden;
 }
 .lib-card:hover {
   border-color: var(--border-m);
-  box-shadow: 0 2px 12px rgba(0,0,0,.06);
+  box-shadow: 0 2px 14px rgba(0,0,0,.055);
 }
-.lib-card-body {
+
+/* Type pill */
+.lib-type-pill {
+  display: inline-flex;
+  align-items: center;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 100px;
+}
+.lib-type-pill--article  { background: var(--sage-tint);  color: var(--sage);  }
+.lib-type-pill--card     { background: var(--dusk-tint);  color: var(--dusk);  }
+.lib-type-pill--tool     { background: var(--amber-tint); color: var(--amber); }
+.lib-type-pill--prompt   { background: var(--blush-tint); color: var(--blush); }
+.lib-type-pill--reflection { background: rgba(0,0,0,.04); color: var(--muted); }
+
+/* ── Card: Article ── */
+.lib-card--article .lib-card-head {
+  padding: 1.1rem 1.2rem .7rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: .5rem;
+}
+.lib-card--article .lib-card-title {
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  font-weight: 400;
+  line-height: 1.45;
+  color: var(--text);
   flex: 1;
-  padding: 1.2rem 1.3rem .9rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
-.lib-card-text {
-  font-family: var(--serif-body);
+.lib-card--article .lib-card-excerpt {
+  padding: 0 1.2rem .8rem;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.65;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex: 1;
+}
+
+/* ── Card: Card (excerpt/quote) ── */
+.lib-card--card .lib-card-body {
+  padding: 1.1rem 1.2rem .85rem;
+  flex: 1;
+}
+.lib-card--card .lib-card-text {
+  font-family: var(--serif);
   font-size: 14px;
   line-height: 1.75;
   color: var(--text);
@@ -129,52 +287,335 @@ button { cursor: pointer; font-family: var(--sans); border: none; }
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* ── Card: Tool ── */
+.lib-card--tool .lib-card-head {
+  padding: 1.1rem 1.2rem .5rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: .5rem;
+}
+.lib-card--tool .lib-card-title {
+  font-family: var(--serif);
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--text);
+  flex: 1;
+}
+.lib-card--tool .lib-card-desc {
+  padding: 0 1.2rem .9rem;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ── Card: Prompt ── */
+.lib-card--prompt .lib-card-body {
+  padding: 1.1rem 1.2rem .85rem;
+  flex: 1;
+}
+.lib-card--prompt .lib-card-text {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 14.5px;
+  line-height: 1.75;
+  color: var(--text);
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ── Card: Reflection ── */
+.lib-card--reflection {
+  background: #FDFCF9;
+}
+.lib-card--reflection .lib-card-body {
+  padding: 1.1rem 1.2rem .85rem;
+  flex: 1;
+}
+.lib-card--reflection .lib-card-text {
+  font-family: var(--serif);
+  font-size: 14.5px;
+  line-height: 1.8;
+  color: var(--text);
+  display: -webkit-box;
+  -webkit-line-clamp: 7;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ── Card footer (shared) ── */
 .lib-card-foot {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: .7rem 1.3rem .9rem;
+  padding: .6rem 1.2rem .8rem;
   border-top: 1px solid var(--border);
   gap: .5rem;
+  margin-top: auto;
 }
 .lib-card-meta { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
-.lib-card-source { font-size: 11.5px; color: var(--muted); font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lib-card-source {
+  font-size: 11.5px;
+  color: var(--muted);
+  font-weight: 400;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .lib-card-source a { color: var(--muted); transition: color .15s; }
 .lib-card-source a:hover { color: var(--text); }
 .lib-card-date { font-size: 10.5px; color: var(--faint); font-weight: 300; }
+.lib-card-actions { display: flex; align-items: center; gap: .35rem; flex-shrink: 0; }
+
+.lib-card-open {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 13px;
+  text-decoration: none;
+  transition: border-color .18s, color .18s;
+}
+.lib-card-open:hover { border-color: var(--border-m); color: var(--text); }
+
 .lib-card-remove {
-  width: 26px; height: 26px; border-radius: 50%;
-  background: none; border: 1px solid var(--border); color: var(--faint);
-  font-size: 14px; display: flex; align-items: center; justify-content: center;
-  cursor: pointer; flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--faint);
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
   transition: border-color .18s, color .18s, background .18s;
 }
-.lib-card-remove:hover { border-color: rgba(180,60,60,.3); color: #c04040; background: rgba(180,60,60,.05); }
+.lib-card-remove:hover {
+  border-color: rgba(180,60,60,.3);
+  color: #c04040;
+  background: rgba(180,60,60,.05);
+}
 
 /* ── Empty state ── */
 .lib-empty {
-  display: flex;
+  display: none;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 360px;
+  min-height: 340px;
   text-align: center;
-  gap: .6rem;
+  gap: .5rem;
+  padding: 2rem;
 }
-.lib-empty-icon { color: var(--faint); margin-bottom: .6rem; opacity: .4; }
-.lib-empty-title { font-family: var(--serif); font-size: 1.2rem; font-weight: 400; color: var(--muted); }
+.lib-empty-icon {
+  color: var(--faint);
+  opacity: .35;
+  margin-bottom: .5rem;
+}
+.lib-empty-title {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  font-weight: 400;
+  color: var(--muted);
+}
 .lib-empty-sub {
-  font-family: var(--serif-body); font-style: italic;
-  font-size: 13.5px; color: var(--faint);
-  max-width: 380px; line-height: 1.7;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 13.5px;
+  color: var(--faint);
+  max-width: 360px;
+  line-height: 1.7;
 }
-.lib-empty-link {
-  margin-top: .8rem; font-size: 13px; color: var(--muted);
-  text-decoration: none; border-bottom: 1px solid var(--border-m); padding-bottom: 1px;
+.lib-empty-cta {
+  margin-top: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border-m);
+  padding-bottom: 1px;
   transition: color .18s, border-color .18s;
+  cursor: pointer;
+  background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  font-family: var(--sans);
 }
-.lib-empty-link:hover { color: var(--text); border-color: var(--text); }
+.lib-empty-cta:hover { color: var(--text); border-bottom-color: var(--text); }
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .lib-page { padding: 1.8rem 1.2rem 5rem; }
+  .lib-heading { font-size: 1.45rem; }
+}
+
+/* ── Card subtype tag ── */
+.lib-card-subtype {
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.lib-card--card[data-card-type="script"]    { border-left: 3px solid rgba(106,100,160,.45); }
+.lib-card--card[data-card-type="technique"] { border-left: 3px solid rgba(144,120,64,.45);  }
+.lib-card--card[data-card-type="reminder"]  { border-left: 3px solid rgba(90,128,80,.45);   }
+.lib-card--card[data-card-type="prompt"]    { border-left: 3px solid rgba(160,96,96,.45);   }
+.lib-card--card[data-card-type="quote"]     { border-left: 3px solid rgba(107,107,107,.3);  }
+
+/* ── Cards toolbar ── */
+.lib-cards-bar {
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.4rem;
+  flex-wrap: wrap;
+}
+.lib-subtypes { display: flex; gap: .3rem; flex-wrap: wrap; }
+.lib-subtype {
+  font-size: 11.5px;
+  font-weight: 400;
+  color: var(--muted);
+  padding: 4px 12px;
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  background: none;
+  cursor: pointer;
+  transition: color .15s, border-color .15s, background .15s;
+}
+.lib-subtype:hover { color: var(--text); border-color: var(--border-m); }
+.lib-subtype.active { color: var(--text); border-color: var(--border-m); background: var(--white); }
+.lib-browse-trigger {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--muted);
+  padding: 5px 14px;
+  border: 1px solid var(--border-m);
+  border-radius: 100px;
+  background: none;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: color .15s, border-color .15s;
+}
+.lib-browse-trigger:hover { color: var(--text); border-color: rgba(0,0,0,.22); }
+
+/* ── Browse overlay ── */
+.lib-browse {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(248,247,244,.97);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 9000;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  gap: 1.4rem;
+  box-sizing: border-box;
+}
+.lib-browse.open { display: flex; }
+.lib-browse-top {
+  position: absolute;
+  top: 1.4rem;
+  right: 1.4rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.lib-browse-counter {
+  font-size: 12px;
+  color: var(--faint);
+}
+.lib-browse-close-btn {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--border-m);
+  background: var(--white);
+  color: var(--muted);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: color .15s, border-color .15s;
+}
+.lib-browse-close-btn:hover { color: var(--text); border-color: rgba(0,0,0,.22); }
+.lib-browse-wrap {
+  display: flex;
+  align-items: center;
+  gap: 1.4rem;
+  max-width: 620px;
+  width: 100%;
+}
+.lib-browse-nav-btn {
+  width: 40px; height: 40px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1px solid var(--border-m);
+  background: var(--white);
+  color: var(--muted);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: color .15s, border-color .15s;
+}
+.lib-browse-nav-btn:hover:not(:disabled) { color: var(--text); border-color: rgba(0,0,0,.22); }
+.lib-browse-nav-btn:disabled { opacity: .28; cursor: default; }
+.lib-browse-card {
+  flex: 1;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 2.2rem 2.4rem 2rem;
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 6px 40px rgba(0,0,0,.07);
+}
+.lib-browse-type {
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  margin-bottom: 1.2rem;
+}
+.lib-browse-text {
+  font-family: var(--serif);
+  font-size: 17px;
+  line-height: 1.85;
+  color: var(--text);
+  flex: 1;
+  white-space: pre-wrap;
+}
+.lib-browse-source {
+  margin-top: 1.6rem;
+  font-size: 11.5px;
+  color: var(--faint);
+}
+@media (max-width: 560px) {
+  .lib-browse-wrap { flex-direction: column; }
+  .lib-browse-nav-btn { display: none; }
+  .lib-browse-card { padding: 1.6rem 1.8rem; min-height: 200px; }
+  .lib-browse-text { font-size: 15.5px; }
+  .lib-browse { padding: 1.2rem; }
+}
 </style>
+  <link rel="stylesheet" href="shared.css">
 </head>
 <body>
 <div id="site-nav-placeholder"></div>
@@ -182,140 +623,552 @@ button { cursor: pointer; font-family: var(--sans); border: none; }
 <div class="lib-page">
 
   <!-- Header -->
-  <div class="lib-page-header">
+  <div class="lib-header">
     <div>
-      <h1 class="lib-page-heading">My Library</h1>
-      <p class="lib-page-sub">A personal collection of ideas worth keeping.</p>
+      <h1 class="lib-heading">Meine Bibliothek</h1>
+      <p class="lib-sub">Eine persönliche Sammlung von Dingen, die geholfen haben.</p>
     </div>
-    <div class="lib-saved-count" id="libSavedCount"></div>
+    <button class="lib-new-btn" id="libNewBtn" style="display:none;" onclick="showCompose()">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+      Neue Reflexion
+    </button>
   </div>
 
-  <!-- Type navigation -->
-  <nav class="lib-nav">
-    <button class="lib-nav-btn active" onclick="filterLibrary('all', this)">
-      All
-      <span class="lib-nav-count" id="libCountAll" style="display:none;">0</span>
+  <!-- Tab navigation -->
+  <nav class="lib-tabs" role="tablist">
+    <button class="lib-tab active" data-filter="all" role="tab" aria-selected="true">
+      Alle <span class="lib-tab-count" id="cnt-all"></span>
     </button>
-    <button class="lib-nav-btn" onclick="filterLibrary('insight', this)">
-      Insights
-      <span class="lib-nav-count" id="libCountInsight" style="display:none;">0</span>
+    <button class="lib-tab" data-filter="article" role="tab">
+      Artikel <span class="lib-tab-count" id="cnt-article"></span>
     </button>
-    <button class="lib-nav-btn" disabled>Cards <span class="lib-soon">soon</span></button>
-    <button class="lib-nav-btn" disabled>Tools <span class="lib-soon">soon</span></button>
-    <button class="lib-nav-btn" disabled>Prompts <span class="lib-soon">soon</span></button>
-    <button class="lib-nav-btn" disabled>Reflections <span class="lib-soon">soon</span></button>
+    <button class="lib-tab" data-filter="card" role="tab">
+      Karten <span class="lib-tab-count" id="cnt-card"></span>
+    </button>
+    <button class="lib-tab" data-filter="tool" role="tab">
+      Tools <span class="lib-tab-count" id="cnt-tool"></span>
+    </button>
+    <button class="lib-tab" data-filter="prompt" role="tab">
+      Prompts <span class="lib-tab-count" id="cnt-prompt"></span>
+    </button>
+    <button class="lib-tab" data-filter="reflection" role="tab">
+      Reflexionen <span class="lib-tab-count" id="cnt-reflection"></span>
+    </button>
   </nav>
 
+  <!-- Reflection compose -->
+  <div class="lib-compose" id="libCompose">
+    <div class="lib-compose-label">Neue Reflexion</div>
+    <textarea
+      class="lib-compose-textarea"
+      id="libComposeText"
+      placeholder="Was beschäftigt dich heute?"
+      rows="4"
+    ></textarea>
+    <div class="lib-compose-footer">
+      <button class="lib-compose-save" onclick="saveReflection()">Speichern</button>
+      <button class="lib-compose-cancel" onclick="hideCompose()">Abbrechen</button>
+    </div>
+  </div>
+
+  <!-- Cards toolbar (visible when Cards tab is active) -->
+  <div class="lib-cards-bar" id="libCardsBar" style="display:none;">
+    <div class="lib-subtypes" role="group" aria-label="Kartentyp filtern">
+      <button class="lib-subtype active" data-subtype="all">Alle</button>
+      <button class="lib-subtype" data-subtype="script">Skript</button>
+      <button class="lib-subtype" data-subtype="technique">Technik</button>
+      <button class="lib-subtype" data-subtype="reminder">Erinnerung</button>
+      <button class="lib-subtype" data-subtype="prompt">Frage</button>
+      <button class="lib-subtype" data-subtype="quote">Zitat</button>
+    </div>
+    <button class="lib-browse-trigger" onclick="openBrowse()">Durchsehen →</button>
+  </div>
+
   <!-- Card grid -->
-  <div class="lib-grid" id="libGrid"></div>
+  <div class="lib-grid" id="libGrid" role="list"></div>
 
   <!-- Empty state -->
-  <div class="lib-empty" id="libEmpty" style="display:none;">
-    <div class="lib-empty-icon">
-      <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
-      </svg>
-    </div>
-    <p class="lib-empty-title">Your library is empty.</p>
-    <p class="lib-empty-sub">As you read and explore, save insights, frameworks, and ideas here — to revisit whenever you need them.</p>
-    <a class="lib-empty-link" href="topics.html">Browse topics →</a>
-  </div>
+  <div class="lib-empty" id="libEmpty" role="status"></div>
 
 </div>
 
+<!-- Browse overlay -->
+<div class="lib-browse" id="libBrowse" role="dialog" aria-modal="true">
+  <div class="lib-browse-top">
+    <span class="lib-browse-counter" id="libBrowseCounter"></span>
+    <button class="lib-browse-close-btn" onclick="closeBrowse()" title="Schließen">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div class="lib-browse-wrap">
+    <button class="lib-browse-nav-btn" id="libBrowsePrev" onclick="browsePrev()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <div class="lib-browse-card">
+      <div class="lib-browse-type" id="libBrowseType"></div>
+      <div class="lib-browse-text" id="libBrowseText"></div>
+      <div class="lib-browse-source" id="libBrowseSource"></div>
+    </div>
+    <button class="lib-browse-nav-btn" id="libBrowseNext" onclick="browseNext()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+  </div>
+</div>
+
 <script>
-let libCurrentFilter = 'all';
+(function () {
+  var currentFilter = 'all';
+  var currentCardSubtype = 'all';
 
-function escapeHtml(s) {
-  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
-}
+  var CARD_TYPES = {
+    script:    { label: 'Skript',     color: '#6A64A0' },
+    technique: { label: 'Technik',    color: '#907840' },
+    reminder:  { label: 'Erinnerung', color: '#5A8050' },
+    prompt:    { label: 'Frage',      color: '#A06060' },
+    quote:     { label: 'Zitat',      color: '#8B8B8B' }
+  };
 
-function formatDate(iso) {
-  const d = new Date(iso);
-  const now = new Date();
-  const diff = Math.floor((now - d) / 1000);
-  if (diff < 60)        return 'Gerade eben';
-  if (diff < 3600)      return Math.floor(diff / 60) + ' Min.';
-  if (diff < 86400)     return Math.floor(diff / 3600) + ' Std.';
-  if (diff < 7 * 86400) return Math.floor(diff / 86400) + ' Tage';
-  return d.toLocaleDateString('de', { day: 'numeric', month: 'short', year: 'numeric' });
-}
-
-function renderLibrary(filter) {
-  if (!window.MBLibrary) return;
-  libCurrentFilter = filter || libCurrentFilter;
-
-  const all   = MBLibrary.get();
-  const shown = libCurrentFilter === 'all' ? all : all.filter(i => i.type === libCurrentFilter);
-
-  const countAll = document.getElementById('libCountAll');
-  countAll.textContent = all.length;
-  countAll.style.display = all.length ? '' : 'none';
-
-  const insightN = all.filter(i => i.type === 'insight').length;
-  const countIns = document.getElementById('libCountInsight');
-  countIns.textContent = insightN;
-  countIns.style.display = insightN ? '' : 'none';
-
-  document.getElementById('libSavedCount').textContent =
-    all.length === 0 ? '' : all.length + (all.length === 1 ? ' gespeichert' : ' gespeichert');
-
-  const grid  = document.getElementById('libGrid');
-  const empty = document.getElementById('libEmpty');
-
-  if (shown.length === 0) {
-    grid.innerHTML = '';
-    empty.style.display = 'flex';
-    return;
+  // ── Helpers ──────────────────────────────────────────────────────────────────
+  function esc(s) {
+    return String(s || '')
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
   }
-  empty.style.display = 'none';
 
-  grid.innerHTML = shown.map(item => {
-    const sourceLink = item.sourceUrl
-      ? `<a href="${item.sourceUrl}">${escapeHtml(item.source || 'Mindbloom')}</a>`
-      : escapeHtml(item.source || 'Mindbloom');
-    return `
-      <div class="lib-card" data-lib-id="${escapeHtml(item.id)}">
-        <div class="lib-card-body">
-          <p class="lib-card-text">${escapeHtml(item.text || item.title)}</p>
-        </div>
-        <div class="lib-card-foot">
-          <div class="lib-card-meta">
-            <span class="lib-card-source">${sourceLink}</span>
-            <span class="lib-card-date">${formatDate(item.savedAt)}</span>
-          </div>
-          <button class="lib-card-remove" title="Entfernen" onclick="removeItem('${escapeHtml(item.id)}')">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
-          </button>
-        </div>
-      </div>`;
-  }).join('');
-}
-
-function filterLibrary(type, btn) {
-  document.querySelectorAll('.lib-nav-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderLibrary(type);
-}
-
-function removeItem(id) {
-  if (!window.MBLibrary) return;
-  MBLibrary.remove(id);
-  const card = document.querySelector(`.lib-card[data-lib-id="${CSS.escape(id)}"]`);
-  if (card) {
-    card.style.transition = 'opacity .2s, transform .2s';
-    card.style.opacity = '0';
-    card.style.transform = 'scale(.97)';
-    setTimeout(() => renderLibrary(), 200);
+  function formatDate(iso) {
+    if (!iso) return '';
+    var d = new Date(iso);
+    var now = new Date();
+    var diff = Math.floor((now - d) / 1000);
+    if (diff < 60)         return 'Gerade eben';
+    if (diff < 3600)       return Math.floor(diff / 60) + ' Min. her';
+    if (diff < 86400)      return Math.floor(diff / 3600) + ' Std. her';
+    if (diff < 7 * 86400)  return Math.floor(diff / 86400) + ' T. her';
+    return d.toLocaleDateString('de', { day: 'numeric', month: 'short', year: 'numeric' });
   }
-}
 
-// Render on load (after MBLibrary is ready)
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', function() { renderLibrary('all'); });
-} else {
-  renderLibrary('all');
-}
+  function genId() {
+    return 'ref-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7);
+  }
+
+  // ── Count update ──────────────────────────────────────────────────────────────
+  function updateCounts(items) {
+    var types = ['all', 'article', 'card', 'tool', 'prompt', 'reflection'];
+    types.forEach(function(t) {
+      var el = document.getElementById('cnt-' + t);
+      if (!el) return;
+      var n = t === 'all' ? items.length : items.filter(function(i) { return i.type === t; }).length;
+      el.textContent = n;
+      el.className = 'lib-tab-count' + (n > 0 ? ' visible' : '');
+    });
+  }
+
+  // ── Card renderers ────────────────────────────────────────────────────────────
+
+  function removeBtn(id) {
+    return '<button class="lib-card-remove" title="Entfernen" onclick="removeItem(\'' + esc(id) + '\')">' +
+      '<svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>' +
+      '</button>';
+  }
+
+  function openBtn(url) {
+    return '<a class="lib-card-open" href="' + esc(url) + '" title="Öffnen">' +
+      '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>' +
+      '</a>';
+  }
+
+  function typePill(type, labelOverride) {
+    var labels = { article:'Artikel', card:'Karte', tool:'Tool', prompt:'Prompt', reflection:'Reflexion' };
+    return '<span class="lib-type-pill lib-type-pill--' + type + '">' + (labelOverride || labels[type] || type) + '</span>';
+  }
+
+  function renderArticleCard(item) {
+    var sourceLink = item.sourceUrl
+      ? '<a href="' + esc(item.sourceUrl) + '">' + esc(item.source || 'Mindbloom') + '</a>'
+      : esc(item.source || 'Mindbloom');
+    return '<div class="lib-card lib-card--article" data-lib-id="' + esc(item.id) + '" role="listitem">' +
+      '<div class="lib-card-head">' +
+        '<p class="lib-card-title">' + esc(item.title || item.text) + '</p>' +
+      '</div>' +
+      (item.text ? '<p class="lib-card-excerpt">' + esc(item.text) + '</p>' : '') +
+      '<div class="lib-card-foot">' +
+        '<div class="lib-card-meta">' +
+          '<span class="lib-card-source">' + sourceLink + '</span>' +
+          '<span class="lib-card-date">' + formatDate(item.savedAt) + '</span>' +
+        '</div>' +
+        '<div class="lib-card-actions">' +
+          (item.sourceUrl ? openBtn(item.sourceUrl) : '') +
+          removeBtn(item.id) +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }
+
+  function renderCardCard(item) {
+    var ct  = item.cardType || 'reminder';
+    var cfg = CARD_TYPES[ct] || CARD_TYPES.reminder;
+    var sourceLink = item.sourceUrl
+      ? '<a href="' + esc(item.sourceUrl) + '">' + esc(item.source || 'Mindbloom') + '</a>'
+      : esc(item.source || 'Mindbloom');
+    return '<div class="lib-card lib-card--card" data-lib-id="' + esc(item.id) + '" data-card-type="' + esc(ct) + '" role="listitem">' +
+      '<div class="lib-card-body">' +
+        '<div style="padding:0 0 .65rem;"><span class="lib-card-subtype" style="color:' + cfg.color + ';">' + cfg.label + '</span></div>' +
+        '<p class="lib-card-text">' + esc(item.text || item.title) + '</p>' +
+      '</div>' +
+      '<div class="lib-card-foot">' +
+        '<div class="lib-card-meta">' +
+          '<span class="lib-card-source">' + sourceLink + '</span>' +
+          '<span class="lib-card-date">' + formatDate(item.savedAt) + '</span>' +
+        '</div>' +
+        '<div class="lib-card-actions">' +
+          (item.sourceUrl ? openBtn(item.sourceUrl) : '') +
+          removeBtn(item.id) +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }
+
+  function renderToolCard(item) {
+    return '<div class="lib-card lib-card--tool" data-lib-id="' + esc(item.id) + '" role="listitem">' +
+      '<div class="lib-card-head">' +
+        typePill('tool') +
+      '</div>' +
+      '<div class="lib-card-head" style="padding-top:.4rem;">' +
+        '<p class="lib-card-title">' + esc(item.title || item.source) + '</p>' +
+      '</div>' +
+      (item.text ? '<p class="lib-card-desc">' + esc(item.text) + '</p>' : '') +
+      '<div class="lib-card-foot">' +
+        '<div class="lib-card-meta">' +
+          '<span class="lib-card-date">' + formatDate(item.savedAt) + '</span>' +
+        '</div>' +
+        '<div class="lib-card-actions">' +
+          (item.sourceUrl ? openBtn(item.sourceUrl) : '') +
+          removeBtn(item.id) +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }
+
+  function renderPromptCard(item) {
+    var sourceLink = item.sourceUrl
+      ? '<a href="' + esc(item.sourceUrl) + '">' + esc(item.source || 'Mindbloom') + '</a>'
+      : esc(item.source || 'Mindbloom');
+    return '<div class="lib-card lib-card--prompt" data-lib-id="' + esc(item.id) + '" role="listitem">' +
+      '<div class="lib-card-body">' +
+        '<p class="lib-card-text">' + esc(item.text || item.title) + '</p>' +
+      '</div>' +
+      '<div class="lib-card-foot">' +
+        '<div class="lib-card-meta">' +
+          '<span class="lib-card-source">' + sourceLink + '</span>' +
+          '<span class="lib-card-date">' + formatDate(item.savedAt) + '</span>' +
+        '</div>' +
+        '<div class="lib-card-actions">' + removeBtn(item.id) + '</div>' +
+      '</div>' +
+    '</div>';
+  }
+
+  function renderReflectionCard(item) {
+    return '<div class="lib-card lib-card--reflection" data-lib-id="' + esc(item.id) + '" role="listitem">' +
+      '<div class="lib-card-body">' +
+        '<p class="lib-card-text">' + esc(item.text) + '</p>' +
+      '</div>' +
+      '<div class="lib-card-foot">' +
+        '<div class="lib-card-meta">' +
+          '<span class="lib-card-date">' + formatDate(item.savedAt) + '</span>' +
+        '</div>' +
+        '<div class="lib-card-actions">' + removeBtn(item.id) + '</div>' +
+      '</div>' +
+    '</div>';
+  }
+
+  function renderCard(item) {
+    switch (item.type) {
+      case 'article':    return renderArticleCard(item);
+      case 'card':       return renderCardCard(item);
+      case 'tool':       return renderToolCard(item);
+      case 'prompt':     return renderPromptCard(item);
+      case 'reflection': return renderReflectionCard(item);
+      default:           return renderCardCard(item);
+    }
+  }
+
+  // ── Empty states ──────────────────────────────────────────────────────────────
+
+  var EMPTY_CONFIG = {
+    all: {
+      icon: '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>',
+      title: 'Deine Bibliothek ist noch leer.',
+      sub: 'Wenn du Mindbloom erkundest, speichere Artikel, Karten, Tools und Prompts, die dich ansprechen.',
+      cta: 'Themen entdecken',
+      href: 'topics.html'
+    },
+    article: {
+      icon: '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>',
+      title: 'Keine Artikel gespeichert.',
+      sub: 'Wenn ein Artikel dich berührt, speichere ihn hier — zum erneuten Lesen, wenn du ihn brauchst.',
+      cta: 'Artikel entdecken',
+      href: 'topics.html'
+    },
+    card: {
+      icon: '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>',
+      title: 'Keine Karten gespeichert.',
+      sub: 'Speichere einzelne Auszüge, Zitate und Methoden aus Artikeln — ohne den ganzen Text aufzuheben.',
+      cta: 'Jetzt lesen',
+      href: 'topics.html'
+    },
+    tool: {
+      icon: '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93A10 10 0 1 0 4.93 19.07M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>',
+      title: 'Keine Tools gespeichert.',
+      sub: 'Speichere Tools hier, damit sie bereit sind, wenn du eine Atemübung, Grounding-Technik oder Reflexion brauchst.',
+      cta: 'Tools entdecken',
+      href: 'tools.html'
+    },
+    prompt: {
+      icon: '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
+      title: 'Keine Prompts gespeichert.',
+      sub: 'Wenn eine Frage dich innehalten lässt — auf die gute Art — speichere sie hier für später.',
+      cta: 'Zum Prompt Room',
+      href: 'prompt-room.html'
+    },
+    reflection: {
+      icon: '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>',
+      title: 'Noch keine Reflexionen.',
+      sub: 'Das ist dein privater Raum. Schreibe, was dir durch den Kopf geht — ein Gedanke, ein Gefühl, eine Erkenntnis.',
+      cta: 'Reflexion schreiben',
+      action: 'compose'
+    }
+  };
+
+  function renderEmpty(filter) {
+    var cfg = EMPTY_CONFIG[filter] || EMPTY_CONFIG.all;
+    var ctaHtml = cfg.action === 'compose'
+      ? '<button class="lib-empty-cta" onclick="showCompose()">' + cfg.cta + ' →</button>'
+      : '<a class="lib-empty-cta" href="' + cfg.href + '">' + cfg.cta + ' →</a>';
+    document.getElementById('libEmpty').innerHTML =
+      '<div class="lib-empty-icon">' + cfg.icon + '</div>' +
+      '<p class="lib-empty-title">' + cfg.title + '</p>' +
+      '<p class="lib-empty-sub">' + cfg.sub + '</p>' +
+      ctaHtml;
+  }
+
+  // ── Render ────────────────────────────────────────────────────────────────────
+
+  function renderLibrary(filter) {
+    if (!window.MBLibrary) return;
+    if (filter !== undefined) currentFilter = filter;
+
+    var all    = MBLibrary.get();
+    var shown  = currentFilter === 'all'
+      ? all
+      : all.filter(function(i) { return i.type === currentFilter; });
+
+    // Apply card subtype filter
+    if (currentFilter === 'card' && currentCardSubtype !== 'all') {
+      shown = shown.filter(function(i) {
+        return (i.cardType || 'reminder') === currentCardSubtype;
+      });
+    }
+
+    updateCounts(all);
+
+    // Cards bar visibility
+    var cardsBar = document.getElementById('libCardsBar');
+    if (cardsBar) cardsBar.style.display = currentFilter === 'card' ? 'flex' : 'none';
+
+    // Reflection "New" button visibility
+    var newBtn = document.getElementById('libNewBtn');
+    if (newBtn) newBtn.style.display = currentFilter === 'reflection' ? '' : 'none';
+
+    var grid  = document.getElementById('libGrid');
+    var empty = document.getElementById('libEmpty');
+
+    if (shown.length === 0) {
+      grid.innerHTML = '';
+      grid.className = 'lib-grid';
+      empty.style.display = 'flex';
+      renderEmpty(currentFilter);
+      return;
+    }
+
+    empty.style.display = 'none';
+
+    // Set grid class for type-specific layout
+    var gridClass = currentFilter === 'all' ? 'lib-grid' : 'lib-grid lib-grid--' + currentFilter;
+    grid.className = gridClass;
+
+    grid.innerHTML = shown.map(function(item) {
+      return renderCard(item);
+    }).join('');
+  }
+
+  // ── Actions ───────────────────────────────────────────────────────────────────
+
+  window.removeItem = function (id) {
+    if (!window.MBLibrary) return;
+    MBLibrary.remove(id);
+    var card = document.querySelector('.lib-card[data-lib-id="' + CSS.escape(id) + '"]');
+    if (card) {
+      card.style.transition = 'opacity .2s, transform .2s';
+      card.style.opacity = '0';
+      card.style.transform = 'scale(.97)';
+      setTimeout(function () { renderLibrary(); }, 200);
+    }
+  };
+
+  window.showCompose = function () {
+    // Switch to Reflection tab first
+    if (currentFilter !== 'reflection') {
+      document.querySelectorAll('.lib-tab').forEach(function(b) {
+        b.classList.toggle('active', b.dataset.filter === 'reflection');
+      });
+      renderLibrary('reflection');
+    }
+    var c = document.getElementById('libCompose');
+    c.classList.add('open');
+    document.getElementById('libComposeText').focus();
+  };
+
+  window.hideCompose = function () {
+    document.getElementById('libCompose').classList.remove('open');
+    document.getElementById('libComposeText').value = '';
+  };
+
+  window.saveReflection = function () {
+    var text = document.getElementById('libComposeText').value.trim();
+    if (!text) return;
+    if (!window.MBLibrary) return;
+    MBLibrary.save({
+      id:   'ref-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7),
+      type: 'reflection',
+      title: text.slice(0, 80),
+      text:  text,
+      source: '',
+      sourceUrl: ''
+    });
+    hideCompose();
+    renderLibrary('reflection');
+  };
+
+  // ── Tab wiring ────────────────────────────────────────────────────────────────
+
+  document.querySelectorAll('.lib-tab').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('.lib-tab').forEach(function(b) {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+      hideCompose();
+      // Reset subtype when switching tabs
+      if (btn.dataset.filter !== 'card') {
+        currentCardSubtype = 'all';
+        document.querySelectorAll('.lib-subtype').forEach(function(b) {
+          b.classList.toggle('active', b.dataset.subtype === 'all');
+        });
+      }
+      renderLibrary(btn.dataset.filter);
+    });
+  });
+
+  document.querySelectorAll('.lib-subtype').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.lib-subtype').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      currentCardSubtype = btn.dataset.subtype;
+      renderLibrary('card');
+    });
+  });
+
+  // ── Textarea auto-grow ────────────────────────────────────────────────────────
+  var ta = document.getElementById('libComposeText');
+  if (ta) {
+    ta.addEventListener('input', function () {
+      this.style.height = 'auto';
+      this.style.height = this.scrollHeight + 'px';
+    });
+  }
+
+  // ── Browse mode ───────────────────────────────────────────────────────────────
+  var _browseItems = [];
+  var _browseIndex = 0;
+
+  function getFilteredCards() {
+    if (!window.MBLibrary) return [];
+    var cards = MBLibrary.get().filter(function(i) { return i.type === 'card'; });
+    if (currentCardSubtype !== 'all') {
+      cards = cards.filter(function(i) { return (i.cardType || 'reminder') === currentCardSubtype; });
+    }
+    return cards;
+  }
+
+  function renderBrowseCard() {
+    var item = _browseItems[_browseIndex];
+    if (!item) return;
+    var ct  = item.cardType || 'reminder';
+    var cfg = CARD_TYPES[ct] || CARD_TYPES.reminder;
+    var typeEl   = document.getElementById('libBrowseType');
+    var textEl   = document.getElementById('libBrowseText');
+    var sourceEl = document.getElementById('libBrowseSource');
+    var counter  = document.getElementById('libBrowseCounter');
+    var prevBtn  = document.getElementById('libBrowsePrev');
+    var nextBtn  = document.getElementById('libBrowseNext');
+    if (typeEl)   { typeEl.textContent = cfg.label; typeEl.style.color = cfg.color; }
+    if (textEl)   { textEl.textContent = item.text || item.title; }
+    if (sourceEl) { sourceEl.textContent = item.source ? '— ' + item.source : ''; }
+    if (counter)  { counter.textContent = (_browseIndex + 1) + ' / ' + _browseItems.length; }
+    if (prevBtn)  prevBtn.disabled = _browseIndex === 0;
+    if (nextBtn)  nextBtn.disabled = _browseIndex === _browseItems.length - 1;
+  }
+
+  window.openBrowse = function () {
+    var cards = getFilteredCards();
+    if (!cards.length) {
+      if (window.MBLibrary) MBLibrary.showToast('Keine Karten gespeichert.');
+      return;
+    }
+    _browseItems = cards;
+    _browseIndex = 0;
+    renderBrowseCard();
+    var overlay = document.getElementById('libBrowse');
+    if (overlay) { overlay.classList.add('open'); document.body.style.overflow = 'hidden'; }
+  };
+
+  window.closeBrowse = function () {
+    var overlay = document.getElementById('libBrowse');
+    if (overlay) overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  };
+
+  window.browsePrev = function () {
+    if (_browseIndex > 0) { _browseIndex--; renderBrowseCard(); }
+  };
+
+  window.browseNext = function () {
+    if (_browseIndex < _browseItems.length - 1) { _browseIndex++; renderBrowseCard(); }
+  };
+
+  document.addEventListener('keydown', function (e) {
+    var browse = document.getElementById('libBrowse');
+    if (!browse || !browse.classList.contains('open')) return;
+    if (e.key === 'ArrowLeft')  window.browsePrev();
+    if (e.key === 'ArrowRight') window.browseNext();
+    if (e.key === 'Escape')     window.closeBrowse();
+  });
+
+  // Click outside card to close browse
+  document.getElementById('libBrowse').addEventListener('click', function(e) {
+    if (e.target === this) window.closeBrowse();
+  });
+
+  // ── Init ──────────────────────────────────────────────────────────────────────
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () { renderLibrary('all'); });
+  } else {
+    renderLibrary('all');
+  }
+
+}());
 </script>
 </body>
 </html>

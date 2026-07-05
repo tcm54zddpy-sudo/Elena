@@ -6,14 +6,14 @@
 <title>Mindbloom — Cloud Watching</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Mulish:wght@300;400;500&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --sans:  'Mulish', sans-serif;
-  --serif: 'Playfair Display', Georgia, serif;
-  --lora:  'Lora', Georgia, serif;
+  --sans:  'Inter', sans-serif;
+  --serif: 'EB Garamond', Georgia, serif;
+  --lora:  'EB Garamond', Georgia, serif;
 }
 
 html, body {
@@ -220,8 +220,27 @@ body {
   font-weight: 300; letter-spacing: .04em;
   transition: opacity .4s;
 }
+
+/* sky quote — fixed, centered above input */
+.sky-quote {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  font-family: var(--lora);
+  font-style: italic;
+  font-size: 13px;
+  color: rgba(80,100,140,.28);
+  letter-spacing: .01em;
+  line-height: 1.7;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 1;
+}
 </style>
-  <script src="nav.js"></script>
+  <script src="nav.js?v=5"></script>
+  <link rel="stylesheet" href="shared.css">
 </head>
 <body>
   <div id="site-nav-placeholder"></div>
@@ -231,6 +250,9 @@ body {
 
 <!-- SKY -->
 <div class="sky" id="sky">
+
+  <!-- QUOTE -->
+  <div class="sky-quote" id="skyQuote" style="display:none;">you are not your thoughts — they are clouds passing by, and you are the sky</div>
 
   <!-- INTRO -->
   <div class="intro" id="intro">
@@ -291,8 +313,8 @@ const sky = document.getElementById('sky');
 const lanes = [16, 28, 40, 52, 64]; // top % of sky
 let laneIdx = 0;
 
-// speed variants (seconds to cross screen) — slow and varied
-const SPEEDS = [52, 60, 68, 76, 84];
+// speed variants (seconds to cross screen) — mixed: some faster, some slow
+const SPEEDS = [30, 60, 38, 76, 84];
 let speedIdx = 0;
 
 // size variants
@@ -376,6 +398,7 @@ function beginSession() {
     intro.style.display = 'none';
     document.getElementById('inputBar').style.display = 'flex';
     document.getElementById('inputHint').style.display = 'block';
+    document.getElementById('skyQuote').style.display = 'block';
     document.getElementById('thoughtInput').focus();
 
     // spawn a few gentle demo clouds after a moment
@@ -395,6 +418,7 @@ function spawnDemoClouds() {
   demos.forEach(d => {
     setTimeout(() => spawnCloud(d.text), d.delay);
   });
+
 }
 
 // keyboard shortcut: Escape clears input

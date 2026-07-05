@@ -6,7 +6,7 @@
 <title>Mindbloom — Prepare</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Mulish:wght@300;400;500&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -20,9 +20,9 @@
   --g-amber:linear-gradient(135deg,#DDD0B0,#BCA870);
   --g-prepare:linear-gradient(135deg,#C0CCDC,#7888A8);
   --sage:#5A8050;--dusk:#6A64A0;--blush:#9A6A64;--slate:#4A7A95;
-  --serif:'Playfair Display',Georgia,serif;
-  --lora:'Lora',Georgia,serif;
-  --sans:'Mulish',sans-serif;
+  --serif:'EB Garamond', Georgia, serif,Georgia,serif;
+  --lora:'EB Garamond', Georgia, serif,Georgia,serif;
+  --sans:'Inter', sans-serif;
   --r:16px;
 }
 html,body{min-height:100%;}
@@ -97,7 +97,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;heigh
 .tool-opt{display:flex;align-items:flex-start;gap:1rem;padding:14px 16px;border-radius:14px;border:1px solid var(--border-m);background:var(--bg);text-align:left;transition:all .15s;cursor:pointer;}
 .tool-opt:hover{background:var(--white);border-color:rgba(0,0,0,.18);transform:translateX(3px);}
 .tool-opt.sel{background:var(--white);border-color:rgba(0,0,0,.2);box-shadow:0 2px 12px rgba(0,0,0,.07);}
-.tool-icon{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:17px;}
+.tool-icon{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:10px;font-weight:600;color:rgba(255,255,255,.9);letter-spacing:.02em;}
 .tool-info .t-name{font-family:var(--serif);font-size:.95rem;font-weight:400;margin-bottom:2px;}
 .tool-info .t-desc{font-size:12.5px;color:var(--muted);line-height:1.5;}
 
@@ -106,7 +106,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;heigh
 .plan-section{margin-bottom:1.4rem;}
 .plan-section:last-child{margin-bottom:0;}
 .plan-icon-row{display:flex;align-items:center;gap:.6rem;margin-bottom:.6rem;}
-.plan-emoji{font-size:1.1rem;}
+.plan-dot{width:8px;height:8px;border-radius:50%;background:var(--border-m);flex-shrink:0;}
 .plan-section-title{font-family:var(--serif);font-size:1rem;font-weight:400;}
 .plan-body{font-size:13.5px;color:var(--muted);line-height:1.7;}
 .plan-tag{display:inline-block;padding:3px 11px;border-radius:100px;font-size:11.5px;font-weight:500;margin-bottom:.5rem;}
@@ -135,7 +135,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;heigh
   .plan-card{padding:1.5rem 1.3rem;}
 }
 </style>
-  <script src="nav.js"></script>
+  <script src="nav.js?v=5"></script>
+  <link rel="stylesheet" href="shared.css">
 </head>
 <body>
   <div id="site-nav-placeholder"></div>
@@ -176,11 +177,11 @@ const TOOL_ROUTING = {
 };
 
 const TOOLS_META = {
-  compass:  { emoji:'🧭', name:'Conversation Compass', desc:'Klarheit vor schwierigen Gesprächen schaffen.', grad:'var(--g-slate)' },
-  redflag:  { emoji:'🚩', name:'Red Flag Predictor',   desc:'Mögliche Stressmomente vorab erkennen.', grad:'var(--g-blush)' },
-  ifthen:   { emoji:'📋', name:'If–Then Builder',      desc:'Konkrete Handlungspläne für schwierige Momente.', grad:'var(--g-amber)' },
-  safexit:  { emoji:'🛟', name:'Safe Exit Planner',    desc:'Ein Sicherheitsnetz für belastende Situationen.', grad:'var(--g-sage)' },
-  energy:   { emoji:'⚡', name:'Energy Forecast',      desc:'Überforderung vorbeugen und Energie planen.', grad:'var(--g-dusk)' },
+  compass:  { icon:'CC', name:'Conversation Compass', desc:'Klarheit vor schwierigen Gesprächen schaffen.', grad:'var(--g-slate)' },
+  redflag:  { icon:'RP', name:'Red Flag Predictor',   desc:'Mögliche Stressmomente vorab erkennen.', grad:'var(--g-blush)' },
+  ifthen:   { icon:'IT', name:'If–Then Builder',      desc:'Konkrete Handlungspläne für schwierige Momente.', grad:'var(--g-amber)' },
+  safexit:  { icon:'SE', name:'Safe Exit Planner',    desc:'Ein Sicherheitsnetz für belastende Situationen.', grad:'var(--g-sage)' },
+  energy:   { icon:'EF', name:'Energy Forecast',      desc:'Überforderung vorbeugen und Energie planen.', grad:'var(--g-dusk)' },
 };
 
 function routeTools() {
@@ -314,7 +315,7 @@ function renderToolSelect(root) {
         ${S.selectedTools.map(k=>{
           const t = TOOLS_META[k];
           return `<button class="tool-opt" onclick="startTool('${k}')">
-            <div class="tool-icon" style="background:${t.grad};">${t.emoji}</div>
+            <div class="tool-icon" style="background:${t.grad};">${t.icon}</div>
             <div class="tool-info">
               <div class="t-name">${t.name}</div>
               <div class="t-desc">${t.desc}</div>
@@ -674,7 +675,7 @@ function renderPlan(root) {
   // COMPASS
   if (S.selectedTools.includes('compass') && (S.compass.goals.length || S.compass.topic)) {
     html += `<div class="plan-section">
-      <div class="plan-icon-row"><span class="plan-emoji">🧭</span><div class="plan-section-title">Mein Ziel</div></div>
+      <div class="plan-icon-row"><span class="plan-dot"></span><div class="plan-section-title">Mein Ziel</div></div>
       ${S.compass.person ? `<div class="plan-item">Mit: ${S.compass.person}</div>` : ''}
       ${S.compass.topic ? `<div class="plan-item">Thema: ${S.compass.topic}</div>` : ''}
       ${S.compass.goals.length ? `<div class="plan-item">Ziel: ${S.compass.goals.join(' · ')}</div>` : ''}
@@ -686,7 +687,7 @@ function renderPlan(root) {
   // RED FLAG
   if (S.selectedTools.includes('redflag') && (S.redflag.topics.length || S.redflag.reactions.length)) {
     html += `<div class="plan-section">
-      <div class="plan-icon-row"><span class="plan-emoji">🚩</span><div class="plan-section-title">Mögliche Stolpersteine</div></div>
+      <div class="plan-icon-row"><span class="plan-dot"></span><div class="plan-section-title">Mögliche Stolpersteine</div></div>
       ${S.redflag.topics.length ? `<div class="plan-item">Heikle Themen: ${S.redflag.topics.join(', ')}</div>` : ''}
       ${S.redflag.persons ? `<div class="plan-item">Personen: ${S.redflag.persons}</div>` : ''}
       ${S.redflag.reactions.filter(r=>r[0]).map(r=>`<div class="plan-item">Wenn ${r[0]} → ${r[1] || '…'}</div>`).join('')}
@@ -696,7 +697,7 @@ function renderPlan(root) {
   // IF-THEN
   if (S.selectedTools.includes('ifthen') && S.ifthen.pairs.some(p=>p.if)) {
     html += `<div class="plan-section">
-      <div class="plan-icon-row"><span class="plan-emoji">📋</span><div class="plan-section-title">Mein Handlungsplan</div></div>
+      <div class="plan-icon-row"><span class="plan-dot"></span><div class="plan-section-title">Mein Handlungsplan</div></div>
       ${S.ifthen.pairs.filter(p=>p.if).map(p=>`<div class="plan-item">Wenn ${p.if} → ${p.then || '…'}</div>`).join('')}
     </div><div class="plan-divider"></div>`;
   }
@@ -704,7 +705,7 @@ function renderPlan(root) {
   // SAFE EXIT
   if (S.selectedTools.includes('safexit') && (S.safexit.signals.length || S.safexit.actions.length)) {
     html += `<div class="plan-section">
-      <div class="plan-icon-row"><span class="plan-emoji">🛟</span><div class="plan-section-title">Mein Sicherheitsnetz</div></div>
+      <div class="plan-icon-row"><span class="plan-dot"></span><div class="plan-section-title">Mein Sicherheitsnetz</div></div>
       ${S.safexit.signals.length ? `<div class="plan-item">Warnzeichen: ${S.safexit.signals.join(' · ')}</div>` : ''}
       ${S.safexit.actions.length ? `<div class="plan-item">Dann: ${S.safexit.actions.join(' · ')}</div>` : ''}
     </div><div class="plan-divider"></div>`;
@@ -714,7 +715,7 @@ function renderPlan(root) {
   if (S.selectedTools.includes('energy')) {
     const balance = S.energy.current - S.energy.cost;
     html += `<div class="plan-section">
-      <div class="plan-icon-row"><span class="plan-emoji">⚡</span><div class="plan-section-title">Mein Energieplan</div></div>
+      <div class="plan-icon-row"><span class="plan-dot"></span><div class="plan-section-title">Mein Energieplan</div></div>
       <div class="plan-item">Aktuelle Energie: ${S.energy.current}% · Situationskosten: ~${S.energy.cost}% · Bilanz: ${balance>0?'+':''}${balance}%</div>
       ${S.energy.prep ? `<div class="plan-item">Vorher: ${S.energy.prep}</div>` : ''}
       ${S.energy.recharge ? `<div class="plan-item">Nachher: ${S.energy.recharge}</div>` : ''}

@@ -6,7 +6,7 @@
 <title>Mindbloom — Anxiety Grounding Tool</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Mulish:wght@300;400;500&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -25,9 +25,9 @@
   --g-amber:   linear-gradient(135deg,#DDD0B0,#BCA870);
   --sage-tint: #F0F4EE;
   --sage:      #5A8050;
-  --serif:     'Playfair Display',Georgia,serif;
-  --serif-body:'Lora',Georgia,serif;
-  --sans:      'Mulish',sans-serif;
+  --serif:     'EB Garamond', Georgia, serif,Georgia,serif;
+  --serif-body:'EB Garamond', Georgia, serif,Georgia,serif;
+  --sans:      'Inter', sans-serif;
   --r:16px;
 }
 
@@ -242,7 +242,8 @@ button { cursor: pointer; font-family: var(--sans); border: none; }
 }
 .card { animation: fadeIn .45s ease forwards; }
 </style>
-  <script src="nav.js"></script>
+  <script src="nav.js?v=5"></script>
+  <link rel="stylesheet" href="shared.css">
 </head>
 <body>
   <div id="site-nav-placeholder"></div>
@@ -273,7 +274,6 @@ const STEPS = [
   {
     count: 5,
     sense: 'Sehen',
-    icon: '👁',
     grad: 'var(--g-slate)',
     dotColor: '#7A9DB5',
     title: 'Nenne 5 Dinge, die du gerade siehst.',
@@ -283,7 +283,6 @@ const STEPS = [
   {
     count: 4,
     sense: 'Fühlen',
-    icon: '✋',
     grad: 'var(--g-sage)',
     dotColor: '#8FAF88',
     title: 'Nenne 4 Dinge, die du körperlich spürst.',
@@ -293,7 +292,6 @@ const STEPS = [
   {
     count: 3,
     sense: 'Hören',
-    icon: '👂',
     grad: 'var(--g-dusk)',
     dotColor: '#8A84B8',
     title: 'Nenne 3 Geräusche, die du gerade hörst.',
@@ -303,7 +301,6 @@ const STEPS = [
   {
     count: 2,
     sense: 'Riechen',
-    icon: '👃',
     grad: 'var(--g-amber)',
     dotColor: '#BCA870',
     title: 'Nenne 2 Dinge, die du riechst.',
@@ -313,7 +310,6 @@ const STEPS = [
   {
     count: 1,
     sense: 'Schmecken',
-    icon: '👅',
     grad: 'var(--g-blush)',
     dotColor: '#BF9690',
     title: 'Nenne 1 Sache, die du schmeckst.',

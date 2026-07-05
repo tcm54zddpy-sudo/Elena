@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mindbloom — Topics</title>
+<title>Mindbloom — Themen</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Mulish:wght@300;400;500&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -37,9 +37,9 @@
   --sage:   #5A8050;
   --dusk:   #6A64A0;
 
-  --serif:      'Playfair Display', Georgia, serif;
-  --serif-body: 'Lora', Georgia, serif;
-  --sans:       'Mulish', sans-serif;
+  --serif:      'EB Garamond', Georgia, serif;
+  --serif-body: 'EB Garamond', Georgia, serif;
+  --sans:       'Inter', sans-serif;
   --r: 16px; --r-sm: 10px;
 }
 
@@ -369,8 +369,21 @@ button { cursor: pointer; font-family: var(--sans); border: none; }
   to   { opacity: 1; transform: translateY(0); }
 }
 .anim { animation: fadeUp .3s ease forwards; }
+
+:focus-visible { outline: 2px solid #5A8050; outline-offset: 3px; border-radius: 4px; }
+
+@media (max-width: 680px) {
+  .page-hero { padding: 40px 1.4rem 0; }
+  .filter-row { padding: 0 1.4rem 20px; }
+  .page-body { padding: 2.5rem 1.4rem 5rem; }
+  .featured-row { grid-template-columns: 1fr; }
+  .search-wrap { margin-bottom: 20px; }
+  .crisis-banner { flex-wrap: wrap; gap: 1rem; }
+  .crisis-link { margin-left: 0; }
+}
 </style>
-  <script src="nav.js"></script>
+  <script src="nav.js?v=5"></script>
+  <link rel="stylesheet" href="shared.css">
 </head>
 <body>
   <div id="site-nav-placeholder"></div>
@@ -380,29 +393,29 @@ button { cursor: pointer; font-family: var(--sans); border: none; }
 
 <!-- HERO -->
 <div class="page-hero">
-  <h1>Find what you're looking for</h1>
-  <p>Browse every topic — or search for exactly what's on your mind right now.</p>
+  <h1>Finde, was du suchst</h1>
+  <p>Alle Themen im Überblick – oder such direkt nach dem, was dir gerade durch den Kopf geht.</p>
 
   <div class="search-wrap">
     <div class="search-bar">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-      <input type="text" id="searchInput" placeholder="Search topics, feelings, situations…" oninput="handleSearch(this.value)" autocomplete="off">
+      <input type="text" id="searchInput" placeholder="Themen, Gefühle, Situationen suchen …" oninput="handleSearch(this.value)" autocomplete="off">
       <button id="searchClear" onclick="clearSearch()">✕</button>
     </div>
   </div>
 
   <div class="filter-row" id="filterRow">
-    <button class="filter-pill active" onclick="filterCat(this,'all')">All topics</button>
-    <button class="filter-pill" onclick="filterCat(this,'grief')"><div class="fp-dot" style="background:var(--g-blush);"></div>Loss & Grief</button>
-    <button class="filter-pill" onclick="filterCat(this,'relationships')"><div class="fp-dot" style="background:var(--g-rose);"></div>Relationships</button>
-    <button class="filter-pill" onclick="filterCat(this,'family')"><div class="fp-dot" style="background:var(--g-amber);"></div>Family</button>
-    <button class="filter-pill" onclick="filterCat(this,'work')"><div class="fp-dot" style="background:var(--g-slate);"></div>Work & School</button>
-    <button class="filter-pill" onclick="filterCat(this,'self')"><div class="fp-dot" style="background:var(--g-dusk);"></div>Self & Identity</button>
-    <button class="filter-pill" onclick="filterCat(this,'emotions')"><div class="fp-dot" style="background:var(--g-sage);"></div>Emotions</button>
-    <button class="filter-pill" onclick="filterCat(this,'conditions')"><div class="fp-dot" style="background:var(--g-lilac);"></div>Mental Health</button>
+    <button class="filter-pill active" onclick="filterCat(this,'all')">Alle Themen</button>
+    <button class="filter-pill" onclick="filterCat(this,'grief')"><div class="fp-dot" style="background:var(--g-blush);"></div>Verlust & Trauer</button>
+    <button class="filter-pill" onclick="filterCat(this,'relationships')"><div class="fp-dot" style="background:var(--g-rose);"></div>Beziehungen</button>
+    <button class="filter-pill" onclick="filterCat(this,'family')"><div class="fp-dot" style="background:var(--g-amber);"></div>Familie</button>
+    <button class="filter-pill" onclick="filterCat(this,'work')"><div class="fp-dot" style="background:var(--g-slate);"></div>Arbeit & Schule</button>
+    <button class="filter-pill" onclick="filterCat(this,'self')"><div class="fp-dot" style="background:var(--g-dusk);"></div>Selbst & Identität</button>
+    <button class="filter-pill" onclick="filterCat(this,'emotions')"><div class="fp-dot" style="background:var(--g-sage);"></div>Gefühle</button>
+    <button class="filter-pill" onclick="filterCat(this,'conditions')"><div class="fp-dot" style="background:var(--g-lilac);"></div>Psychische Gesundheit</button>
     <button class="filter-pill" onclick="filterCat(this,'trauma')"><div class="fp-dot" style="background:var(--g-clay);"></div>Trauma</button>
-    <button class="filter-pill" onclick="filterCat(this,'transitions')"><div class="fp-dot" style="background:var(--g-moss);"></div>Life Transitions</button>
-    <button class="filter-pill" onclick="filterCat(this,'growth')"><div class="fp-dot" style="background:var(--g-gold);"></div>Personal Growth</button>
+    <button class="filter-pill" onclick="filterCat(this,'transitions')"><div class="fp-dot" style="background:var(--g-moss);"></div>Lebensveränderungen</button>
+    <button class="filter-pill" onclick="filterCat(this,'growth')"><div class="fp-dot" style="background:var(--g-gold);"></div>Persönliches Wachstum</button>
   </div>
 </div>
 
@@ -412,15 +425,15 @@ button { cursor: pointer; font-family: var(--sans); border: none; }
   <!-- No results -->
   <div class="no-results" id="noResults">
     <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#ABABAB" stroke-width="1.2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-    <p id="noResultsText">No topics found for that search.</p>
+    <p id="noResultsText">Keine Themen für diese Suche gefunden.</p>
   </div>
 
   <!-- Core / Featured topics -->
   <div id="coreSection">
     <div class="block-head">
-      <div class="block-head__eyebrow">The essentials</div>
-      <h2 class="block-head__title">Core Topics</h2>
-      <p class="block-head__sub">The central areas of Mindbloom — start here.</p>
+      <div class="block-head__eyebrow">Das Wichtigste</div>
+      <h2 class="block-head__title">Kernthemen</h2>
+      <p class="block-head__sub">Die zentralen Bereiche von Mindbloom – fang hier an.</p>
     </div>
     <div class="core-grid" id="coreGrid"></div>
     <div class="section-divider" style="margin-top:3rem;"></div>
@@ -428,28 +441,28 @@ button { cursor: pointer; font-family: var(--sans); border: none; }
 
   <!-- Start here (MVP featured) -->
   <div id="featuredSection">
-    <div class="featured-label">Start here — most visited</div>
+    <div class="featured-label">Hier anfangen – am meisten besucht</div>
     <div class="featured-row">
       <a class="feat-card" href="article-understanding-anxiety.html">
         <div class="feat-card__bg" style="background:var(--g-slate);"></div>
-        <div class="feat-card__tag">Emotions</div>
-        <div class="feat-card__title">Understanding anxiety — what it is and why it happens</div>
-        <div class="feat-card__desc">A plain-language guide to anxiety, written for people who've never looked into it before.</div>
-        <div class="feat-card__footer"><span class="feat-card__read">6 min read</span><span class="feat-card__arrow">→</span></div>
+        <div class="feat-card__tag">Gefühle</div>
+        <div class="feat-card__title">Angst verstehen – was sie ist und warum sie entsteht</div>
+        <div class="feat-card__desc">Ein klarer Einstieg in das Thema Angst – für alle, die sich noch nie damit beschäftigt haben.</div>
+        <div class="feat-card__footer"><span class="feat-card__read">6 Min. Lesezeit</span><span class="feat-card__arrow">→</span></div>
       </a>
       <a class="feat-card" href="article-healing-breakup.html">
         <div class="feat-card__bg" style="background:var(--g-blush);"></div>
-        <div class="feat-card__tag">Loss & Grief</div>
-        <div class="feat-card__title">Healing after a breakup — a guide for when it really hurts</div>
-        <div class="feat-card__desc">Why breakups can feel like grief, and what actually helps you move through it.</div>
-        <div class="feat-card__footer"><span class="feat-card__read">8 min read</span><span class="feat-card__arrow">→</span></div>
+        <div class="feat-card__tag">Verlust & Trauer</div>
+        <div class="feat-card__title">Heilen nach einer Trennung – ein Begleiter, wenn es wirklich wehtut</div>
+        <div class="feat-card__desc">Warum Trennungen sich anfühlen wie Trauer – und was wirklich hilft, hindurchzugehen.</div>
+        <div class="feat-card__footer"><span class="feat-card__read">8 Min. Lesezeit</span><span class="feat-card__arrow">→</span></div>
       </a>
       <a class="feat-card" href="article-burnout.html">
         <div class="feat-card__bg" style="background:var(--g-amber);"></div>
-        <div class="feat-card__tag">Work & School</div>
-        <div class="feat-card__title">What burnout actually feels like — and how to know if you have it</div>
-        <div class="feat-card__desc">Burnout isn't just being tired. Here's how to recognise it and what to do next.</div>
-        <div class="feat-card__footer"><span class="feat-card__read">7 min read</span><span class="feat-card__arrow">→</span></div>
+        <div class="feat-card__tag">Arbeit & Schule</div>
+        <div class="feat-card__title">Wie Burnout sich wirklich anfühlt – und woran man ihn erkennt</div>
+        <div class="feat-card__desc">Burnout ist mehr als Müdigkeit. Wie du ihn erkennst – und was als nächstes hilft.</div>
+        <div class="feat-card__footer"><span class="feat-card__read">7 Min. Lesezeit</span><span class="feat-card__arrow">→</span></div>
       </a>
     </div>
     <div class="section-divider"></div>
@@ -461,18 +474,18 @@ button { cursor: pointer; font-family: var(--sans); border: none; }
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#BF9690" stroke-width="1.5" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
     </div>
     <div class="crisis-text">
-      <h4>Are you in crisis right now?</h4>
-      <p>If you're struggling to stay safe, you don't have to find the right article. Go straight to support.</p>
+      <h4>Bist du gerade in einer Krise?</h4>
+      <p>Wenn du Schwierigkeiten hast, sicher zu bleiben, musst du nicht erst den richtigen Artikel suchen. Geh direkt zur Soforthilfe.</p>
     </div>
-    <a href="#" class="crisis-link">Get immediate help →</a>
+    <a href="#" class="crisis-link">Zur Soforthilfe →</a>
   </div>
 
   <!-- Explore more (additional categories) -->
   <div id="exploreSection">
     <div class="block-head">
-      <div class="block-head__eyebrow">Keep exploring</div>
-      <h2 class="block-head__title">Explore More</h2>
-      <p class="block-head__sub">Additional areas to dig into whenever you need them.</p>
+      <div class="block-head__eyebrow">Weiterstöbern</div>
+      <h2 class="block-head__title">Mehr entdecken</h2>
+      <p class="block-head__sub">Weitere Bereiche, wann immer du sie brauchst.</p>
     </div>
     <div id="categoryBlocks"></div>
   </div>
@@ -482,154 +495,154 @@ button { cursor: pointer; font-family: var(--sans); border: none; }
 <script>
 const CATEGORIES = [
   {
-    id: 'grief', label: 'Loss & Grief', grad: 'var(--g-blush)',
-    desc: 'When something or someone is gone',
+    id: 'grief', label: 'Verlust & Trauer', grad: 'var(--g-blush)',
+    desc: 'Wenn etwas oder jemand nicht mehr da ist',
     topics: [
-      { name: 'Death of a loved one',   tag: null },
-      { name: 'Death of a parent',      tag: null },
-      { name: 'Pet loss',               tag: null },
-      { name: 'Breakup grief',          tag: 'popular' },
-      { name: 'Friendship breakup',     tag: null },
-      { name: 'Estrangement',           tag: null },
-      { name: 'No contact',             tag: 'popular' },
-      { name: 'Ambiguous loss',         tag: null },
-      { name: 'Grief & depression',     tag: null },
-      { name: 'Grief & loneliness',     tag: null },
+      { name: 'Tod eines geliebten Menschen', tag: null },
+      { name: 'Tod eines Elternteils',        tag: null },
+      { name: 'Verlust eines Haustieres',     tag: null },
+      { name: 'Trauer nach einer Trennung',   tag: 'beliebt' },
+      { name: 'Ende einer Freundschaft',      tag: null },
+      { name: 'Kontaktabbruch in der Familie',tag: null },
+      { name: 'Kein Kontakt mehr',            tag: 'beliebt' },
+      { name: 'Ambiger Verlust',              tag: null },
+      { name: 'Trauer & Depression',          tag: null },
+      { name: 'Trauer & Einsamkeit',          tag: null },
     ]
   },
   {
-    id: 'relationships', label: 'Relationships', grad: 'var(--g-rose)',
-    desc: 'How we connect — and why it\'s hard',
+    id: 'relationships', label: 'Beziehungen', grad: 'var(--g-rose)',
+    desc: 'Wie wir uns verbinden – und warum es manchmal so schwer ist',
     topics: [
-      { name: 'Loneliness',             tag: 'popular' },
-      { name: 'Dating & intimacy',      tag: null },
-      { name: 'Attachment styles',      tag: 'popular' },
-      { name: 'Anxious attachment',     tag: null },
-      { name: 'Avoidant attachment',    tag: null },
-      { name: 'Toxic relationships',    tag: 'popular' },
-      { name: 'Codependency',           tag: null },
-      { name: 'Friendships',            tag: null },
-      { name: 'Conflict & communication', tag: null },
-      { name: 'Breakups & divorce',     tag: 'popular' },
+      { name: 'Einsamkeit',                   tag: 'beliebt' },
+      { name: 'Dating & Intimität',           tag: null },
+      { name: 'Bindungsstile',                tag: 'beliebt' },
+      { name: 'Ängstliche Bindung',           tag: null },
+      { name: 'Vermeidende Bindung',          tag: null },
+      { name: 'Toxische Beziehungen',         tag: 'beliebt' },
+      { name: 'Codependenz',                  tag: null },
+      { name: 'Freundschaften',               tag: null },
+      { name: 'Konflikt & Kommunikation',     tag: null },
+      { name: 'Trennungen & Scheidung',       tag: 'beliebt' },
     ]
   },
   {
-    id: 'family', label: 'Family', grad: 'var(--g-amber)',
-    desc: 'The relationships we didn\'t choose',
+    id: 'family', label: 'Familie', grad: 'var(--g-amber)',
+    desc: 'Die Beziehungen, die wir uns nicht aussuchen konnten',
     topics: [
-      { name: 'Difficult parents',      tag: 'popular' },
-      { name: 'Narcissistic dynamics',  tag: 'popular' },
-      { name: 'Sibling conflict',       tag: null },
-      { name: 'Becoming a parent',      tag: null },
-      { name: 'Caring for a relative',  tag: null },
-      { name: 'Growing up in a difficult home', tag: null },
-      { name: 'Family estrangement',    tag: null },
+      { name: 'Schwierige Eltern',            tag: 'beliebt' },
+      { name: 'Narzisstische Dynamiken',      tag: 'beliebt' },
+      { name: 'Geschwisterkonflikte',         tag: null },
+      { name: 'Eltern werden',                tag: null },
+      { name: 'Angehörige pflegen',           tag: null },
+      { name: 'In einem schwierigen Zuhause aufwachsen', tag: null },
+      { name: 'Familienentfremdung',          tag: null },
     ]
   },
   {
-    id: 'work', label: 'Work & School', grad: 'var(--g-slate)',
-    desc: 'Performance, pressure and purpose',
+    id: 'work', label: 'Arbeit & Schule', grad: 'var(--g-slate)',
+    desc: 'Leistung, Druck und Sinnfragen',
     topics: [
-      { name: 'Burnout',                tag: 'popular' },
-      { name: 'Work stress',            tag: 'popular' },
-      { name: 'Procrastination',        tag: 'popular' },
-      { name: 'Exam & performance anxiety', tag: null },
-      { name: 'Imposter syndrome',      tag: 'popular' },
-      { name: 'Career crisis',          tag: null },
-      { name: 'Workplace conflict',     tag: null },
-      { name: 'Motivation at work',     tag: null },
+      { name: 'Burnout',                      tag: 'beliebt' },
+      { name: 'Arbeitsstress',                tag: 'beliebt' },
+      { name: 'Prokrastination',              tag: 'beliebt' },
+      { name: 'Prüfungs- & Leistungsangst',  tag: null },
+      { name: 'Impostor-Syndrom',             tag: 'beliebt' },
+      { name: 'Berufliche Orientierungslosigkeit', tag: null },
+      { name: 'Konflikte am Arbeitsplatz',   tag: null },
+      { name: 'Motivation bei der Arbeit',   tag: null },
     ]
   },
   {
-    id: 'self', label: 'Self & Identity', grad: 'var(--g-dusk)',
-    desc: 'How you see yourself — and who you want to be',
+    id: 'self', label: 'Selbst & Identität', grad: 'var(--g-dusk)',
+    desc: 'Wie du dich selbst siehst – und wer du sein möchtest',
     topics: [
-      { name: 'Self-worth',             tag: 'popular' },
-      { name: 'Self-confidence',        tag: 'popular' },
-      { name: 'Perfectionism',          tag: 'popular' },
-      { name: 'People pleasing',        tag: 'popular' },
-      { name: 'Setting boundaries',     tag: 'popular' },
-      { name: 'Body image',             tag: null },
-      { name: 'Identity & purpose',     tag: null },
-      { name: 'Self-criticism',         tag: null },
+      { name: 'Selbstwert',                   tag: 'beliebt' },
+      { name: 'Selbstvertrauen',              tag: 'beliebt' },
+      { name: 'Perfektionismus',              tag: 'beliebt' },
+      { name: 'Menschen gefallen wollen',     tag: 'beliebt' },
+      { name: 'Grenzen setzen',               tag: 'beliebt' },
+      { name: 'Körperbild',                   tag: null },
+      { name: 'Identität & Sinn',             tag: null },
+      { name: 'Selbstkritik',                 tag: null },
     ]
   },
   {
-    id: 'emotions', label: 'Emotions', grad: 'var(--g-sage)',
-    desc: 'Understanding what you\'re actually feeling',
+    id: 'emotions', label: 'Gefühle', grad: 'var(--g-sage)',
+    desc: 'Verstehen, was du wirklich fühlst',
     topics: [
-      { name: 'Anxiety & worry',        tag: 'popular' },
-      { name: 'Shame',                  tag: 'popular' },
-      { name: 'Guilt',                  tag: null },
-      { name: 'Anger',                  tag: null },
-      { name: 'Numbness',               tag: null },
-      { name: 'Hopelessness',           tag: null },
-      { name: 'Overwhelm',              tag: 'popular' },
-      { name: 'Longing',                tag: null },
-      { name: 'Fear of the future',     tag: null },
+      { name: 'Angst & Sorgen',               tag: 'beliebt' },
+      { name: 'Scham',                         tag: 'beliebt' },
+      { name: 'Schuld',                        tag: null },
+      { name: 'Wut',                           tag: null },
+      { name: 'Taubheit',                      tag: null },
+      { name: 'Hoffnungslosigkeit',            tag: null },
+      { name: 'Überwältigung',                 tag: 'beliebt' },
+      { name: 'Sehnsucht',                     tag: null },
+      { name: 'Angst vor der Zukunft',         tag: null },
     ]
   },
   {
-    id: 'conditions', label: 'Mental Health Conditions', grad: 'var(--g-lilac)',
-    desc: 'Clear, honest information — no jargon',
+    id: 'conditions', label: 'Psychische Erkrankungen', grad: 'var(--g-lilac)',
+    desc: 'Klare, ehrliche Informationen – ohne Fachjargon',
     topics: [
-      { name: 'Depression',             tag: 'popular' },
-      { name: 'Anxiety disorders',      tag: 'popular' },
-      { name: 'PTSD',                   tag: null },
-      { name: 'ADHD',                   tag: 'popular' },
-      { name: 'OCD',                    tag: null },
-      { name: 'Eating disorders',       tag: null },
-      { name: 'Panic attacks',          tag: 'popular' },
-      { name: 'Social anxiety',         tag: 'popular' },
+      { name: 'Depression',                   tag: 'beliebt' },
+      { name: 'Angststörungen',               tag: 'beliebt' },
+      { name: 'PTBS',                          tag: null },
+      { name: 'ADHS',                          tag: 'beliebt' },
+      { name: 'Zwangsstörungen',              tag: null },
+      { name: 'Essstörungen',                 tag: null },
+      { name: 'Panikattacken',                tag: 'beliebt' },
+      { name: 'Soziale Angst',                tag: 'beliebt' },
     ]
   },
   {
     id: 'trauma', label: 'Trauma', grad: 'var(--g-clay)',
-    desc: 'What trauma is — and what it does to us',
+    desc: 'Was Trauma ist – und was es mit uns macht',
     topics: [
-      { name: 'What is trauma?',        tag: 'beginner' },
-      { name: 'Childhood trauma',       tag: 'popular' },
-      { name: 'Emotional abuse',        tag: null },
-      { name: 'Neglect',                tag: null },
-      { name: 'Complex PTSD',           tag: null },
-      { name: 'Trauma & the body',      tag: null },
-      { name: 'Healing from trauma',    tag: 'popular' },
+      { name: 'Was ist Trauma?',              tag: 'Einstieg' },
+      { name: 'Kindheitstrauma',              tag: 'beliebt' },
+      { name: 'Emotionaler Missbrauch',       tag: null },
+      { name: 'Vernachlässigung',             tag: null },
+      { name: 'Komplexe PTBS',               tag: null },
+      { name: 'Trauma & der Körper',          tag: null },
+      { name: 'Heilung nach Trauma',          tag: 'beliebt' },
     ]
   },
   {
-    id: 'transitions', label: 'Life Transitions', grad: 'var(--g-moss)',
-    desc: 'When life changes faster than you can keep up',
+    id: 'transitions', label: 'Lebensveränderungen', grad: 'var(--g-moss)',
+    desc: 'Wenn das Leben sich schneller ändert, als man mitkommt',
     topics: [
-      { name: 'Moving & relocating',    tag: null },
-      { name: 'Starting university',    tag: null },
-      { name: 'Becoming a parent',      tag: null },
-      { name: 'Job loss',               tag: null },
-      { name: 'Midlife',                tag: null },
-      { name: 'Retirement',             tag: null },
-      { name: 'Leaving home',           tag: null },
+      { name: 'Umzug & Ortswechsel',          tag: null },
+      { name: 'Studium beginnen',             tag: null },
+      { name: 'Eltern werden',                tag: null },
+      { name: 'Jobverlust',                   tag: null },
+      { name: 'Lebensmitte',                  tag: null },
+      { name: 'Ruhestand',                    tag: null },
+      { name: 'Von zu Hause ausziehen',       tag: null },
     ]
   },
   {
-    id: 'health', label: 'Health', grad: 'var(--g-fog)',
-    desc: 'Mind and body are more connected than you think',
+    id: 'health', label: 'Gesundheit', grad: 'var(--g-fog)',
+    desc: 'Körper und Geist sind enger verbunden, als du denkst',
     topics: [
-      { name: 'Sleep problems',         tag: 'popular' },
-      { name: 'Chronic illness & pain', tag: null },
-      { name: 'Mind-body connection',   tag: null },
-      { name: 'Fatigue & energy',       tag: null },
+      { name: 'Schlafprobleme',               tag: 'beliebt' },
+      { name: 'Chronische Erkrankung & Schmerz', tag: null },
+      { name: 'Körper-Geist-Verbindung',      tag: null },
+      { name: 'Erschöpfung & Energie',        tag: null },
     ]
   },
   {
-    id: 'growth', label: 'Personal Growth', grad: 'var(--g-gold)',
-    desc: 'For when you want to understand yourself better',
+    id: 'growth', label: 'Persönliches Wachstum', grad: 'var(--g-gold)',
+    desc: 'Für alle, die sich selbst besser verstehen möchten',
     topics: [
-      { name: 'Resilience',             tag: null },
-      { name: 'Mindfulness',            tag: 'popular' },
-      { name: 'Self-compassion',        tag: 'popular' },
-      { name: 'Motivation & habits',    tag: 'popular' },
-      { name: 'Emotional intelligence', tag: null },
-      { name: 'Values & meaning',       tag: null },
-      { name: 'Journaling',             tag: null },
+      { name: 'Resilienz',                    tag: null },
+      { name: 'Achtsamkeit',                  tag: 'beliebt' },
+      { name: 'Selbstmitgefühl',              tag: 'beliebt' },
+      { name: 'Motivation & Gewohnheiten',    tag: 'beliebt' },
+      { name: 'Emotionale Intelligenz',       tag: null },
+      { name: 'Werte & Sinn',                 tag: null },
+      { name: 'Journaling',                   tag: null },
     ]
   },
 ];
@@ -777,14 +790,14 @@ const CAT_PAGE_HREFS = {
 // ── CORE TOPICS — the 8 main categories from the Topics mega-menu ──
 // filterId links a core card to the matching filter pill (null = no pill)
 const CORE_TOPICS = [
-  { id: 'self-worth',    filterId: 'self',          href: 'topic-self-worth.html',    grad: 'var(--g-dusk)',  name: 'Self-Worth & Identity', desc: 'How you see yourself — and who you want to be',          subs: ['Self-Worth', 'Confidence', 'Perfectionism'] },
-  { id: 'anxiety',       filterId: null,            href: 'topic-anxiety.html',       grad: 'var(--g-slate)', name: 'Anxiety & Overthinking', desc: 'Understanding worry, racing thoughts, and finding calm', subs: ['Anxiety', 'Overthinking', 'Panic Attacks'] },
-  { id: 'loneliness',    filterId: null,            href: 'topic-loneliness.html',    grad: 'var(--g-fog)',   name: 'Loneliness & Connection', desc: 'Finding belonging — with others and with yourself',     subs: ['Loneliness', 'Belonging', 'Vulnerability'] },
-  { id: 'relationships', filterId: 'relationships', href: 'topic-relationships.html', grad: 'var(--g-rose)',  name: 'Relationships',          desc: 'How we connect — and why it\'s hard',                    subs: ['Breakups', 'Dating', 'Attachment Styles'] },
-  { id: 'transitions',   filterId: 'transitions',   href: 'topic-transitions.html',   grad: 'var(--g-moss)',  name: 'Life Transitions',       desc: 'When life changes faster than you can keep up',          subs: ['Moving', 'New Job', 'Fresh Starts'] },
-  { id: 'stress',        filterId: null,            href: 'topic-stress.html',        grad: 'var(--g-amber)', name: 'Stress & Burnout',       desc: 'Performance, pressure and the path back to rest',        subs: ['Burnout', 'Overwhelm', 'Recovery'] },
-  { id: 'habits',        filterId: null,            href: 'topic-habits.html',        grad: 'var(--g-gold)',  name: 'Habits & Growth',        desc: 'For when you want to build something new in yourself',    subs: ['Habits', 'Motivation', 'Procrastination'] },
-  { id: 'emotions',      filterId: 'emotions',      href: 'topic-emotions.html',      grad: 'var(--g-sage)',  name: 'Emotions & Resilience',  desc: 'Understanding what you\'re actually feeling',             subs: ['Grief & Loss', 'Inner Critic', 'Shame'] },
+  { id: 'self-worth',    filterId: 'self',          href: 'topic-self-worth.html',    grad: 'var(--g-dusk)',  name: 'Selbstwert & Identität',   desc: 'Wie du dich selbst siehst – und wer du sein möchtest',        subs: ['Selbstwert', 'Selbstvertrauen', 'Perfektionismus'] },
+  { id: 'anxiety',       filterId: null,            href: 'topic-anxiety.html',       grad: 'var(--g-slate)', name: 'Angst & Grübeln',          desc: 'Sorgen, Gedankenrasen und innere Ruhe verstehen',             subs: ['Angst', 'Grübeln', 'Panikattacken'] },
+  { id: 'loneliness',    filterId: null,            href: 'topic-loneliness.html',    grad: 'var(--g-fog)',   name: 'Einsamkeit & Verbindung',  desc: 'Zugehörigkeit finden – mit anderen und mit dir selbst',       subs: ['Einsamkeit', 'Zugehörigkeit', 'Verletzlichkeit'] },
+  { id: 'relationships', filterId: 'relationships', href: 'topic-relationships.html', grad: 'var(--g-rose)',  name: 'Beziehungen',              desc: 'Wie wir uns verbinden – und warum es manchmal so schwer ist', subs: ['Trennungen', 'Dating', 'Bindungsstile'] },
+  { id: 'transitions',   filterId: 'transitions',   href: 'topic-transitions.html',   grad: 'var(--g-moss)',  name: 'Lebensveränderungen',      desc: 'Wenn das Leben sich schneller ändert, als man mitkommt',      subs: ['Umzug', 'Neuer Job', 'Neuanfänge'] },
+  { id: 'stress',        filterId: null,            href: 'topic-stress.html',        grad: 'var(--g-amber)', name: 'Stress & Burnout',         desc: 'Leistung, Druck und der Weg zurück zur Ruhe',                 subs: ['Burnout', 'Überwältigung', 'Regeneration'] },
+  { id: 'habits',        filterId: null,            href: 'topic-habits.html',        grad: 'var(--g-gold)',  name: 'Gewohnheiten & Wachstum',  desc: 'Für alle, die in sich selbst etwas Neues aufbauen möchten',   subs: ['Gewohnheiten', 'Motivation', 'Prokrastination'] },
+  { id: 'emotions',      filterId: 'emotions',      href: 'topic-emotions.html',      grad: 'var(--g-sage)',  name: 'Gefühle & Resilienz',      desc: 'Verstehen, was du wirklich fühlst',                           subs: ['Trauer & Verlust', 'Innerer Kritiker', 'Scham'] },
 ];
 
 // Categories shown as Core cards must not be duplicated in Explore More
@@ -794,8 +807,8 @@ let activeFilter = 'all';
 let searchQuery  = '';
 
 function tagColor(tag) {
-  if (tag === 'popular') return { bg: 'rgba(90,128,80,.1)', color: '#5A8050' };
-  if (tag === 'beginner') return { bg: 'rgba(106,100,160,.1)', color: '#6A64A0' };
+  if (tag === 'beliebt') return { bg: 'rgba(90,128,80,.1)', color: '#5A8050' };
+  if (tag === 'Einstieg') return { bg: 'rgba(106,100,160,.1)', color: '#6A64A0' };
   return null;
 }
 
@@ -822,7 +835,7 @@ function renderCore() {
       '<div class="core-card__name">' + ct.name + '</div>' +
       '<div class="core-card__desc">' + ct.desc + '</div>' +
       '<div class="core-card__subs">' + ct.subs.join(' · ') + '</div>' +
-      '<div class="core-card__cta">Explore <span>→</span></div>';
+      '<div class="core-card__cta">Entdecken <span>→</span></div>';
     grid.appendChild(card);
   });
 
@@ -879,15 +892,15 @@ function renderAll() {
         ${catHref
           ? `<a href="${catHref}" class="cat-title-group cat-title-group--link">
               <div class="cat-title">${cat.label}</div>
-              <div class="cat-count">${cat.topics.length} topics</div>
+              <div class="cat-count">${cat.topics.length} Themen</div>
             </a>`
           : `<div class="cat-title-group">
               <div class="cat-title">${cat.label}</div>
-              <div class="cat-count">${cat.topics.length} topics</div>
+              <div class="cat-count">${cat.topics.length} Themen</div>
             </div>`
         }
         ${catHref
-          ? `<a href="${catHref}" class="cat-all-link">See all <span>→</span></a>`
+          ? `<a href="${catHref}" class="cat-all-link">Alle anzeigen <span>→</span></a>`
           : ''}
       </div>
       <div class="topic-grid">${pillsHTML}</div>`;
@@ -904,7 +917,7 @@ function renderAll() {
         const card = document.createElement('a');
         card.className = 'article-card';
         card.href = art.url;
-        card.innerHTML = '<div class="article-card__accent" style="background:' + art.accent + '"></div><div class="article-card__tag">Learn</div><div class="article-card__title">' + art.title + '</div><div class="article-card__excerpt">' + art.excerpt + '</div><div class="article-card__read">Lesen <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>';
+        card.innerHTML = '<div class="article-card__accent" style="background:' + art.accent + '"></div><div class="article-card__tag">Artikel</div><div class="article-card__title">' + art.title + '</div><div class="article-card__excerpt">' + art.excerpt + '</div><div class="article-card__read">Lesen <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>';
         arow.appendChild(card);
       });
     }

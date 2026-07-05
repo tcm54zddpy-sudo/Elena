@@ -8,8 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <!-- TODO vor Launch: Google Fonts durch lokal gehostete Fonts ersetzen (DSGVO) -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Mulish:wght@300;400;500&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet" />
-  <script src="nav.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="nav.js?v=5"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -26,8 +26,8 @@
       --dusk-tint:#EEEDF6;
       --amber:    #907840;
       --amber-tint:#F5F0E4;
-      --serif:    'Playfair Display', Georgia, serif;
-      --sans:     'Mulish', sans-serif;
+      --serif:    'EB Garamond', Georgia, serif;
+      --sans:     'Inter', sans-serif;
       --r:        16px;
       --shadow:   0 1px 4px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.06);
     }
@@ -262,6 +262,7 @@
       .legal-header h1 { font-size: 1.6rem; }
     }
   </style>
+  <link rel="stylesheet" href="shared.css">
 </head>
 <body>
 
@@ -305,14 +306,14 @@
         <p class="legal-header__meta">Stand: Juni 2026 &nbsp;·&nbsp; Plattform: <span class="placeholder">Mindbloom</span> &nbsp;·&nbsp; Domain: <span class="placeholder">[DEINE-DOMAIN.DE]</span></p>
 
         <div class="callout callout--warning" style="margin-top:1.2rem">
-          ⚠️ Alle <span class="placeholder">[PLATZHALTER]</span> müssen vor dem Launch durch echte Angaben ersetzt werden. Diese Texte sind eine rechtliche Vorlage – eine Prüfung durch einen deutschen Fachanwalt für IT-Recht wird empfohlen.
+          Alle <span class="placeholder">[PLATZHALTER]</span> müssen vor dem Launch durch echte Angaben ersetzt werden. Diese Texte sind eine rechtliche Vorlage – eine Prüfung durch einen deutschen Fachanwalt für IT-Recht wird empfohlen.
         </div>
 
         <!-- Tabs -->
         <div class="legal-tabs" style="margin-top:1.5rem">
           <button class="legal-tab active" onclick="showTab('impressum')">§ Impressum</button>
-          <button class="legal-tab" onclick="showTab('datenschutz')">🔒 Datenschutzerklärung</button>
-          <button class="legal-tab" onclick="showTab('agb')">📋 Nutzungsbedingungen</button>
+          <button class="legal-tab" onclick="showTab('datenschutz')">Datenschutzerklärung</button>
+          <button class="legal-tab" onclick="showTab('agb')">Nutzungsbedingungen</button>
         </div>
       </div>
 
@@ -354,7 +355,7 @@
           <div class="legal-subsection">
             <h3>Kein Ersatz für professionelle Hilfe</h3>
             <div class="callout callout--crisis">
-              🆘 <strong>Mindbloom ist kein Ersatz für professionelle medizinische, psychologische oder therapeutische Beratung.</strong> Bei psychischen Krisen oder Notfällen:<br>
+              <strong>Mindbloom ist kein Ersatz für professionelle medizinische, psychologische oder therapeutische Beratung.</strong> Bei psychischen Krisen oder Notfällen:<br>
               Telefonseelsorge (kostenlos, 24/7): <strong>0800 111 0 111</strong> oder <strong>0800 111 0 222</strong><br>
               Notruf: <strong>112</strong>
             </div>
@@ -437,7 +438,7 @@
           <h2 class="legal-section__title"><span>3</span>Gesundheitsdaten nach Art. 9 DSGVO</h2>
 
           <div class="callout callout--warning">
-            ⚠️ <strong>Wichtiger Hinweis:</strong> Inhalte über psychische Erkrankungen, Therapieerfahrungen oder mentale Gesundheit gelten als <strong>besondere Kategorie personenbezogener Daten</strong> nach Art. 9 DSGVO und genießen besonderen Schutz.
+            <strong>Wichtiger Hinweis:</strong> Inhalte über psychische Erkrankungen, Therapieerfahrungen oder mentale Gesundheit gelten als <strong>besondere Kategorie personenbezogener Daten</strong> nach Art. 9 DSGVO und genießen besonderen Schutz.
           </div>
 
           <div class="legal-subsection" style="margin-top:1rem">
@@ -454,7 +455,7 @@
           <h2 class="legal-section__title"><span>4</span>Cookies</h2>
 
           <div class="callout callout--info">
-            ✅ Wir setzen ausschließlich technisch notwendige Cookies. Es werden <strong>keine Tracking- oder Analyse-Cookies</strong> ohne deine Einwilligung gesetzt.
+            Wir setzen ausschließlich technisch notwendige Cookies. Es werden <strong>keine Tracking- oder Analyse-Cookies</strong> ohne deine Einwilligung gesetzt.
           </div>
 
           <div class="legal-subsection" style="margin-top:1rem">
@@ -546,7 +547,7 @@
             <h3>Zweck der Plattform</h3>
             <p><span class="placeholder">Mindbloom</span> ist eine Community-Plattform zum Austausch über mentale Gesundheit, Wohlbefinden und Selbstfürsorge.</p>
             <div class="callout callout--crisis">
-              🆘 Die Plattform ist <strong>kein Ersatz für professionelle therapeutische oder medizinische Beratung</strong>. Bei einer Krise: <strong>Telefonseelsorge 0800 111 0 111</strong> (kostenlos, 24/7)
+              Die Plattform ist <strong>kein Ersatz für professionelle therapeutische oder medizinische Beratung</strong>. Bei einer Krise: <strong>Telefonseelsorge 0800 111 0 111</strong> (kostenlos, 24/7)
             </div>
           </div>
         </div>
@@ -563,7 +564,7 @@
           </ul>
 
           <div class="callout callout--info" style="margin-top:1rem">
-            💬 Mindbloom ist ein <strong>Safe Space</strong>. Wir bitten alle Mitglieder, sich respektvoll und empathisch zu verhalten.
+            Mindbloom ist ein <strong>Safe Space</strong>. Wir bitten alle Mitglieder, sich respektvoll und empathisch zu verhalten.
           </div>
         </div>
 
@@ -571,7 +572,7 @@
           <h2 class="legal-section__title"><span>3</span>Verbotene Inhalte</h2>
 
           <div class="callout callout--warning" style="margin-bottom:1rem">
-            ⚠️ Verstöße gegen diese Regeln können zur sofortigen Sperrung des Accounts führen.
+            Verstöße gegen diese Regeln können zur sofortigen Sperrung des Accounts führen.
           </div>
 
           <ul class="legal-list">

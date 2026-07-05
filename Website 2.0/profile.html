@@ -6,7 +6,7 @@
 <title>Mindbloom — Journal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Mulish:wght@300;400;500&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -35,9 +35,9 @@
   --amber:  #907840;
   --blush:  #9A6A64;
 
-  --serif:       'Playfair Display', Georgia, serif;
-  --serif-body:  'Lora', Georgia, serif;
-  --sans:        'Mulish', sans-serif;
+  --serif:       'EB Garamond', Georgia, serif;
+  --serif-body:  'EB Garamond', Georgia, serif;
+  --sans:        'Inter', sans-serif;
   --r:    16px;
   --r-sm: 10px;
 }
@@ -57,6 +57,7 @@ body {
 a { text-decoration: none; color: inherit; }
 button { cursor: pointer; font-family: var(--sans); border: none; }
 
+/* ======== NAV ======== */
 /* ======== LAYOUT ======== */
 .page {
   display: grid;
@@ -711,12 +712,79 @@ button { cursor: pointer; font-family: var(--sans); border: none; }
   color: var(--text);
 }
 .ph-btn--outline:hover { background: var(--bg); }
-.ph-btn--messages {
-  background: var(--sage-tint); border: 1px solid rgba(90,128,80,.2);
-  color: var(--sage); text-decoration: none;
-  display: flex; align-items: center; justify-content: center; gap: 6px;
+
+/* ── Library Tab ── */
+.lib-filters {
+  display: flex; gap: 6px; margin-bottom: 1.8rem;
 }
-.ph-btn--messages:hover { background: rgba(90,128,80,.15); }
+.lib-filter {
+  padding: 5px 14px; border-radius: 20px;
+  font-size: 12.5px; font-family: var(--sans); font-weight: 400;
+  background: none; border: 1px solid var(--border-m);
+  color: var(--muted); cursor: pointer; transition: all .15s;
+}
+.lib-filter:hover { border-color: var(--text); color: var(--text); }
+.lib-filter.active { background: var(--text); border-color: var(--text); color: #fff; }
+
+.lib-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.2rem;
+}
+.lib-card {
+  background: #fff; border: 1px solid var(--border);
+  border-radius: 14px; padding: 1.4rem 1.5rem 1.2rem;
+  display: flex; flex-direction: column; gap: 0.5rem;
+  transition: box-shadow .15s;
+}
+.lib-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.07); }
+
+.lib-tag {
+  font-size: 10.5px; font-family: var(--sans); font-weight: 500;
+  letter-spacing: .04em; text-transform: uppercase;
+  padding: 3px 9px; border-radius: 20px; align-self: flex-start;
+}
+.lib-tag--article  { background: var(--g-sage);  color: var(--sage); }
+.lib-tag--tool     { background: var(--g-dusk);  color: var(--dusk); }
+.lib-tag--worksheet{ background: var(--g-amber); color: var(--amber); }
+
+.lib-topic {
+  font-size: 11px; font-family: var(--sans); color: var(--faint);
+  letter-spacing: .03em; margin-top: 2px;
+}
+.lib-title {
+  font-size: 15px; font-family: var(--serif-head); font-weight: 600;
+  color: var(--text); line-height: 1.35; margin: 0;
+}
+.lib-desc {
+  font-size: 13px; font-family: var(--serif-body); color: var(--muted);
+  line-height: 1.55; margin: 0; flex: 1;
+}
+.lib-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 0.6rem; padding-top: 0.8rem;
+  border-top: 1px solid var(--border);
+}
+.lib-time {
+  font-size: 11.5px; font-family: var(--sans); color: var(--faint);
+}
+.lib-actions { display: flex; align-items: center; gap: 6px; }
+.lib-btn {
+  display: flex; align-items: center; gap: 4px;
+  padding: 5px 10px; border-radius: 8px; border: 1px solid var(--border-m);
+  background: none; color: var(--muted); cursor: pointer;
+  font-size: 12px; font-family: var(--sans); transition: all .15s;
+  text-decoration: none;
+}
+.lib-btn:hover { border-color: var(--text); color: var(--text); }
+.lib-btn svg { color: var(--sage); }
+.lib-btn--open { background: var(--bg); }
+.lib-empty {
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  min-height: 180px; justify-content: center; text-align: center;
+  color: var(--faint); font-family: var(--serif-body); font-size: 14px;
+  font-style: italic; font-weight: 300;
+}
 
 .ph-tabs {
   display: flex; gap: 0;
@@ -816,6 +884,19 @@ button { cursor: pointer; font-family: var(--sans); border: none; }
 }
 .sp-toggle.on .sp-knob { left: 19px; }
 
+/* ── PRIVACY MANAGER ── */
+.ph-bio { font-size: 13px; color: var(--muted); font-weight: 300; font-family: var(--serif-body); font-style: italic; margin-top: 3px; }
+.sp-intro { padding: 1.1rem 1.4rem .2rem; font-size: 12.5px; color: var(--muted); font-weight: 300; line-height: 1.6; }
+.pm-locked { display: flex; align-items: flex-start; gap: 10px; padding: .65rem .75rem; background: var(--bg); border-radius: var(--r-sm); }
+.pm-lock-tag { margin-left: auto; display: inline-flex; align-items: center; gap: 5px; font-size: 11px; color: var(--faint); flex-shrink: 0; }
+.pm-head { display: grid; grid-template-columns: 1fr 60px 84px; align-items: center; margin-bottom: .5rem; }
+.pm-col { font-size: 10px; font-weight: 500; letter-spacing: .05em; text-transform: uppercase; color: var(--faint); text-align: center; }
+.pm-row { display: grid; grid-template-columns: 1fr 60px 84px; align-items: center; padding: .65rem 0; border-bottom: 1px solid var(--border); }
+.pm-row:last-child { border-bottom: none; }
+.pm-item { min-width: 0; padding-right: .6rem; }
+.pm-cell { display: flex; justify-content: center; }
+.sp-footnote { padding: 1.1rem 1.4rem 1.5rem; font-size: 11.5px; color: var(--faint); font-weight: 300; line-height: 1.55; }
+
 /* ── EDIT MODAL ── */
 .edit-modal {
   position: fixed; inset: 0; z-index: 400;
@@ -897,14 +978,11 @@ button { cursor: pointer; font-family: var(--sans); border: none; }
 
 .anim-in { animation: fadeSlide 0.35s ease forwards; }
 </style>
-  <script src="nav.js"></script>
-  <script src="library.js"></script>
+  <script src="nav.js?v=5"></script>
+  <link rel="stylesheet" href="shared.css">
 </head>
 <body>
-  <div id="site-nav-placeholder"></div>
-
-<!-- NAV -->
-  
+<div id="site-nav-placeholder"></div>
 
 <!-- HIDDEN INPUTS -->
 <input type="file" id="fileInput" accept="image/*" multiple>
@@ -919,37 +997,24 @@ button { cursor: pointer; font-family: var(--sans); border: none; }
       <div class="ph-avatar" id="phAvatar"></div>
       <div class="ph-info">
         <div class="ph-name" id="phName">Elena Behrens</div>
-        <div class="ph-stats" id="phStats">
-          <span id="phFollowers">0 followers</span>
-          <span class="ph-dot">·</span>
-          <span id="phFollowing">2 following</span>
-        </div>
+        <div class="ph-bio" id="phBio">Dein privater Raum bei Mindbloom.</div>
       </div>
-      <button class="ph-settings-btn" onclick="document.getElementById('settingsPanel').classList.toggle('open')" title="Settings">
+      <button class="ph-settings-btn" onclick="openSettings()" title="Privatsphäre">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
       </button>
     </div>
 
     <!-- Action buttons -->
     <div class="ph-actions">
-      <button class="ph-btn ph-btn--ghost">View stats</button>
-      <button class="ph-btn ph-btn--outline" onclick="document.getElementById('editModal').style.display='flex'">Edit profile</button>
-      <a href="chat.html" class="ph-btn ph-btn--messages" id="messagesBtn" style="display:none;">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        Messages
-      </a>
+      <button class="ph-btn ph-btn--outline" onclick="document.getElementById('editModal').style.display='flex'">Profil bearbeiten</button>
+      <button class="ph-btn ph-btn--ghost" onclick="openSettings()">Privatsphäre verwalten</button>
     </div>
 
     <!-- Profile tabs -->
     <div class="ph-tabs">
       <button class="ph-tab active" onclick="switchProfileTab(this,'journal')">Journal</button>
-      <button class="ph-tab" onclick="switchProfileTab(this,'activity')">
-        Activity
-        <span class="ph-tab-badge">New</span>
-      </button>
-      <button class="ph-tab" onclick="switchProfileTab(this,'library')" id="tabLibrary">Library</button>
-      <button class="ph-tab" onclick="switchProfileTab(this,'shared')">Shared</button>
-      <button class="ph-tab" onclick="switchProfileTab(this,'about')">About</button>
+      <a class="ph-tab" href="library.html">Meine Bibliothek</a>
+      <button class="ph-tab" onclick="switchProfileTab(this,'about')">Über mich</button>
     </div>
   </div>
 </div>
@@ -958,73 +1023,80 @@ button { cursor: pointer; font-family: var(--sans); border: none; }
 <div class="settings-overlay" id="settingsOverlay" onclick="closeSettings()"></div>
 <div class="settings-panel" id="settingsPanel">
   <div class="sp-header">
-    <span>Profile settings</span>
+    <span>Privatsphäre</span>
     <button onclick="closeSettings()">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
     </button>
   </div>
 
+  <div class="sp-intro">
+    Standardmäßig ist alles privat. Du entscheidest pro Information, wer sie sehen darf — Freunde, die Community, oder niemand.
+  </div>
+
   <div class="sp-section">
-    <div class="sp-label">Visibility</div>
-    <div class="sp-row" onclick="setPrivacy('private')" id="optPrivate">
-      <div class="sp-row-left">
-        <div class="sp-icon">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        </div>
-        <div>
-          <div class="sp-opt-title">Private</div>
-          <div class="sp-opt-desc">Only you can see your journal, stats, and activity</div>
-        </div>
+    <div class="sp-label">Immer privat</div>
+    <div class="pm-locked">
+      <div class="sp-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
       </div>
-      <div class="sp-check" id="checkPrivate">✓</div>
-    </div>
-    <div class="sp-row" onclick="setPrivacy('public')" id="optPublic">
-      <div class="sp-row-left">
-        <div class="sp-icon">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-        </div>
-        <div>
-          <div class="sp-opt-title">Public</div>
-          <div class="sp-opt-desc">Others can follow you and see what you choose to share</div>
-        </div>
+      <div>
+        <div class="sp-opt-title">Tagebuch</div>
+        <div class="sp-opt-desc">Deine Einträge sieht nur du. Das lässt sich nicht ändern.</div>
       </div>
-      <div class="sp-check" id="checkPublic" style="opacity:0;">✓</div>
+      <span class="pm-lock-tag">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Gesperrt
+      </span>
     </div>
   </div>
 
-  <div class="sp-section" id="publicOptions" style="opacity:.35; pointer-events:none;">
-    <div class="sp-label">What others can see</div>
-    <div class="sp-toggle-row" style="opacity:.4; pointer-events:none;">
-      <div>
-        <div class="sp-toggle-title">Journal</div>
-        <div class="sp-toggle-desc">Always private — only visible to you</div>
-      </div>
-      <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--faint);">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        Locked
-      </div>
+  <div class="sp-section">
+    <div class="sp-label">Wer darf was sehen</div>
+    <div class="pm-head">
+      <span></span>
+      <span class="pm-col">Freunde</span>
+      <span class="pm-col">Community</span>
     </div>
-    <div class="sp-toggle-row">
-      <div>
-        <div class="sp-toggle-title">Community posts & replies</div>
-        <div class="sp-toggle-desc">What you post in the community</div>
+
+    <div class="pm-row">
+      <div class="pm-item">
+        <div class="sp-opt-title">Anzeigename</div>
+        <div class="sp-opt-desc">Wie du genannt wirst</div>
       </div>
-      <button class="sp-toggle on" id="tog2" onclick="this.classList.toggle('on')"><div class="sp-knob"></div></button>
+      <div class="pm-cell"><button class="sp-toggle on" onclick="this.classList.toggle('on')"><div class="sp-knob"></div></button></div>
+      <div class="pm-cell"><button class="sp-toggle" onclick="this.classList.toggle('on')"><div class="sp-knob"></div></button></div>
     </div>
-    <div class="sp-toggle-row">
-      <div>
-        <div class="sp-toggle-title">Reading activity</div>
-        <div class="sp-toggle-desc">Articles and guides you've read</div>
+
+    <div class="pm-row">
+      <div class="pm-item">
+        <div class="sp-opt-title">Über mich</div>
+        <div class="sp-opt-desc">Deine Bio</div>
       </div>
-      <button class="sp-toggle" id="tog3" onclick="this.classList.toggle('on')"><div class="sp-knob"></div></button>
+      <div class="pm-cell"><button class="sp-toggle on" onclick="this.classList.toggle('on')"><div class="sp-knob"></div></button></div>
+      <div class="pm-cell"><button class="sp-toggle" onclick="this.classList.toggle('on')"><div class="sp-knob"></div></button></div>
     </div>
-    <div class="sp-toggle-row">
-      <div>
-        <div class="sp-toggle-title">Followers & following</div>
-        <div class="sp-toggle-desc">Who follows you and who you follow</div>
+
+    <div class="pm-row">
+      <div class="pm-item">
+        <div class="sp-opt-title">Pronomen</div>
+        <div class="sp-opt-desc">Optional</div>
       </div>
-      <button class="sp-toggle on" id="tog4" onclick="this.classList.toggle('on')"><div class="sp-knob"></div></button>
+      <div class="pm-cell"><button class="sp-toggle" onclick="this.classList.toggle('on')"><div class="sp-knob"></div></button></div>
+      <div class="pm-cell"><button class="sp-toggle" onclick="this.classList.toggle('on')"><div class="sp-knob"></div></button></div>
     </div>
+
+    <div class="pm-row">
+      <div class="pm-item">
+        <div class="sp-opt-title">Geteilte Einträge</div>
+        <div class="sp-opt-desc">Nur Einträge, die du bewusst zum Teilen markierst</div>
+      </div>
+      <div class="pm-cell"><button class="sp-toggle" onclick="this.classList.toggle('on')"><div class="sp-knob"></div></button></div>
+      <div class="pm-cell"><button class="sp-toggle" onclick="this.classList.toggle('on')"><div class="sp-knob"></div></button></div>
+    </div>
+  </div>
+
+  <div class="sp-footnote">
+    Notizen, die du für Fremde hinterlässt, bleiben immer anonym — unabhängig von diesen Einstellungen.
   </div>
 </div>
 
@@ -1032,7 +1104,7 @@ button { cursor: pointer; font-family: var(--sans); border: none; }
 <div class="edit-modal" id="editModal" style="display:none;" onclick="if(event.target===this)this.style.display='none'">
   <div class="edit-modal__box">
     <div class="em-header">
-      <span>Edit profile</span>
+      <span>Profil bearbeiten</span>
       <button onclick="document.getElementById('editModal').style.display='none'">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
       </button>
@@ -1040,16 +1112,16 @@ button { cursor: pointer; font-family: var(--sans); border: none; }
     <div class="em-body">
       <div class="em-avatar-edit">
         <div class="em-avatar-preview" id="emAvatarPreview"></div>
-        <button class="em-avatar-btn">Change photo</button>
+        <button class="em-avatar-btn">Foto ändern</button>
       </div>
-      <label class="em-label">Display name</label>
+      <label class="em-label">Anzeigename</label>
       <input class="em-input" id="emName" value="Elena Behrens">
-      <label class="em-label">Bio <span style="color:var(--faint);font-weight:300;">(optional)</span></label>
-      <textarea class="em-textarea" id="emBio" placeholder="A few words about you…"></textarea>
+      <label class="em-label">Über mich <span style="color:var(--faint);font-weight:300;">(optional)</span></label>
+      <textarea class="em-textarea" id="emBio" placeholder="Ein paar Worte über dich…"></textarea>
     </div>
     <div class="em-footer">
-      <button class="em-cancel" onclick="document.getElementById('editModal').style.display='none'">Cancel</button>
-      <button class="em-save" onclick="saveProfile()">Save</button>
+      <button class="em-cancel" onclick="document.getElementById('editModal').style.display='none'">Abbrechen</button>
+      <button class="em-save" onclick="saveProfile()">Speichern</button>
     </div>
   </div>
 </div>
@@ -1060,259 +1132,108 @@ button { cursor: pointer; font-family: var(--sans); border: none; }
   <p style="font-size:14px; color:var(--faint); font-weight:300; font-family:var(--serif-body); font-style:italic;"></p>
 </div>
 
-<!-- MY LIBRARY PANEL -->
-<div id="libraryPanel" style="display:none;">
-<style>
-/* ── My Library ── */
-.lib-wrap {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 2.8rem 2.8rem 6rem;
-}
-.lib-top {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  margin-bottom: 1.8rem;
-}
-.lib-heading {
-  font-family: var(--serif);
-  font-size: 1.6rem;
-  font-weight: 400;
-  margin-bottom: 4px;
-}
-.lib-desc {
-  font-size: 13.5px;
-  color: var(--muted);
-  font-weight: 300;
-  font-family: var(--serif-body);
-  font-style: italic;
-}
-.lib-saved-count {
-  font-size: 12px;
-  color: var(--faint);
-  font-weight: 400;
-  padding-bottom: 3px;
-}
+<!-- MY LIBRARY TAB -->
+<div id="libraryPage" style="display:none; max-width:1280px; margin:2.5rem auto; padding:0 2.8rem;">
 
-/* ── Type filter nav ── */
-.lib-nav {
-  display: flex;
-  gap: 2px;
-  margin-bottom: 2rem;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 0;
-}
-.lib-nav-btn {
-  padding: 0.6rem 1rem;
-  font-size: 13px;
-  font-weight: 400;
-  color: var(--muted);
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-family: var(--sans);
-  border-bottom: 2px solid transparent;
-  margin-bottom: -1px;
-  transition: color .18s, border-color .18s;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.lib-nav-btn:hover:not(:disabled) { color: var(--text); }
-.lib-nav-btn.active { color: var(--text); border-bottom-color: var(--text); font-weight: 500; }
-.lib-nav-btn:disabled { opacity: .35; cursor: default; }
-.lib-soon {
-  font-size: 9px;
-  font-weight: 600;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  color: var(--faint);
-  background: var(--border);
-  padding: 2px 5px;
-  border-radius: 100px;
-}
-.lib-nav-count {
-  font-size: 10px;
-  font-weight: 600;
-  background: var(--sage-tint);
-  color: var(--sage);
-  padding: 2px 6px;
-  border-radius: 100px;
-}
+  <!-- Filter bar -->
+  <div class="lib-filters">
+    <button class="lib-filter active" onclick="filterLibrary(this,'all')">Alle</button>
+    <button class="lib-filter" onclick="filterLibrary(this,'article')">Artikel</button>
+    <button class="lib-filter" onclick="filterLibrary(this,'tool')">Tools</button>
+    <button class="lib-filter" onclick="filterLibrary(this,'worksheet')">Arbeitsblätter</button>
+  </div>
 
-/* ── Card grid ── */
-.lib-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-}
-@media (max-width: 860px) { .lib-grid { grid-template-columns: repeat(2,1fr); } }
-@media (max-width: 560px) { .lib-grid { grid-template-columns: 1fr; } }
+  <!-- Grid -->
+  <div class="lib-grid" id="libraryGrid">
 
-.lib-card {
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  display: flex;
-  flex-direction: column;
-  transition: border-color .18s, box-shadow .18s;
-  overflow: hidden;
-}
-.lib-card:hover {
-  border-color: var(--border-m);
-  box-shadow: 0 2px 12px rgba(0,0,0,.06);
-}
-.lib-card-body {
-  flex: 1;
-  padding: 1.2rem 1.3rem .9rem;
-}
-.lib-card-text {
-  font-family: var(--serif-body);
-  font-size: 14px;
-  line-height: 1.75;
-  color: var(--text);
-  display: -webkit-box;
-  -webkit-line-clamp: 6;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-.lib-card-foot {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: .7rem 1.3rem .9rem;
-  border-top: 1px solid var(--border);
-  gap: .5rem;
-}
-.lib-card-meta {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  min-width: 0;
-}
-.lib-card-source {
-  font-size: 11.5px;
-  color: var(--muted);
-  font-weight: 400;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.lib-card-source a { color: var(--muted); transition: color .15s; }
-.lib-card-source a:hover { color: var(--text); }
-.lib-card-date {
-  font-size: 10.5px;
-  color: var(--faint);
-  font-weight: 300;
-}
-.lib-card-remove {
-  width: 26px; height: 26px;
-  border-radius: 50%;
-  background: none;
-  border: 1px solid var(--border);
-  color: var(--faint);
-  font-size: 14px;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer; flex-shrink: 0;
-  transition: border-color .18s, color .18s, background .18s;
-  line-height: 1;
-  padding: 0;
-}
-.lib-card-remove:hover {
-  border-color: rgba(180,60,60,.3);
-  color: #c04040;
-  background: rgba(180,60,60,.05);
-}
-
-/* ── Empty state ── */
-.lib-empty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 320px;
-  text-align: center;
-  gap: .6rem;
-}
-.lib-empty-icon { color: var(--faint); margin-bottom: .4rem; opacity: .5; }
-.lib-empty-title {
-  font-family: var(--serif);
-  font-size: 1.15rem;
-  font-weight: 400;
-  color: var(--muted);
-}
-.lib-empty-sub {
-  font-family: var(--serif-body);
-  font-style: italic;
-  font-size: 13.5px;
-  color: var(--faint);
-  max-width: 360px;
-  line-height: 1.7;
-}
-.lib-empty-link {
-  margin-top: .6rem;
-  font-size: 13px;
-  color: var(--muted);
-  text-decoration: none;
-  border-bottom: 1px solid var(--border-m);
-  padding-bottom: 1px;
-  transition: color .18s, border-color .18s;
-}
-.lib-empty-link:hover { color: var(--text); border-color: var(--text); }
-</style>
-
-  <div class="lib-wrap">
-
-    <!-- Header -->
-    <div class="lib-top">
-      <div>
-        <h2 class="lib-heading">My Library</h2>
-        <p class="lib-desc">A personal collection of ideas worth keeping.</p>
+    <div class="lib-card" data-type="article">
+      <div class="lib-tag lib-tag--article">Artikel</div>
+      <div class="lib-topic">Schlaf</div>
+      <h3 class="lib-title">Die Kraft des Schlafs: Warum Erholung Therapie ist</h3>
+      <p class="lib-desc">Schlaf beeinflusst Stimmung, Konzentration und emotionale Resilienz mehr als die meisten ahnen.</p>
+      <div class="lib-footer">
+        <span class="lib-time">8 Min.</span>
+        <div class="lib-actions">
+          <button class="lib-btn" title="Gespeichert" onclick="toggleSave(this)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          </button>
+          <a href="article-power-of-sleep.html" class="lib-btn lib-btn--open">Öffnen →</a>
+        </div>
       </div>
-      <div class="lib-saved-count" id="libSavedCount"></div>
     </div>
 
-    <!-- Type navigation -->
-    <nav class="lib-nav" id="libNav">
-      <button class="lib-nav-btn active" onclick="filterLibrary('all', this)">
-        All
-        <span class="lib-nav-count" id="libCountAll">0</span>
-      </button>
-      <button class="lib-nav-btn" onclick="filterLibrary('insight', this)">
-        Insights
-        <span class="lib-nav-count" id="libCountInsight" style="display:none;">0</span>
-      </button>
-      <button class="lib-nav-btn lib-nav-btn--soon" disabled>
-        Cards <span class="lib-soon">soon</span>
-      </button>
-      <button class="lib-nav-btn lib-nav-btn--soon" disabled>
-        Tools <span class="lib-soon">soon</span>
-      </button>
-      <button class="lib-nav-btn lib-nav-btn--soon" disabled>
-        Prompts <span class="lib-soon">soon</span>
-      </button>
-      <button class="lib-nav-btn lib-nav-btn--soon" disabled>
-        Reflections <span class="lib-soon">soon</span>
-      </button>
-    </nav>
-
-    <!-- Card grid -->
-    <div class="lib-grid" id="libGrid"></div>
-
-    <!-- Empty state -->
-    <div class="lib-empty" id="libEmpty" style="display:none;">
-      <div class="lib-empty-icon">
-        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
-        </svg>
+    <div class="lib-card" data-type="article">
+      <div class="lib-tag lib-tag--article">Artikel</div>
+      <div class="lib-topic">Gewohnheiten</div>
+      <h3 class="lib-title">Warum wir prokrastinieren — und wie wir aufhören</h3>
+      <p class="lib-desc">Prokrastination ist kein Charakterfehler, sondern eine Reaktion auf negative Gefühle. So kommst du raus.</p>
+      <div class="lib-footer">
+        <span class="lib-time">6 Min.</span>
+        <div class="lib-actions">
+          <button class="lib-btn" title="Gespeichert" onclick="toggleSave(this)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          </button>
+          <a href="article-procrastination.html" class="lib-btn lib-btn--open">Öffnen →</a>
+        </div>
       </div>
-      <p class="lib-empty-title">Your library is empty.</p>
-      <p class="lib-empty-sub">As you explore Mindbloom, save insights, frameworks, and ideas here — to revisit whenever you need them.</p>
-      <a class="lib-empty-link" href="topics.html">Browse topics →</a>
+    </div>
+
+    <div class="lib-card" data-type="tool">
+      <div class="lib-tag lib-tag--tool">Tool</div>
+      <div class="lib-topic">Grenzen</div>
+      <h3 class="lib-title">Grenzen setzen: Dein persönlicher Leitfaden</h3>
+      <p class="lib-desc">Erkenne, wo deine Grenzen liegen, und lerne, sie klar und freundlich zu kommunizieren.</p>
+      <div class="lib-footer">
+        <span class="lib-time">Interaktiv</span>
+        <div class="lib-actions">
+          <button class="lib-btn" title="Gespeichert" onclick="toggleSave(this)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          </button>
+          <a href="tool-boundaries.html" class="lib-btn lib-btn--open">Öffnen →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="lib-card" data-type="worksheet">
+      <div class="lib-tag lib-tag--worksheet">Worksheet</div>
+      <div class="lib-topic">Selbstreflexion</div>
+      <h3 class="lib-title">Werte & Prioritäten — Was zählt wirklich?</h3>
+      <p class="lib-desc">Finde heraus, was dir wirklich wichtig ist, und bring dein Leben wieder in Einklang damit.</p>
+      <div class="lib-footer">
+        <span class="lib-time">15–20 Min.</span>
+        <div class="lib-actions">
+          <button class="lib-btn" title="Gespeichert" onclick="toggleSave(this)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          </button>
+          <a href="mindbloom-worksheets.html" class="lib-btn lib-btn--open">Öffnen →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="lib-card" data-type="tool">
+      <div class="lib-tag lib-tag--tool">Tool</div>
+      <div class="lib-topic">Vorbereitung</div>
+      <h3 class="lib-title">Therapiegespräch vorbereiten</h3>
+      <p class="lib-desc">Strukturiere deine Gedanken vor der nächsten Sitzung — damit du das Gespräch wirklich nutzt.</p>
+      <div class="lib-footer">
+        <span class="lib-time">Interaktiv</span>
+        <div class="lib-actions">
+          <button class="lib-btn" title="Gespeichert" onclick="toggleSave(this)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          </button>
+          <a href="tool-prepare.html" class="lib-btn lib-btn--open">Öffnen →</a>
+        </div>
+      </div>
     </div>
 
   </div>
+
+  <!-- Empty state (hidden by default) -->
+  <div class="lib-empty" id="libEmpty" style="display:none;">
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ABABAB" stroke-width="1.2" stroke-linecap="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+    <p>Noch nichts gespeichert in dieser Kategorie.</p>
+  </div>
+
 </div>
 
 <!-- PAGE -->
@@ -1777,6 +1698,7 @@ function renderEntries() {
 function updatePageNav() {
   const nav = document.getElementById('pageNav');
   if (currentView !== 'book') { nav.style.display = 'none'; return; }
+  nav.style.display = '';
   const total = Math.ceil(entries.length / ENTRIES_PER_PAGE);
   document.getElementById('pageInfo').textContent = `Seite ${currentPage + 1} von ${total}`;
   document.getElementById('prevPageBtn').disabled = currentPage === 0;
@@ -2038,23 +1960,10 @@ function usePrompt() {
 renderEntries();
 
 // ===== PROFILE HEADER =====
-let privacy = 'private'; // default
 
-function setPrivacy(mode) {
-  privacy = mode;
-  document.getElementById('checkPrivate').style.opacity = mode === 'private' ? '1' : '0';
-  document.getElementById('checkPublic').style.opacity  = mode === 'public'  ? '1' : '0';
-  document.getElementById('optPrivate').style.background = mode === 'private' ? 'var(--sage-tint)' : '';
-  document.getElementById('optPublic').style.background  = mode === 'public'  ? 'var(--sage-tint)' : '';
-  const pub = document.getElementById('publicOptions');
-  pub.style.opacity        = mode === 'public' ? '1' : '.35';
-  pub.style.pointerEvents  = mode === 'public' ? 'auto' : 'none';
-  // show/hide followers
-  document.getElementById('phStats').style.display = mode === 'public' ? '' : 'none';
-  // show/hide shared tab
-  document.querySelector('[onclick*="shared"]').style.display = mode === 'public' ? '' : 'none';
-  // show/hide messages button
-  document.getElementById('messagesBtn').style.display = mode === 'public' ? 'flex' : 'none';
+function openSettings() {
+  document.getElementById('settingsPanel').classList.add('open');
+  document.getElementById('settingsOverlay').classList.add('open');
 }
 
 function closeSettings() {
@@ -2062,141 +1971,47 @@ function closeSettings() {
   document.getElementById('settingsOverlay').classList.remove('open');
 }
 
-document.getElementById('settingsPanel').addEventListener('transitionend', () => {});
-// open overlay together with panel
-document.querySelector('.ph-settings-btn').addEventListener('click', () => {
-  document.getElementById('settingsOverlay').classList.add('open');
-});
-
 function switchProfileTab(btn, tab) {
   document.querySelectorAll('.ph-tab').forEach(t => t.classList.remove('active'));
   btn.classList.add('active');
-
-  const page          = document.getElementById('mainPage');
-  const placeholder   = document.getElementById('tabPlaceholder');
-  const libraryPanel  = document.getElementById('libraryPanel');
-
-  page.style.display         = tab === 'journal' ? '' : 'none';
-  libraryPanel.style.display = tab === 'library' ? 'block' : 'none';
-
-  if (tab === 'library') {
-    placeholder.style.display = 'none';
-    renderLibraryPanel('all');
-  } else if (tab !== 'journal') {
+  document.getElementById('mainPage').style.display = tab === 'journal' ? '' : 'none';
+  document.getElementById('libraryPage').style.display = tab === 'library' ? '' : 'none';
+  const placeholder = document.getElementById('tabPlaceholder');
+  if (tab === 'about') {
     placeholder.style.display = 'flex';
     placeholder.querySelector('p').textContent =
-      tab === 'activity' ? 'Your recent activity will appear here.' :
-      tab === 'shared'   ? 'Journal entries you\'ve made public will appear here.' :
-                           'Tell the community a little about yourself.';
+      'Das hier sehen nur die, denen du es ausdrücklich erlaubst. Du steuerst alles über „Privatsphäre verwalten".';
   } else {
     placeholder.style.display = 'none';
   }
 }
 
-// ── My Library ────────────────────────────────────────────────────────────────
-
-let libCurrentFilter = 'all';
-
-function formatLibDate(iso) {
-  const d = new Date(iso);
-  const now = new Date();
-  const diff = Math.floor((now - d) / 1000);
-  if (diff < 60)       return 'Just now';
-  if (diff < 3600)     return Math.floor(diff / 60) + 'm ago';
-  if (diff < 86400)    return Math.floor(diff / 3600) + 'h ago';
-  if (diff < 7 * 86400) return Math.floor(diff / 86400) + 'd ago';
-  return d.toLocaleDateString('en', { month: 'short', day: 'numeric', year: 'numeric' });
-}
-
-function renderLibraryPanel(filter) {
-  if (!window.MBLibrary) return;
-  libCurrentFilter = filter || libCurrentFilter;
-
-  const all  = MBLibrary.get();
-  const shown = libCurrentFilter === 'all' ? all : all.filter(i => i.type === libCurrentFilter);
-
-  // Update counts
-  document.getElementById('libCountAll').textContent = all.length;
-  document.getElementById('libCountAll').style.display = all.length ? '' : 'none';
-
-  const insightCount = all.filter(i => i.type === 'insight').length;
-  document.getElementById('libCountInsight').textContent = insightCount;
-  document.getElementById('libCountInsight').style.display = insightCount ? '' : 'none';
-
-  const countEl = document.getElementById('libSavedCount');
-  countEl.textContent = all.length === 0 ? '' : all.length + (all.length === 1 ? ' saved' : ' saved');
-
-  const grid  = document.getElementById('libGrid');
-  const empty = document.getElementById('libEmpty');
-
-  if (shown.length === 0) {
-    grid.innerHTML = '';
-    empty.style.display = 'flex';
-    return;
-  }
-  empty.style.display = 'none';
-
-  grid.innerHTML = shown.map(item => {
-    const sourceLink = item.sourceUrl
-      ? `<a href="${item.sourceUrl}">${escapeHtml(item.source || 'Mindbloom')}</a>`
-      : escapeHtml(item.source || 'Mindbloom');
-    return `
-      <div class="lib-card" data-lib-id="${escapeHtml(item.id)}">
-        <div class="lib-card-body">
-          <p class="lib-card-text">${escapeHtml(item.text || item.title)}</p>
-        </div>
-        <div class="lib-card-foot">
-          <div class="lib-card-meta">
-            <span class="lib-card-source">${sourceLink}</span>
-            <span class="lib-card-date">${formatLibDate(item.savedAt)}</span>
-          </div>
-          <button class="lib-card-remove" title="Remove" onclick="removeFromLibrary('${escapeHtml(item.id)}')">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
-          </button>
-        </div>
-      </div>`;
-  }).join('');
-}
-
-function filterLibrary(type, btn) {
-  document.querySelectorAll('.lib-nav-btn').forEach(b => b.classList.remove('active'));
+function filterLibrary(btn, type) {
+  document.querySelectorAll('.lib-filter').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  renderLibraryPanel(type);
+  const cards = document.querySelectorAll('.lib-card');
+  let visible = 0;
+  cards.forEach(c => {
+    const show = type === 'all' || c.dataset.type === type;
+    c.style.display = show ? '' : 'none';
+    if (show) visible++;
+  });
+  document.getElementById('libEmpty').style.display = visible === 0 ? 'flex' : 'none';
 }
 
-function removeFromLibrary(id) {
-  if (!window.MBLibrary) return;
-  MBLibrary.remove(id);
-  const card = document.querySelector(`.lib-card[data-lib-id="${CSS.escape(id)}"]`);
-  if (card) {
-    card.style.transition = 'opacity .2s, transform .2s';
-    card.style.opacity = '0';
-    card.style.transform = 'scale(.97)';
-    setTimeout(() => renderLibraryPanel(), 200);
-  }
-}
-
-function escapeHtml(s) {
-  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+function toggleSave(btn) {
+  const saved = btn.querySelector('svg');
+  const isSaved = saved.getAttribute('fill') === 'currentColor';
+  saved.setAttribute('fill', isSaved ? 'none' : 'currentColor');
 }
 
 function saveProfile() {
   const name = document.getElementById('emName').value.trim();
   if (name) document.getElementById('phName').textContent = name;
+  const bio = document.getElementById('emBio').value.trim();
+  if (bio) document.getElementById('phBio').textContent = bio;
   document.getElementById('editModal').style.display = 'none';
 }
-
-// init: hide stats (private by default), hide shared tab
-setPrivacy('private');
-
-// Auto-open tab from URL hash (e.g. profile.html#library)
-(function() {
-  const hash = window.location.hash.replace('#', '');
-  if (hash === 'library') {
-    const btn = document.getElementById('tabLibrary');
-    if (btn) switchProfileTab(btn, 'library');
-  }
-})();
 </script>
 </body>
 </html>

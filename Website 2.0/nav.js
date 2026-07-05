@@ -8,157 +8,6 @@
  *
  * ─────────────────────────────────────────────────────────────────────────── */
 
-// ─── 0. Theme (Dark / Light Mode) ─────────────────────────────────────────────
-// Runs first so the correct theme is set before anything renders.
-// Priority: saved user choice (localStorage) → system preference → light.
-
-function mbGetSavedTheme() {
-  try { return localStorage.getItem('mb-theme'); } catch (e) { return null; }
-}
-
-function mbApplyTheme(theme) {
-  document.documentElement.dataset.theme = theme;
-}
-
-mbApplyTheme(
-  mbGetSavedTheme() ||
-  (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-);
-
-// Follow system changes as long as the user hasn't picked a theme manually
-if (window.matchMedia) {
-  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-    if (!mbGetSavedTheme()) mbApplyTheme(e.matches ? 'dark' : 'light');
-  });
-}
-
-window.mbToggleTheme = function () {
-  const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
-  // brief global transition so the switch fades instead of snapping
-  document.documentElement.classList.add('mb-theme-anim');
-  mbApplyTheme(next);
-  try { localStorage.setItem('mb-theme', next); } catch (e) {}
-  setTimeout(() => document.documentElement.classList.remove('mb-theme-anim'), 350);
-};
-
-function injectThemeCSS() {
-  if (document.getElementById('mb-theme-css')) return;
-  const style = document.createElement('style');
-  style.id = 'mb-theme-css';
-  style.textContent = `
-/* ── Dark theme ──
-   Every page defines its colors as :root variables; html[data-theme="dark"]
-   has higher specificity than :root, so these overrides win on all pages. */
-html[data-theme="dark"] {
-  color-scheme: dark;
-
-  --bg:        #2A3141;
-  --white:     #333C4E;
-  --dark:      #14161D;
-  --border:    rgba(255,255,255,0.14);
-  --border-m:  rgba(255,255,255,0.2);
-  --text:      #E6E9EC;
-  --muted:     #AEB4BB;
-  --faint:     #8B929A;
-
-  --sage:   #9FC2D8;
-  --dusk:   #C4BCDD;
-  --amber:  #DBCDB2;
-  --blush:  #DCC2CC;
-  --slate:  #A9C7DA;
-
-  --sage-tint:  #313E48;
-  --dusk-tint:  #333A4E;
-  --amber-tint: #383D48;
-  --blush-tint: #383844;
-  --slate-tint: #303C4A;
-  --t-sage:  #313E48;
-  --t-dusk:  #333A4E;
-  --t-amber: #383D48;
-  --t-blush: #383844;
-  --t-slate: #303C4A;
-
-  --shadow:    0 1px 4px rgba(0,0,0,.3), 0 4px 16px rgba(0,0,0,.25);
-  --shadow-md: 0 4px 8px rgba(0,0,0,.3), 0 16px 40px rgba(0,0,0,.4);
-}
-
-/* Deep blue gradient ground, like the design reference */
-html[data-theme="dark"] body {
-  background: linear-gradient(180deg, #2A3141 0%, #2D3648 46%, #2F3A4C 100%) fixed;
-}
-
-/* Pill buttons, chips & toasts use background:var(--text) with hardcoded
-   white text — in dark mode --text is light, so the label must flip to dark. */
-html[data-theme="dark"] .btn--primary,
-html[data-theme="dark"] .btn--dark,
-html[data-theme="dark"] .btn-primary,
-html[data-theme="dark"] .btn-continue,
-html[data-theme="dark"] .btn-next,
-html[data-theme="dark"] .btn-add,
-html[data-theme="dark"] .btn-sort,
-html[data-theme="dark"] .btn-reflect,
-html[data-theme="dark"] .btn-start,
-html[data-theme="dark"] .btn-save,
-html[data-theme="dark"] .btn-share,
-html[data-theme="dark"] .btn-join,
-html[data-theme="dark"] .btn-leave,
-html[data-theme="dark"] .chip.selected,
-html[data-theme="dark"] .alt-chip.selected,
-html[data-theme="dark"] .sf-chip,
-html[data-theme="dark"] .val-pill.selected,
-html[data-theme="dark"] .filter-pill.active,
-html[data-theme="dark"] .filter-btn.active,
-html[data-theme="dark"] .friend-btn.selected,
-html[data-theme="dark"] .need-btn.selected,
-html[data-theme="dark"] .vt-btn.active,
-html[data-theme="dark"] .cal-day.today,
-html[data-theme="dark"] .att-remove,
-html[data-theme="dark"] .em-save,
-html[data-theme="dark"] .quick-submit,
-html[data-theme="dark"] .chat-send-btn,
-html[data-theme="dark"] .new-entry-btn,
-html[data-theme="dark"] .new-msg-btn,
-html[data-theme="dark"] .step-dot,
-html[data-theme="dark"] .progress-step.active .ps-num,
-html[data-theme="dark"] .msg-row.mine .msg-bubble,
-html[data-theme="dark"] .toast {
-  color: #1A1A1A;
-}
-
-/* Boxes & callouts with hardcoded light backgrounds → translucent dark surfaces */
-html[data-theme="dark"] .journal-box,
-html[data-theme="dark"] .exp-pill.yes,
-html[data-theme="dark"] .tone-easy,
-html[data-theme="dark"] .answer-btn.never { background: rgba(176,203,180,0.1); }
-html[data-theme="dark"] .script-box { background: rgba(255,255,255,0.06); }
-html[data-theme="dark"] .entry-card:hover,
-html[data-theme="dark"] .entry-card.expanded { background: rgba(255,255,255,0.07); }
-html[data-theme="dark"] .exp-pill.no,
-html[data-theme="dark"] .tone-firm,
-html[data-theme="dark"] .answer-btn.often { background: rgba(220,194,204,0.1); }
-html[data-theme="dark"] .answer-btn.sometimes { background: rgba(219,205,178,0.1); }
-html[data-theme="dark"] .callout--crisis { background: rgba(220,140,150,0.12); }
-html[data-theme="dark"] .callout--warning { background: rgba(219,205,178,0.12); }
-html[data-theme="dark"] .placeholder { background: rgba(219,205,178,0.28); }
-
-/* Article & panel body text is hardcoded near-black → lighten */
-html[data-theme="dark"] article p,
-html[data-theme="dark"] article li,
-html[data-theme="dark"] .panel-body p,
-html[data-theme="dark"] .panel-body li { color: #CDD3D9; }
-html[data-theme="dark"] .callout--info,
-html[data-theme="dark"] .journal-box li { color: #B0CBB4; }
-
-/* Smooth cross-fade while switching themes */
-html.mb-theme-anim, html.mb-theme-anim *, html.mb-theme-anim *::before, html.mb-theme-anim *::after {
-  transition: background-color .3s ease, color .3s ease, border-color .3s ease, box-shadow .3s ease !important;
-}
-`;
-  document.head.appendChild(style);
-}
-injectThemeCSS();
-
-
 // ─── 1. Self-inject CSS (runs synchronously, before body renders) ─────────────
 
 function injectNavCSS() {
@@ -181,22 +30,30 @@ function injectNavCSS() {
   --faint:  #ABABAB;
   --sage:   #5A8050;
   --dusk:   #6A64A0;
-  --serif:  'Playfair Display', Georgia, serif;
-  --sans:   'Mulish', system-ui, sans-serif;
+  --serif:  'EB Garamond', Georgia, serif;
+  --sans:   'Inter', sans-serif, system-ui, sans-serif;
 }
 
 body { padding-top: var(--nav-h); }
 
-/* ── Nav bar ── */
+/* ── Global focus styles ── */
+:focus-visible {
+  outline: 2px solid #5A8050;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ── Nav bar (Liquid Glass) ── */
 .site-nav {
   position: fixed;
   top: 0; left: 0; right: 0;
   z-index: 900;
   height: var(--nav-h);
-  background: rgba(248,247,244,0.94);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1px solid var(--border);
+  background: rgba(255,255,255,0.55);
+  backdrop-filter: blur(22px) saturate(180%);
+  -webkit-backdrop-filter: blur(22px) saturate(180%);
+  border-bottom: 1px solid rgba(255,255,255,0.6);
+  box-shadow: 0 1px 0 rgba(255,255,255,.7) inset, 0 8px 32px rgba(31,38,80,.05);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -204,6 +61,11 @@ body { padding-top: var(--nav-h); }
   font-family: var(--sans);
   gap: 24px;
   isolation: isolate;
+  transition: background .3s ease, box-shadow .3s ease, border-color .3s ease;
+}
+.site-nav--scrolled {
+  background: rgba(255,255,255,0.72);
+  box-shadow: 0 1px 0 rgba(255,255,255,.8) inset, 0 12px 36px rgba(31,38,80,.09);
 }
 
 /* Logo — always centred, out of flex flow */
@@ -246,11 +108,11 @@ body { padding-top: var(--nav-h); }
   transition: color 0.14s, background 0.14s;
   white-space: nowrap;
 }
-.nav-link:hover { color: var(--text); background: rgba(0,0,0,0.045); }
+.nav-link:hover { color: var(--text); background: rgba(255,255,255,0.55); box-shadow: 0 2px 10px rgba(31,38,80,.06); backdrop-filter: blur(8px); }
 .nav-link.is-active { color: var(--text); }
 
 .nav-item-with-menu { list-style: none; position: relative; }
-.nav-item-with-menu.is-open .nav-link { color: var(--text); background: rgba(0,0,0,0.045); }
+.nav-item-with-menu.is-open .nav-link { color: var(--text); background: rgba(255,255,255,0.6); box-shadow: 0 2px 10px rgba(31,38,80,.06); }
 
 .nav-chevron {
   transition: transform 0.2s ease;
@@ -271,13 +133,16 @@ body { padding-top: var(--nav-h); }
   font-size: 13px;
   font-weight: 500;
   color: var(--sage);
+  background: rgba(255,255,255,0.4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(90,128,80,0.28);
   border-radius: 20px;
   text-decoration: none;
   white-space: nowrap;
-  transition: background 0.14s, border-color 0.14s;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
-.nav-help:hover { background: rgba(90,128,80,0.07); border-color: rgba(90,128,80,0.48); }
+.nav-help:hover { background: rgba(90,128,80,0.12); border-color: rgba(90,128,80,0.48); transform: scale(1.04); box-shadow: 0 4px 16px rgba(90,128,80,.16); }
 
 .nav-avatar {
   width: 32px; height: 32px;
@@ -285,91 +150,48 @@ body { padding-top: var(--nav-h); }
   display: grid;
   place-items: center;
   color: var(--muted);
-  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.35);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.55);
   text-decoration: none;
-  transition: border-color 0.14s, color 0.14s;
+  transition: border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
-.nav-avatar:hover { border-color: rgba(0,0,0,0.18); color: var(--text); }
+.nav-avatar:hover { border-color: rgba(0,0,0,0.18); color: var(--text); transform: scale(1.08); }
 .nav-library-btn {
   width: 32px; height: 32px;
   border-radius: 50%;
   display: grid;
   place-items: center;
   color: var(--muted);
-  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.35);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.55);
   text-decoration: none;
-  transition: border-color 0.14s, color 0.14s;
+  transition: border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
-.nav-library-btn:hover { border-color: rgba(0,0,0,0.18); color: var(--text); }
+.nav-library-btn:hover { border-color: rgba(0,0,0,0.18); color: var(--text); transform: scale(1.08); }
 
-/* ── Theme toggle (Dark / Light) ── */
-.nav-theme-toggle {
-  width: 32px; height: 32px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  color: var(--muted);
-  background: transparent;
-  border: 1px solid var(--border);
-  padding: 0;
-  cursor: pointer;
-  transition: border-color 0.14s, color 0.14s;
-}
-.nav-theme-toggle:hover { border-color: rgba(0,0,0,0.18); color: var(--text); }
-.nav-theme-toggle .mb-icon-sun { display: none; }
-html[data-theme="dark"] .nav-theme-toggle .mb-icon-sun  { display: block; }
-html[data-theme="dark"] .nav-theme-toggle .mb-icon-moon { display: none; }
-
-/* ── Dark theme: nav, menus, backdrop ── */
-html[data-theme="dark"] .site-nav,
-html[data-theme="dark"] .mega-menu,
-html[data-theme="dark"] .mini-menu {
-  --bg:     #2A3141;
-  --white:  #2D3542;
-  --border: rgba(255,255,255,0.14);
-  --text:   #E6E9EC;
-  --muted:  #AEB4BB;
-  --faint:  #8B929A;
-  --sage:   #9FC2D8;
-  --dusk:   #C4BCDD;
-}
-html[data-theme="dark"] .site-nav { background: rgba(18,20,27,0.6); backdrop-filter: blur(20px) saturate(1.4); -webkit-backdrop-filter: blur(20px) saturate(1.4); }
-html[data-theme="dark"] .nav-link:hover,
-html[data-theme="dark"] .nav-item-with-menu.is-open .nav-link { background: rgba(255,255,255,0.07); }
-html[data-theme="dark"] .nav-help { border-color: rgba(159,194,216,0.4); }
-html[data-theme="dark"] .nav-help:hover { background: rgba(159,194,216,0.12); border-color: rgba(159,194,216,0.6); }
-html[data-theme="dark"] .nav-avatar:hover,
-html[data-theme="dark"] .nav-library-btn:hover,
-html[data-theme="dark"] .nav-theme-toggle:hover { border-color: rgba(255,255,255,0.28); }
-html[data-theme="dark"] .mega-menu,
-html[data-theme="dark"] .mini-menu {
-  box-shadow: 0 18px 44px rgba(0,0,0,0.35), 0 4px 12px rgba(0,0,0,0.25);
-}
-html[data-theme="dark"] .mega-cat:hover,
-html[data-theme="dark"] .mega-cat.is-active,
-html[data-theme="dark"] .mega-sub-link:hover,
-html[data-theme="dark"] .mini-item:hover,
-html[data-theme="dark"] .mega-search-btn { background: rgba(255,255,255,0.06); }
-html[data-theme="dark"] .mega-search-btn:hover { background: rgba(255,255,255,0.1); }
-html[data-theme="dark"] .mega-cat__dot { background: rgba(255,255,255,0.15); }
-html[data-theme="dark"] .mega-cat.is-active .mega-cat__dot { background: var(--sage); }
-
-/* ── Shared panel base ── */
+/* ── Shared panel base (Liquid Glass) ── */
 .mega-menu, .mini-menu {
   position: fixed;
   top: var(--nav-h); left: 0; right: 0;
   z-index: 800;
-  background: var(--white);
-  border-bottom: 1px solid var(--border);
-  box-shadow: 0 18px 44px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04);
+  background: rgba(255,255,255,0.68);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border-bottom: 1px solid rgba(255,255,255,0.6);
+  border-radius: 0 0 28px 28px;
+  box-shadow: 0 24px 60px rgba(31,38,80,0.10), 0 4px 16px rgba(31,38,80,0.05), 0 1px 0 rgba(255,255,255,.6) inset;
   opacity: 0;
-  transform: translateY(-6px);
+  transform: translateY(-8px) scale(.995);
   pointer-events: none;
-  transition: opacity 0.2s ease, transform 0.22s ease;
+  transition: opacity 0.25s ease, transform 0.3s cubic-bezier(.2,.8,.2,1);
 }
 .mega-menu.is-visible, .mini-menu.is-visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
   pointer-events: all;
 }
 
@@ -400,7 +222,7 @@ html[data-theme="dark"] .mega-cat.is-active .mega-cat__dot { background: var(--s
   padding: 8px 12px; border-radius: 10px; cursor: pointer;
   transition: background 0.12s;
 }
-.mega-cat:hover, .mega-cat.is-active { background: rgba(0,0,0,0.04); }
+.mega-cat:hover, .mega-cat.is-active { background: rgba(255,255,255,0.55); box-shadow: 0 2px 8px rgba(31,38,80,.05); }
 .mega-cat__name { font-size: 13.5px; font-weight: 400; color: var(--text); letter-spacing: -0.01em; line-height: 1.3; text-decoration: none; flex: 1; }
 .mega-cat.is-active .mega-cat__name { font-weight: 500; }
 .mega-cat__dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(0,0,0,0.1); flex-shrink: 0; transition: background 0.15s; }
@@ -416,19 +238,21 @@ html[data-theme="dark"] .mega-cat.is-active .mega-cat__dot { background: var(--s
   color: var(--muted); text-decoration: none;
   border-radius: 8px; transition: color 0.12s, background 0.12s;
 }
-.mega-sub-link:hover { color: var(--text); background: rgba(0,0,0,0.04); }
+.mega-sub-link:hover { color: var(--text); background: rgba(255,255,255,0.55); }
 .mega-footer {
   display: flex; align-items: center; justify-content: space-between;
   border-top: 1px solid var(--border); margin-top: 22px; padding-top: 18px;
 }
 .mega-search-btn {
   display: inline-flex; align-items: center; gap: 7px;
-  padding: 6px 13px; background: rgba(0,0,0,0.04);
-  border-radius: 8px; text-decoration: none;
-  transition: background 0.14s; color: var(--faint);
+  padding: 6px 13px; background: rgba(255,255,255,0.45);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.5);
+  border-radius: 100px; text-decoration: none;
+  transition: background 0.2s ease, transform 0.2s ease; color: var(--faint);
   font-size: 13px; font-weight: 300;
 }
-.mega-search-btn:hover { background: rgba(0,0,0,0.07); }
+.mega-search-btn:hover { background: rgba(255,255,255,0.7); transform: scale(1.03); }
 .mega-all-link, .mini-all-link {
   font-size: 12.5px; font-weight: 400; color: var(--muted);
   text-decoration: none; display: inline-flex; align-items: center;
@@ -456,7 +280,7 @@ html[data-theme="dark"] .mega-cat.is-active .mega-cat__dot { background: var(--s
   padding: 8px 10px; border-radius: 10px;
   text-decoration: none; transition: background 0.12s;
 }
-.mini-item:hover { background: rgba(0,0,0,0.04); }
+.mini-item:hover { background: rgba(255,255,255,0.55); box-shadow: 0 2px 8px rgba(31,38,80,.05); }
 .mini-item__name { font-size: 13.5px; font-weight: 400; color: var(--text); letter-spacing: -0.005em; }
 .mini-item__desc { font-size: 12px; font-weight: 300; color: var(--faint); line-height: 1.4; }
 .mini-single-list { display: flex; flex-direction: column; gap: 2px; }
@@ -468,13 +292,112 @@ html[data-theme="dark"] .mega-cat.is-active .mega-cat__dot { background: var(--s
 .mega-backdrop { position: fixed; inset: 0; z-index: 700; pointer-events: none; }
 .mega-backdrop.is-visible { pointer-events: all; }
 
+/* ── Mobile hamburger ── */
+.nav-burger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  cursor: pointer;
+  background: none; border: none;
+  padding: 0;
+  transition: background .14s;
+  flex-shrink: 0;
+}
+.nav-burger:hover { background: rgba(0,0,0,.05); }
+.nav-burger span {
+  display: block;
+  width: 18px; height: 1.5px;
+  background: #1A1A1A;
+  border-radius: 2px;
+  transition: transform .22s ease, opacity .18s;
+}
+.nav-burger.is-open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.nav-burger.is-open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.nav-burger.is-open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+/* ── Mobile drawer (Liquid Glass) ── */
+.nav-drawer {
+  position: fixed;
+  top: var(--nav-h); left: 0; right: 0; bottom: 0;
+  z-index: 850;
+  background: rgba(255,255,255,0.62);
+  backdrop-filter: blur(30px) saturate(180%);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  overflow-y: auto;
+  padding: 24px 24px 48px;
+  display: flex; flex-direction: column; gap: 6px;
+  transform: translateY(-8px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .28s ease, transform .3s cubic-bezier(.2,.8,.2,1);
+}
+.nav-drawer.is-open {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: all;
+}
+.nav-drawer__link {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 16px;
+  font-family: 'Inter', sans-serif, system-ui, sans-serif;
+  font-size: 16px; font-weight: 400;
+  color: #1A1A1A;
+  text-decoration: none;
+  border-radius: 16px;
+  transition: background .2s ease, transform .2s ease;
+}
+.nav-drawer__link:hover, .nav-drawer__link:active { background: rgba(255,255,255,.6); box-shadow: 0 4px 16px rgba(31,38,80,.06); }
+.nav-drawer__link svg { color: #ABABAB; }
+.nav-drawer__divider {
+  height: 1px;
+  background: rgba(0,0,0,.07);
+  margin: 8px 0;
+}
+.nav-drawer__help {
+  display: flex; align-items: center; justify-content: center;
+  margin-top: 16px;
+  padding: 14px 24px;
+  background: rgba(90,128,80,.12);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(90,128,80,.25);
+  border-radius: 100px;
+  font-size: 14px; font-weight: 500;
+  color: #5A8050;
+  text-decoration: none;
+  transition: transform .2s ease, background .2s ease;
+}
+.nav-drawer__help:hover { transform: scale(1.02); background: rgba(90,128,80,.18); }
+
+@media (max-width: 768px) {
+  .nav-links { display: none !important; }
+  .nav-help { display: none !important; }
+  .nav-burger { display: flex !important; }
+  .site-nav { padding: 0 20px; }
+  .nav-logo { position: static; transform: none; }
+}
+
 /* ── Global Footer ── */
 .site-footer {
-  background: #1A1A1A;
+  background: linear-gradient(160deg, #1A2D40 0%, #0E1E2C 100%);
+  position: relative;
+  overflow: hidden;
   padding: 48px 2.8rem 32px;
-  font-family: 'Mulish', system-ui, sans-serif;
+  font-family: 'Inter', sans-serif, system-ui, sans-serif;
+}
+.site-footer::before {
+  content: '';
+  position: absolute;
+  width: 520px; height: 520px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(100,150,200,.16) 0%, transparent 65%);
+  top: -160px; right: -80px;
+  pointer-events: none;
 }
 .site-footer__inner {
+  position: relative; z-index: 1;
   max-width: 1060px; margin: 0 auto;
   display: flex; align-items: center; justify-content: space-between;
   flex-wrap: wrap; gap: 24px;
@@ -482,7 +405,7 @@ html[data-theme="dark"] .mega-cat.is-active .mega-cat__dot { background: var(--s
   border-bottom: 1px solid rgba(255,255,255,.07);
 }
 .site-footer__logo {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: 'EB Garamond', Georgia, serif;
   font-size: 1.3rem; letter-spacing: .12em;
   color: rgba(255,255,255,.8); text-decoration: none;
 }
@@ -491,32 +414,37 @@ html[data-theme="dark"] .mega-cat.is-active .mega-cat__dot { background: var(--s
   list-style: none; margin: 0; padding: 0;
 }
 .site-footer__links a {
-  font-size: 11px; font-weight: 500; letter-spacing: .1em;
-  text-transform: uppercase; color: rgba(255,255,255,.35);
+  font-size: 12px; font-weight: 400; letter-spacing: .02em;
+  color: rgba(255,255,255,.38);
   padding: 4px 10px; text-decoration: none; transition: color .18s;
 }
-.site-footer__links a:hover { color: rgba(255,255,255,.7); }
+.site-footer__links a:hover { color: rgba(255,255,255,.75); }
 .site-footer__links .site-footer__legal { color: rgba(255,255,255,.55); }
 .site-footer__legal:hover { color: rgba(255,255,255,.9) !important; }
 .site-footer__bottom {
+  position: relative; z-index: 1;
   max-width: 1060px; margin: 24px auto 0;
   font-size: 11.5px; color: rgba(255,255,255,.2);
 }
 
-/* ── Cookie Banner ── */
+/* ── Cookie Banner (dark glass) ── */
 .mb-cookie-banner {
   position: fixed; bottom: 24px;
   left: 50%; transform: translateX(-50%) translateY(12px);
   z-index: 850;
-  background: #1A1A1A; color: rgba(255,255,255,.75);
-  border-radius: 14px; padding: 14px 20px;
+  background: rgba(20,25,35,.62);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  color: rgba(255,255,255,.75);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 20px; padding: 14px 20px;
   display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
   max-width: 680px; width: calc(100% - 48px);
-  box-shadow: 0 8px 32px rgba(0,0,0,.28);
-  font-family: 'Mulish', system-ui, sans-serif;
+  box-shadow: 0 12px 40px rgba(0,0,0,.24), 0 1px 0 rgba(255,255,255,.08) inset;
+  font-family: 'Inter', sans-serif, system-ui, sans-serif;
   font-size: 13px; line-height: 1.5;
   opacity: 0; pointer-events: none;
-  transition: opacity .3s, transform .3s;
+  transition: opacity .3s ease, transform .3s cubic-bezier(.2,.8,.2,1);
 }
 .mb-cookie-banner.is-visible {
   opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: all;
@@ -525,16 +453,64 @@ html[data-theme="dark"] .mega-cat.is-active .mega-cat__dot { background: var(--s
 .mb-cookie-banner a { color: #8FBC85; text-decoration: none; }
 .mb-cookie-banner a:hover { text-decoration: underline; }
 .mb-cookie-banner button {
-  background: rgba(255,255,255,.12); border: none;
-  color: #fff; padding: 7px 18px; border-radius: 8px;
+  background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.16);
+  color: #fff; padding: 7px 18px; border-radius: 100px;
   font-size: 12.5px; font-weight: 500; cursor: pointer;
   white-space: nowrap; font-family: inherit; flex-shrink: 0;
-  transition: background .15s;
+  transition: background .2s ease, transform .2s ease;
 }
-.mb-cookie-banner button:hover { background: rgba(255,255,255,.2); }
+.mb-cookie-banner button:hover { background: rgba(255,255,255,.24); transform: scale(1.04); }
 
 @media (max-width: 600px) {
   .site-footer { padding: 40px 1.4rem 28px; }
+}
+
+/* ── Atmospheric nav mode (over gradient hero) ── */
+.site-nav--atm {
+  background: rgba(20,45,70,.30) !important;
+  backdrop-filter: blur(22px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(180%) !important;
+  border-bottom-color: rgba(255,255,255,.14) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,.10) !important;
+}
+.site-nav--atm .nav-logo { color: rgba(255,255,255,.92) !important; }
+.site-nav--atm .nav-link { color: rgba(255,255,255,.76) !important; }
+.site-nav--atm .nav-link:hover,
+.site-nav--atm .nav-item-with-menu.is-open .nav-link {
+  color: #fff !important;
+  background: rgba(255,255,255,.12) !important;
+}
+.site-nav--atm .nav-help {
+  color: rgba(255,255,255,.82) !important;
+  border-color: rgba(255,255,255,.24) !important;
+}
+.site-nav--atm .nav-help:hover {
+  background: rgba(255,255,255,.12) !important;
+  border-color: rgba(255,255,255,.44) !important;
+}
+.site-nav--atm .nav-avatar,
+.site-nav--atm .nav-library-btn {
+  color: rgba(255,255,255,.68) !important;
+  border-color: rgba(255,255,255,.20) !important;
+}
+.site-nav--atm .nav-avatar:hover,
+.site-nav--atm .nav-library-btn:hover {
+  color: #fff !important;
+  border-color: rgba(255,255,255,.40) !important;
+}
+.site-nav--atm .nav-burger span { background: #fff !important; }
+
+/* ── Reduced transparency / motion fallback ── */
+@media (prefers-reduced-transparency: reduce) {
+  .site-nav, .mega-menu, .mini-menu, .nav-drawer, .mb-cookie-banner {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: #F8F7F4 !important;
+  }
+  .mb-cookie-banner { background: #1A1A1A !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .site-nav, .nav-link, .nav-help, .nav-avatar, .nav-library-btn, .mega-menu, .mini-menu, .nav-drawer, .nav-drawer__link, .mega-search-btn { transition: none !important; }
 }
 `;
   document.head.appendChild(style);
@@ -551,49 +527,49 @@ const NAV_CONFIG = {
   helpHref:    "help.html",
   profileHref: "profile.html",
   links: [
-    { label: "Home",      href: "index.html" },
-    { label: "Learn",     href: "learn.html" },
-    { label: "Topics",    href: "topics.html",    triggerId: "topicsTrigger",    menuId: "megaMenu" },
+    { label: "Start",     href: "index.html" },
+    { label: "Lernen",    href: "learn.html" },
+    { label: "Themen",    href: "topics.html",    triggerId: "topicsTrigger",    menuId: "megaMenu" },
     { label: "Tools",     href: "tools.html",     triggerId: "toolsTrigger",     menuId: "toolsMenu" },
     { label: "Community", href: "community.html", triggerId: "communityTrigger", menuId: "communityMenu" },
-    { label: "About",     href: "about.html" },
+    { label: "Über uns",  href: "about.html" },
   ],
 };
 
 const TOPICS_CATEGORIES = [
-  { id: "self-worth",   name: "Self-Worth & Identity",    href: "topic-self-worth.html",    subtopics: ["Self-Worth", "Confidence", "Self-Compassion", "Comparison", "Perfectionism", "Validation", "Boundaries"] },
-  { id: "anxiety",      name: "Anxiety & Overthinking",   href: "topic-anxiety.html",       subtopics: ["Anxiety", "Overthinking", "Panic Attacks", "Worry Loops", "Sleep Issues", "Racing Thoughts", "Nervous System"] },
-  { id: "loneliness",   name: "Loneliness & Connection",  href: "topic-loneliness.html",    subtopics: ["Loneliness", "Isolation", "Feeling Left Out", "Belonging", "Making Friends", "Reconnecting", "Vulnerability"] },
-  { id: "relationships",name: "Relationships",            href: "topic-relationships.html", subtopics: ["Breakups", "Dating", "Attachment Styles", "Family Dynamics", "Friendship Issues", "Communication", "Conflict"] },
-  { id: "stress",       name: "Stress & Burnout",         href: "topic-stress.html",        subtopics: ["Burnout", "Stress", "Exhaustion", "Rest", "Work-Life Balance", "Overwhelm", "Recovery"] },
-  { id: "habits",       name: "Habits & Growth",          href: "topic-habits.html",        subtopics: ["Habits & Discipline", "Purpose & Meaning", "Life Direction", "Motivation", "Procrastination", "Fresh Starts", "Routine"] },
-  { id: "emotions",     name: "Emotions & Resilience",    href: "topic-emotions.html",      subtopics: ["Emotional Overwhelm", "Grief & Loss", "Depression", "Inner Critic", "Anger", "Shame", "Self-Compassion"] },
-  { id: "transitions",  name: "Life Transitions",         href: "topic-transitions.html",   subtopics: ["Moving & Relocation", "New Job & Study", "Identity Crisis", "Fresh Starts", "Grief & Loss", "Life Direction", "Reinvention"] },
+  { id: "self-worth",   name: "Selbstwert & Identität",   href: "topic-self-worth.html",    subtopics: ["Selbstwert", "Selbstvertrauen", "Selbstmitgefühl", "Vergleiche", "Perfektionismus", "Anerkennung", "Grenzen"] },
+  { id: "anxiety",      name: "Angst & Grübeln",          href: "topic-anxiety.html",       subtopics: ["Angst", "Grübeln", "Panikattacken", "Gedankenkarussell", "Schlafprobleme", "Gedankenrasen", "Nervensystem"] },
+  { id: "loneliness",   name: "Einsamkeit & Verbindung",  href: "topic-loneliness.html",    subtopics: ["Einsamkeit", "Isolation", "Ausgeschlossen fühlen", "Zugehörigkeit", "Freundschaften knüpfen", "Wieder verbinden", "Verletzlichkeit"] },
+  { id: "relationships",name: "Beziehungen",              href: "topic-relationships.html", subtopics: ["Trennungen", "Dating", "Bindungsstile", "Familiendynamiken", "Freundschaftsprobleme", "Kommunikation", "Konflikte"] },
+  { id: "stress",       name: "Stress & Burnout",         href: "topic-stress.html",        subtopics: ["Burnout", "Stress", "Erschöpfung", "Erholung", "Work-Life-Balance", "Überwältigung", "Regeneration"] },
+  { id: "habits",       name: "Gewohnheiten & Wachstum",  href: "topic-habits.html",        subtopics: ["Gewohnheiten & Disziplin", "Sinn & Bedeutung", "Lebensrichtung", "Motivation", "Prokrastination", "Neuanfänge", "Routine"] },
+  { id: "emotions",     name: "Gefühle & Resilienz",      href: "topic-emotions.html",      subtopics: ["Emotionale Überwältigung", "Trauer & Verlust", "Depression", "Innerer Kritiker", "Wut", "Scham", "Selbstmitgefühl"] },
+  { id: "transitions",  name: "Lebensveränderungen",      href: "topic-transitions.html",   subtopics: ["Umzug & Ortswechsel", "Neuer Job & Studium", "Identitätskrise", "Neuanfänge", "Trauer & Verlust", "Lebensrichtung", "Neuerfindung"] },
 ];
 
 const TOOLS_GROUPS = [
-  { label: "Calm & Ground",  items: [
-    { name: "4-7-8 Breathing",  href: "tool-breathing.html",     desc: "Activate your calm response" },
-    { name: "Thought Clouds",   href: "tool-clouds.html",         desc: "Let thoughts pass without holding on" },
-    { name: "Difficult Days",   href: "tool-difficult-days.html", desc: "A guide for hard moments" },
+  { label: "Beruhigen & Erden",       items: [
+    { name: "4-7-8 Breathing",  href: "tool-breathing.html",     desc: "Deine Ruhe aktivieren" },
+    { name: "Thought Clouds",   href: "tool-clouds.html",         desc: "Gedanken ziehen lassen" },
+    { name: "Difficult Days",   href: "tool-difficult-days.html", desc: "Ein Begleiter für schwere Momente" },
   ]},
-  { label: "Reflect & Know", items: [
-    { name: "Thought Mirror",   href: "tool-thought-mirror.html", desc: "Reframe unhelpful thinking" },
-    { name: "Emotion Wheel",    href: "tool-emotion-wheel.html",  desc: "Name what you're feeling" },
-    { name: "Values Clarifier", href: "tool-values.html",         desc: "Find what matters to you" },
+  { label: "Reflektieren & Erkennen", items: [
+    { name: "Thought Mirror",   href: "tool-thought-mirror.html", desc: "Hilfloses Denken umstrukturieren" },
+    { name: "Emotion Wheel",    href: "tool-emotion-wheel.html",  desc: "Benenne, was du fühlst" },
+    { name: "Values Clarifier", href: "tool-values.html",         desc: "Finde, was dir wichtig ist" },
   ]},
-  { label: "Act & Prepare",  items: [
-    { name: "Boundary Builder", href: "tool-boundaries.html",     desc: "Script a hard conversation" },
-    { name: "Circle of Control",href: "tool-control.html",        desc: "Focus on what's yours to change" },
-    { name: "Prepare Flow",     href: "tool-prepare.html",        desc: "Get ready for what's coming" },
+  { label: "Handeln & Vorbereiten",   items: [
+    { name: "Boundary Builder", href: "tool-boundaries.html",     desc: "Ein schwieriges Gespräch vorbereiten" },
+    { name: "Circle of Control",href: "tool-control.html",        desc: "Fokus auf das, was du ändern kannst" },
+    { name: "Prepare Flow",     href: "tool-prepare.html",        desc: "Vorbereiten, was kommt" },
   ]},
 ];
 
 const COMMUNITY_ITEMS = [
-  { name: "All Posts",        href: "community.html",       desc: "Browse the community feed" },
-  { name: "Prompt Room",      href: "prompt-room.html",     desc: "Daily reflection prompts" },
-  { name: "Share Your Story", href: "community.html#share", desc: "Write and publish your experience" },
-  { name: "Most Helpful",     href: "community.html#top",   desc: "Posts that resonated most" },
+  { name: "Alle Beiträge",       href: "community.html",       desc: "Den Community-Feed entdecken" },
+  { name: "Prompt Room",         href: "prompt-room.html",     desc: "Tägliche Reflexionsfragen" },
+  { name: "Deine Geschichte",    href: "community.html#share", desc: "Schreibe und teile deine Erfahrung" },
+  { name: "Am hilfreichsten",    href: "community.html#top",   desc: "Beiträge, die am meisten bewegt haben" },
 ];
 
 
@@ -605,10 +581,10 @@ function toSlug(str) {
 
 function buildTopicsMegaMenu() {
   return `
-<div class="mega-menu" id="megaMenu" role="dialog" aria-label="Topics menu">
+<div class="mega-menu" id="megaMenu" role="dialog" aria-label="Themen-Menü">
   <div class="mega-menu__inner">
     <div class="mega-left">
-      <span class="mega-label">Browse by topic</span>
+      <span class="mega-label">Nach Thema stöbern</span>
       <ul class="mega-cat-list" id="megaCatList">
         ${TOPICS_CATEGORIES.map((cat, i) => `
           <li class="mega-cat${i === 0 ? " is-active" : ""}" data-cat="${cat.id}">
@@ -628,10 +604,10 @@ function buildTopicsMegaMenu() {
       <div class="mega-footer">
         <a href="topics.html" class="mega-search-btn">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
-          <span>Search topics…</span>
+          <span>Themen suchen …</span>
         </a>
         <a href="topics.html" class="mega-all-link">
-          All topics
+          Alle Themen
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
       </div>
@@ -657,7 +633,7 @@ function buildToolsDropdown() {
     </div>
     <div class="mini-footer">
       <a href="tools.html" class="mini-all-link">
-        All tools
+        Alle Tools
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
     </div>
@@ -690,17 +666,17 @@ function buildFooter() {
   <div class="site-footer__inner">
     <a href="index.html" class="site-footer__logo">Mindbloom</a>
     <ul class="site-footer__links">
-      <li><a href="topics.html">Topics</a></li>
-      <li><a href="learn.html">Learn</a></li>
+      <li><a href="topics.html">Themen</a></li>
+      <li><a href="learn.html">Lernen</a></li>
       <li><a href="tools.html">Tools</a></li>
       <li><a href="community.html">Community</a></li>
-      <li><a href="about.html">About</a></li>
+      <li><a href="about.html">Über uns</a></li>
       <li><a href="help.html">Soforthilfe</a></li>
       <li><a href="legal.html" class="site-footer__legal">Impressum &amp; Datenschutz</a></li>
     </ul>
   </div>
   <div class="site-footer__bottom">
-    <p>&copy; 2026 Mindbloom &nbsp;&middot;&nbsp; A space for your mind &nbsp;&middot;&nbsp; Kein Ersatz f&uuml;r professionelle Hilfe &nbsp;&middot;&nbsp; Telefonseelsorge: <strong style="color:rgba(255,255,255,.4)">0800 111 0 111</strong></p>
+    <p>&copy; 2026 Mindbloom &nbsp;&middot;&nbsp; Ein Raum für deinen Kopf &nbsp;&middot;&nbsp; Kein Ersatz f&uuml;r professionelle Hilfe &nbsp;&middot;&nbsp; Telefonseelsorge: <strong style="color:rgba(255,255,255,.4)">0800 111 0 111</strong></p>
   </div>
 </footer>`;
 }
@@ -757,6 +733,13 @@ function buildNav() {
       : `<li><a href="${link.href}" class="nav-link">${link.label}</a></li>`
   ).join('\n    ');
 
+  const drawerLinksHTML = NAV_CONFIG.links.map(link =>
+    `<a href="${link.href}" class="nav-drawer__link">
+      <span>${link.label}</span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+    </a>`
+  ).join('');
+
   placeholder.outerHTML = `
 <nav class="site-nav" id="siteNav">
   <ul class="nav-links">
@@ -765,15 +748,7 @@ function buildNav() {
   <a href="${NAV_CONFIG.logo.href}" class="nav-logo">${NAV_CONFIG.logo.label}</a>
   <div class="nav-right">
     <a href="${NAV_CONFIG.helpHref}" class="nav-help">${NAV_CONFIG.helpLabel}</a>
-    <button type="button" class="nav-theme-toggle" onclick="mbToggleTheme()" aria-label="Dark / Light Mode umschalten" title="Dark / Light Mode">
-      <svg class="mb-icon-moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/>
-      </svg>
-      <svg class="mb-icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
-      </svg>
-    </button>
-    <a href="library.html" class="nav-library-btn" aria-label="My Library" title="My Library">
+    <a href="library.html" class="nav-library-btn" aria-label="Meine Bibliothek" title="Meine Bibliothek">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
         <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
       </svg>
@@ -783,8 +758,16 @@ function buildNav() {
         <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
       </svg>
     </a>
+    <button class="nav-burger" id="navBurger" aria-label="Menü" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
+<div class="nav-drawer" id="navDrawer" aria-hidden="true">
+  ${drawerLinksHTML}
+  <div class="nav-drawer__divider"></div>
+  <a href="${NAV_CONFIG.helpHref}" class="nav-drawer__help">${NAV_CONFIG.helpLabel}</a>
+</div>
 ${buildTopicsMegaMenu()}
 ${buildToolsDropdown()}
 ${buildCommunityDropdown()}
@@ -860,7 +843,39 @@ function initNav() {
   });
 
   backdrop.addEventListener("click", closeAll);
-  document.addEventListener("keydown", e => { if (e.key === "Escape") closeAll(); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") { closeAll(); closeMobileDrawer(); } });
+
+  // Mobile hamburger
+  const burger = document.getElementById("navBurger");
+  const drawer = document.getElementById("navDrawer");
+
+  function closeMobileDrawer() {
+    if (!drawer) return;
+    burger?.classList.remove("is-open");
+    burger?.setAttribute("aria-expanded", "false");
+    drawer.classList.remove("is-open");
+    drawer.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+  }
+
+  burger?.addEventListener("click", () => {
+    const isOpen = drawer.classList.contains("is-open");
+    if (isOpen) {
+      closeMobileDrawer();
+    } else {
+      burger.classList.add("is-open");
+      burger.setAttribute("aria-expanded", "true");
+      drawer.classList.add("is-open");
+      drawer.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+      closeAll();
+    }
+  });
+
+  // Close drawer on link click
+  drawer?.querySelectorAll(".nav-drawer__link, .nav-drawer__help").forEach(link => {
+    link.addEventListener("click", closeMobileDrawer);
+  });
 
   // Topics mega menu — category switching
   const catList   = document.getElementById("megaCatList");
@@ -879,24 +894,76 @@ function initNav() {
 }
 
 
-// ─── 6. Init ──────────────────────────────────────────────────────────────────
+// ─── 6. Atmospheric nav (transparent over gradient hero) ─────────────────────
+
+function initAtmNav() {
+  const nav = document.querySelector('.site-nav');
+  if (!nav || !document.body.classList.contains('atm-hero')) return;
+
+  nav.classList.add('site-nav--atm');
+
+  const hero = document.querySelector('.hero');
+  if (!hero) return;
+
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      const heroBottom = hero.getBoundingClientRect().bottom;
+      nav.classList.toggle('site-nav--atm', heroBottom > 0);
+      ticking = false;
+    });
+  }, { passive: true });
+}
+
+
+// ─── 6b. Scroll reaction (glass nav deepens slightly once page scrolls) ──────
+
+function initScrollNav() {
+  const nav = document.querySelector('.site-nav');
+  if (!nav) return;
+  let ticking = false;
+  function update() {
+    nav.classList.toggle('site-nav--scrolled', window.scrollY > 8);
+    ticking = false;
+  }
+  update();
+  window.addEventListener('scroll', () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(update);
+  }, { passive: true });
+}
+
+
+// ─── 7. Init ──────────────────────────────────────────────────────────────────
 
 if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", buildNav);
+  document.addEventListener("DOMContentLoaded", () => { buildNav(); initAtmNav(); initScrollNav(); });
 } else {
   buildNav();
+  initAtmNav();
+  initScrollNav();
 }
 
 // ─── 7. bfcache (Safari Back/Forward) ────────────────────────────────────────
 
 window.addEventListener('pageshow', (e) => {
   if (!e.persisted) return;
-  injectThemeCSS();
   injectNavCSS();
   if (!document.querySelector('.site-nav')) {
     _navInitDone = false;
     buildNav();
   } else {
     closeAllMenus();
+    const drawer = document.getElementById('navDrawer');
+    if (drawer) {
+      drawer.classList.remove('is-open');
+      drawer.setAttribute('aria-hidden', 'true');
+    }
+    const burger = document.getElementById('navBurger');
+    if (burger) burger.classList.remove('is-open');
+    document.body.style.overflow = '';
   }
 });

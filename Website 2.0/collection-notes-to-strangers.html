@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mindbloom — Notes to Strangers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #F8F7F4;
+  --white:     #FFFFFF;
+  --paper:     #FCFBF7;
+  --border:    rgba(0,0,0,0.08);
+  --border-m:  rgba(0,0,0,0.13);
+  --text:      #1A1A1A;
+  --muted:     #6B6B6B;
+  --faint:     #ABABAB;
+
+  --g-dusk:    linear-gradient(135deg, #C4C0DC 0%, #8A84B8 100%);
+  --g-blush:   linear-gradient(135deg, #DEC9C4 0%, #BF9690 100%);
+
+  --sage-tint:  #F0F4EE;
+  --blush-tint: #F6EEEC;
+  --sage:   #5A8050;
+  --dusk:   #6A64A0;
+  --blush:  #9A6A64;
+
+  --serif:      'EB Garamond', Georgia, serif;
+  --serif-body: 'EB Garamond', Georgia, serif;
+  --sans:       'Inter', sans-serif;
+  --r:    16px;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: var(--sans); font-weight: 300; font-size: 15px; line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+}
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; font-family: var(--sans); border: none; background: none; }
+
+/* NAV */
+/* BREADCRUMB + HEADER */
+.crumb { max-width: 880px; margin: 0 auto; padding: 1.4rem 1.6rem 0; }
+.crumb a { font-size: 12px; color: var(--muted); transition: color .18s; }
+.crumb a:hover { color: var(--text); }
+.collection-head { max-width: 880px; margin: 0 auto; padding: 1.6rem 1.6rem 2rem; text-align: center; }
+.collection-head .kicker { font-size: 10.5px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--dusk); margin-bottom: 0.7rem; }
+.collection-head h1 { font-family: var(--serif); font-size: clamp(28px, 4vw, 42px); font-weight: 400; margin-bottom: 12px; }
+.collection-head p { font-family: var(--serif-body); font-style: italic; font-size: 15px; color: var(--muted); max-width: 520px; margin: 0 auto; line-height: 1.7; }
+
+/* GIVE STRIP */
+.give-strip {
+  max-width: 880px; margin: 0 auto 2.4rem; padding: 0 1.6rem;
+}
+.give-inner {
+  background: var(--white); border: 1px solid var(--border); border-radius: var(--r);
+  padding: 1rem 1.4rem; display: flex; align-items: center; gap: 1rem;
+}
+.give-seal { width: 34px; height: 34px; border-radius: 50%; background: var(--g-blush); flex-shrink: 0; }
+.give-text { flex: 1; font-size: 13.5px; color: var(--muted); }
+.give-btn { flex-shrink: 0; padding: 0.5rem 1.2rem; border-radius: 100px; background: var(--text); color: #fff; font-size: 12.5px; font-weight: 500; transition: opacity .18s; }
+.give-btn:hover { opacity: .82; }
+
+/* LIST */
+.list-wrap { max-width: 880px; margin: 0 auto; padding: 0 1.6rem 6rem; }
+.notes-grid { columns: 2; column-gap: 1rem; }
+.note-card {
+  break-inside: avoid; display: block; width: 100%; text-align: left;
+  background: var(--white); border: 1px solid var(--border); border-radius: var(--r);
+  padding: 1.4rem 1.5rem; margin-bottom: 1rem;
+  cursor: pointer; transition: border-color .18s, box-shadow .18s, transform .12s;
+}
+.note-card:hover { border-color: var(--border-m); box-shadow: 0 2px 14px rgba(0,0,0,.05); transform: translateY(-1px); }
+.note-card.fresh { border-color: rgba(90,128,80,.28); }
+.note-quote { font-family: var(--serif-body); font-size: 1.02rem; line-height: 1.7; color: var(--text); }
+.note-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 1rem; }
+.note-sign { font-family: var(--serif-body); font-style: italic; font-size: 12.5px; color: var(--faint); }
+.note-new { font-size: 9.5px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--sage); background: var(--sage-tint); padding: 2px 8px; border-radius: 100px; }
+
+/* DETAIL */
+.detail-wrap { max-width: 620px; margin: 0 auto; padding: 1rem 1.6rem 6rem; display: none; }
+.detail-wrap.show { display: block; }
+.detail-back { font-size: 12.5px; color: var(--muted); margin-bottom: 1.4rem; display: inline-flex; align-items: center; gap: 6px; transition: color .18s; }
+.detail-back:hover { color: var(--text); }
+.letter {
+  position: relative; background: var(--paper); border: 1px solid var(--border); border-radius: var(--r);
+  padding: 3rem 2.6rem 2.2rem; box-shadow: 0 1px 3px rgba(0,0,0,.04), 0 14px 40px rgba(0,0,0,.05); overflow: hidden;
+}
+.letter::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--g-dusk); opacity: .5; }
+.letter-seal { width: 44px; height: 44px; border-radius: 50%; background: var(--g-dusk); margin: 0 auto 1.6rem; box-shadow: 0 2px 8px rgba(138,132,184,.4); }
+.letter-body { font-family: var(--serif-body); font-size: 1.3rem; line-height: 1.85; color: var(--text); text-align: center; }
+.letter-sign { font-family: var(--serif-body); font-style: italic; font-size: 13.5px; color: var(--faint); text-align: center; margin-top: 1.6rem; }
+.letter-react { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 2rem; padding-top: 1.6rem; border-top: 1px solid var(--border); }
+.react-btn { display: inline-flex; align-items: center; gap: 6px; padding: 0.42rem 0.95rem; border-radius: 100px; border: 1px solid var(--border-m); background: var(--white); font-size: 12.5px; color: var(--muted); transition: border-color .18s, color .18s, background .18s, transform .12s; }
+.react-btn:hover { border-color: var(--dusk); color: var(--text); transform: translateY(-1px); }
+.react-btn.picked { background: var(--blush-tint); border-color: var(--dusk); color: var(--dusk); }
+.detail-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 1.4rem; min-height: 22px; }
+.detail-confirm { font-size: 12.5px; color: var(--sage); font-family: var(--serif-body); font-style: italic; opacity: 0; transition: opacity .3s; }
+.detail-confirm.show { opacity: 1; }
+.text-link { font-size: 12.5px; color: var(--dusk); font-weight: 500; transition: opacity .18s; }
+.text-link:hover { opacity: .65; }
+
+@media (max-width: 600px) {
+  .notes-grid { columns: 1; }
+}
+</style>
+  <script src="nav.js?v=5"></script>
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div id="site-nav-placeholder"></div>
+
+<!-- LIST VIEW -->
+<div id="listView">
+  <div class="crumb"><a href="community.html">← Zurück zur Community</a></div>
+
+  <div class="collection-head">
+    <div class="kicker">Sammlung</div>
+    <h1>Notes to Strangers</h1>
+    <p>Worte, die Menschen für jemanden dagelassen haben, den sie nie treffen werden. Lies, so viele du magst.</p>
+  </div>
+
+  <div class="give-strip">
+    <div class="give-inner">
+      <div class="give-seal"></div>
+      <div class="give-text">Du kannst auch eine Notiz dalassen — anonym, für jemanden, der sie vielleicht gerade braucht.</div>
+      <a href="community.html" class="give-btn">Notiz schreiben</a>
+    </div>
+  </div>
+
+  <div class="list-wrap">
+    <div class="notes-grid" id="notesGrid"></div>
+  </div>
+</div>
+
+<!-- DETAIL VIEW -->
+<div class="detail-wrap" id="detailView">
+  <div class="crumb" style="padding-left:0;padding-right:0;"><button class="detail-back" onclick="closeNote()">← Zurück zur Sammlung</button></div>
+  <div class="letter">
+    <div class="letter-seal"></div>
+    <div class="letter-body" id="detailBody"></div>
+    <div class="letter-sign">— jemand, der dich nicht kennt</div>
+    <div class="letter-react" id="detailReact">
+      <button class="react-btn" onclick="react(this)">Danke</button>
+      <button class="react-btn" onclick="react(this)">Das tat gut</button>
+      <button class="react-btn" onclick="react(this)">Das hab ich gebraucht</button>
+      <button class="react-btn" onclick="react(this)">Proud of you</button>
+    </div>
+    <div class="detail-foot">
+      <span class="detail-confirm" id="detailConfirm">Dein Dank ist unterwegs zu ihnen.</span>
+      <button class="text-link" onclick="nextNote()">Nächste Notiz →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* Seed content — would come from the moderated collection store.
+   `fresh: true` shows a quiet "neu heute" marker (aliveness without metrics). */
+const NOTES = [
+  { text: "Falls dir das heute keiner gesagt hat: schön, dass es dich gibt.", fresh: true },
+  { text: "Du musst dich nicht zusammenreißen, um es zu verdienen, hier zu sein. Du darfst einfach müde sein und trotzdem bleiben." },
+  { text: "Der Mensch, der du in fünf Jahren bist, ist froh, dass du heute nicht aufgegeben hast.", fresh: true },
+  { text: "Es ist okay, wenn heute nur „aufstehen und atmen“ die ganze Liste war. Das war genug." },
+  { text: "Du bist nicht zu viel. Du warst nur lange bei Menschen, die zu wenig Platz hatten." },
+  { text: "Irgendwo lacht jemand gerade über einen Witz, den nur du erzählen kannst. Diese Welt braucht dich." },
+  { text: "Wenn du das hier liest und es gerade schwer ist: Es muss nicht heute besser werden. Nur irgendwann." },
+  { text: "Du hast bisher 100% deiner schlimmsten Tage überstanden. Das ist keine Kleinigkeit." },
+  { text: "Jemand, den du noch nicht kennst, wird sich eines Tages freuen, dass es dich gibt." },
+  { text: "Sei heute ein bisschen sanfter zu dir, als du glaubst, es zu verdienen. Du verdienst mehr, als du denkst." },
+  { text: "Es ist mutig, weiterzumachen, wenn niemand sieht, wie schwer es ist. Ich sehe es." },
+  { text: "Ruhe ist kein Aufgeben. Manchmal ist Innehalten das Tapferste, was man tun kann." }
+];
+
+let current = 0;
+
+function renderList() {
+  const grid = document.getElementById('notesGrid');
+  grid.innerHTML = '';
+  NOTES.forEach((n, i) => {
+    const b = document.createElement('button');
+    b.className = 'note-card' + (n.fresh ? ' fresh' : '');
+    b.onclick = () => openNote(i);
+    b.innerHTML =
+      '<div class="note-quote">„' + n.text + '“</div>' +
+      '<div class="note-foot">' +
+        '<span class="note-sign">— Fremde:r</span>' +
+        (n.fresh ? '<span class="note-new">neu heute</span>' : '') +
+      '</div>';
+    grid.appendChild(b);
+  });
+}
+
+function openNote(i) {
+  current = i;
+  document.getElementById('detailBody').textContent = '„' + NOTES[i].text + '“';
+  document.querySelectorAll('#detailReact .react-btn').forEach(b => b.classList.remove('picked'));
+  document.getElementById('detailConfirm').classList.remove('show');
+  document.getElementById('listView').style.display = 'none';
+  document.getElementById('detailView').classList.add('show');
+  window.scrollTo({ top: 0, behavior: 'auto' });
+}
+
+function closeNote() {
+  document.getElementById('detailView').classList.remove('show');
+  document.getElementById('listView').style.display = 'block';
+}
+
+function nextNote() {
+  openNote((current + 1) % NOTES.length);
+}
+
+function react(btn) {
+  document.querySelectorAll('#detailReact .react-btn').forEach(b => b.classList.remove('picked'));
+  btn.classList.add('picked');
+  document.getElementById('detailConfirm').classList.add('show');
+}
+
+renderList();
+</script>
+</body>
+</html>

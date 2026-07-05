@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mindbloom — Community Prompt</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Mulish:wght@300;400;500&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -30,9 +30,9 @@
   --sage:   #5A8050;
   --dusk:   #6A64A0;
 
-  --serif:      'Playfair Display', Georgia, serif;
-  --serif-body: 'Lora', Georgia, serif;
-  --sans:       'Mulish', sans-serif;
+  --serif:      'EB Garamond', Georgia, serif;
+  --serif-body: 'EB Garamond', Georgia, serif;
+  --sans:       'Inter', sans-serif;
   --r: 16px; --r-sm: 10px;
 }
 
@@ -233,7 +233,8 @@ button { cursor: pointer; font-family: var(--sans); border: none; }
 }
 .anim-in { animation: fadeSlide .35s ease forwards; }
 </style>
-  <script src="nav.js"></script>
+  <script src="nav.js?v=5"></script>
+  <link rel="stylesheet" href="shared.css">
 </head>
 <body>
   <div id="site-nav-placeholder"></div>
@@ -274,9 +275,9 @@ button { cursor: pointer; font-family: var(--sans); border: none; }
   <div class="write-box">
     <div class="write-box-top">
       <div class="write-avatar"></div>
-      <div class="write-name">You</div>
+      <div class="write-name">Du</div>
       <div class="write-anon">
-        Post anonymously
+        Anonym posten
         <button class="anon-toggle" id="anonToggle" onclick="this.classList.toggle('on')">
           <div class="anon-knob"></div>
         </button>
@@ -295,7 +296,7 @@ button { cursor: pointer; font-family: var(--sans); border: none; }
   <span class="sort-label">847 responses</span>
   <div class="sort-options">
     <button class="sort-btn active" onclick="setSort(this,'top')">Top</button>
-    <button class="sort-btn" onclick="setSort(this,'recent')">Recent</button>
+    <button class="sort-btn" onclick="setSort(this,'recent')">Neueste</button>
   </div>
 </div>
 
@@ -312,7 +313,7 @@ const RESPONSES = [
   },
   {
     id: 2, anon: true,
-    author: 'Anonymous', grad: 'var(--g-slate)',
+    author: 'Anonym', grad: 'var(--g-slate)',
     time: '8 hours ago', hearts: 187,
     body: 'Crying. I used to apologise every time I got emotional, like it was an inconvenience to everyone. I\'m not doing that anymore. Crying means something mattered. That\'s not weakness.'
   },
@@ -324,7 +325,7 @@ const RESPONSES = [
   },
   {
     id: 4, anon: true,
-    author: 'Anonymous', grad: 'var(--g-blush)',
+    author: 'Anonym', grad: 'var(--g-blush)',
     time: 'Yesterday', hearts: 98,
     body: 'My apartment not being perfectly clean. I was raised to believe mess meant failure. Now I see dishes in the sink and think "I cooked for myself today, that\'s enough." It\'s a small thing but it changed the whole tone of how I talk to myself.'
   },
@@ -406,9 +407,9 @@ function submitResponse() {
   const isAnon = document.getElementById('anonToggle').classList.contains('on');
   const newResp = {
     id: Date.now(), anon: isAnon,
-    author: isAnon ? 'Anonymous' : 'You',
+    author: isAnon ? 'Anonym' : 'Du',
     grad: isAnon ? 'var(--g-slate)' : 'var(--g-dusk)',
-    time: 'Just now', hearts: 0,
+    time: 'Gerade eben', hearts: 0,
     body: val
   };
   RESPONSES.unshift(newResp);
