@@ -748,6 +748,14 @@ function buildNav() {
   <a href="${NAV_CONFIG.logo.href}" class="nav-logo">${NAV_CONFIG.logo.label}</a>
   <div class="nav-right">
     <a href="${NAV_CONFIG.helpHref}" class="nav-help">${NAV_CONFIG.helpLabel}</a>
+    <button type="button" class="nav-theme-toggle" onclick="mbToggleTheme()" aria-label="Dark- oder Hell-Modus umschalten" title="Dark / Hell">
+      <svg class="mb-icon-moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/>
+      </svg>
+      <svg class="mb-icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+      </svg>
+    </button>
     <a href="library.html" class="nav-library-btn" aria-label="Meine Bibliothek" title="Meine Bibliothek">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
         <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
