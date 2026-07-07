@@ -242,7 +242,7 @@ const LISTS = {
 
   'energy-takers-givers': {
     title: 'Energy Takers vs. Energy Givers',
-    badge: { label: 'Energie', bg: 'rgba(188,168,112,.15)', color: '#907840' },
+    badge: { label: 'Energie', bg: 'rgba(188,168,112,.15)', color: '#B07D3A' },
     backUrl: 'topic-stress.html',
     backLabel: 'Stress & Burnout',
     intro: 'Wir vergessen im Alltag oft die absoluten Basics. Dein Körper und dein Geist sind wie eine Batterie – achte darauf, was sie entlädt und was sie auflädt.',
