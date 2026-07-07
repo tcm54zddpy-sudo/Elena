@@ -31,7 +31,7 @@ function injectNavCSS() {
   --sage:   #5A8050;
   --dusk:   #6A64A0;
   --serif:  'EB Garamond', Georgia, serif;
-  --sans:   'Inter', sans-serif, system-ui, sans-serif;
+  --sans:   'Inter', system-ui, sans-serif;
 }
 
 body { padding-top: var(--nav-h); }
@@ -343,7 +343,7 @@ body { padding-top: var(--nav-h); }
 .nav-drawer__link {
   display: flex; align-items: center; justify-content: space-between;
   padding: 14px 16px;
-  font-family: 'Inter', sans-serif, system-ui, sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 16px; font-weight: 400;
   color: #1A1A1A;
   text-decoration: none;
@@ -386,7 +386,7 @@ body { padding-top: var(--nav-h); }
   position: relative;
   overflow: hidden;
   padding: 48px 2.8rem 32px;
-  font-family: 'Inter', sans-serif, system-ui, sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 .site-footer::before {
   content: '';
@@ -441,7 +441,7 @@ body { padding-top: var(--nav-h); }
   display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
   max-width: 680px; width: calc(100% - 48px);
   box-shadow: 0 12px 40px rgba(0,0,0,.24), 0 1px 0 rgba(255,255,255,.08) inset;
-  font-family: 'Inter', sans-serif, system-ui, sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 13px; line-height: 1.5;
   opacity: 0; pointer-events: none;
   transition: opacity .3s ease, transform .3s cubic-bezier(.2,.8,.2,1);

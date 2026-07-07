@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mindbloom — Messages</title>
+<title>Mindbloom — Nachrichten</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Mulish:wght@300;400;500&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="nav.js?v=7"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -30,10 +31,10 @@
   --sage:   #5A8050;
   --dusk:   #6A64A0;
 
-  --serif:      'Playfair Display', Georgia, serif;
-  --serif-body: 'Lora', Georgia, serif;
-  --sans:       'Mulish', sans-serif;
-  --r: 16px; --r-sm: 10px;
+  --serif:      'EB Garamond', Georgia, serif;
+  --serif-body: 'EB Garamond', Georgia, serif;
+  --sans:       'Inter', sans-serif;
+  --r: 20px; --r-sm: 12px;
 }
 
 html, body { height: 100%; }
@@ -273,7 +274,7 @@ button { cursor: pointer; font-family: var(--sans); border: none; }
 }
 .msg-row { animation: fadeUp .22s ease; }
 </style>
-  <script src="nav.js?v=6"></script>
+  <link rel="stylesheet" href="shared.css">
   <script src="theme.js?v=1"></script>
 </head>
 <body>
@@ -288,16 +289,16 @@ button { cursor: pointer; font-family: var(--sans); border: none; }
   <!-- LEFT: conversations -->
   <div class="conv-panel">
     <div class="conv-header">
-      <h2>Messages</h2>
+      <h2>Nachrichten</h2>
       <div class="conv-search">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-        <input type="text" placeholder="Search conversations…" id="searchInput" oninput="filterConvs(this.value)">
+        <input type="text" placeholder="Unterhaltungen durchsuchen …" id="searchInput" oninput="filterConvs(this.value)">
       </div>
     </div>
     <div class="conv-list" id="convList"></div>
     <button class="new-msg-btn" onclick="openNewMsg()">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-      New message
+      Neue Nachricht
     </button>
   </div>
 
@@ -305,7 +306,7 @@ button { cursor: pointer; font-family: var(--sans); border: none; }
   <div class="chat-panel" id="chatPanel">
     <div class="chat-empty" id="chatEmpty">
       <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-      <p>Select a conversation to start reading,<br>or send someone a message.</p>
+      <p>Wähle eine Unterhaltung aus,<br>oder schreib jemandem eine Nachricht.</p>
     </div>
 
     <div id="chatView" style="display:none; flex-direction:column; height:100%;">
@@ -316,7 +317,7 @@ button { cursor: pointer; font-family: var(--sans); border: none; }
           <div class="chat-header-online" id="chatOnline"></div>
         </div>
         <div class="chat-header-actions">
-          <button class="chat-icon-btn" title="View profile">
+          <button class="chat-icon-btn" title="Profil ansehen">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
           </button>
         </div>
@@ -335,7 +336,7 @@ button { cursor: pointer; font-family: var(--sans); border: none; }
 
       <div class="chat-input-area">
         <div class="chat-input-row">
-          <textarea class="chat-input" id="chatInput" rows="1" placeholder="Write a message…"
+          <textarea class="chat-input" id="chatInput" rows="1" placeholder="Schreib eine Nachricht …"
             onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMsg();}"
             oninput="autoResize(this)"></textarea>
           <button class="chat-send-btn" onclick="sendMsg()">
@@ -352,45 +353,45 @@ button { cursor: pointer; font-family: var(--sans); border: none; }
 const CONVS = [
   {
     id: 1, name: 'Lea M.', grad: 'var(--g-sage)', online: true,
-    preview: 'That breathing exercise really helped me today',
-    time: '2m', unread: 2,
+    preview: 'Die Atemübung hat mir heute wirklich geholfen',
+    time: '2 Min.', unread: 2,
     messages: [
-      { from: 'them', text: 'Hey, I just read your post about anxiety tools. Really resonated with me.', time: '10:14' },
-      { from: 'me',   text: 'I\'m really glad it helped. It took me a while to find what actually works.', time: '10:16' },
-      { from: 'them', text: 'Do you use the breathing exercises here a lot?', time: '10:17' },
-      { from: 'me',   text: 'Almost every day before bed. The 4-2-4 rhythm is the one that works for me.', time: '10:19' },
-      { from: 'them', text: 'That breathing exercise really helped me today', time: '10:41' },
+      { from: 'them', text: 'Hey, ich habe gerade deinen Beitrag über Tools bei Angst gelesen. Das hat mich wirklich berührt.', time: '10:14' },
+      { from: 'me',   text: 'Das freut mich sehr. Ich habe eine Weile gebraucht, um herauszufinden, was wirklich hilft.', time: '10:16' },
+      { from: 'them', text: 'Nutzt du die Atemübungen hier oft?', time: '10:17' },
+      { from: 'me',   text: 'Fast jeden Abend vor dem Schlafen. Der 4-2-4-Rhythmus funktioniert für mich am besten.', time: '10:19' },
+      { from: 'them', text: 'Die Atemübung hat mir heute wirklich geholfen', time: '10:41' },
     ]
   },
   {
     id: 2, name: 'Mira S.', grad: 'var(--g-dusk)', online: true,
-    preview: 'Let me know if you ever want to talk more about it',
-    time: '1h', unread: 0,
+    preview: 'Sag gern Bescheid, wenn du mal mehr darüber reden möchtest',
+    time: '1 Std.', unread: 0,
     messages: [
-      { from: 'them', text: 'I read your community post about burnout. I\'ve been going through the same thing.', time: 'Yesterday' },
-      { from: 'me',   text: 'It\'s such a slow thing to notice, right? You just think you\'re tired.', time: 'Yesterday' },
-      { from: 'them', text: 'Exactly. Took me months to name it.', time: 'Yesterday' },
-      { from: 'them', text: 'Let me know if you ever want to talk more about it', time: 'Yesterday' },
+      { from: 'them', text: 'Ich habe deinen Community-Beitrag über Burnout gelesen. Ich stecke gerade in etwas ganz Ähnlichem.', time: 'Gestern' },
+      { from: 'me',   text: 'Es dauert so lange, bis du es überhaupt bemerkst, oder? Du denkst einfach, du bist nur müde.', time: 'Gestern' },
+      { from: 'them', text: 'Genau. Ich habe Monate gebraucht, um es benennen zu können.', time: 'Gestern' },
+      { from: 'them', text: 'Sag gern Bescheid, wenn du mal mehr darüber reden möchtest', time: 'Gestern' },
     ]
   },
   {
     id: 3, name: 'Tom K.', grad: 'var(--g-amber)', online: false,
-    preview: 'Week 2 done 🌿 feeling a bit lighter',
-    time: '3h', unread: 1,
+    preview: 'Woche 2 geschafft 🌿 es fühlt sich etwas leichter an',
+    time: '3 Std.', unread: 1,
     messages: [
-      { from: 'them', text: 'Following you from the mood journal challenge!', time: 'Mon' },
-      { from: 'me',   text: 'Same — love seeing your updates. Week 2 done 🌿 feeling a bit lighter', time: 'Mon' },
-      { from: 'them', text: 'Week 2 done 🌿 feeling a bit lighter', time: 'Tue' },
+      { from: 'them', text: 'Ich folge dir seit der Stimmungstagebuch-Challenge.', time: 'Mo' },
+      { from: 'me',   text: 'Ich dir auch — ich sehe deine Updates gern. Woche 2 geschafft 🌿 es fühlt sich etwas leichter an', time: 'Mo' },
+      { from: 'them', text: 'Woche 2 geschafft 🌿 es fühlt sich etwas leichter an', time: 'Di' },
     ]
   },
   {
     id: 4, name: 'Jana R.', grad: 'var(--g-blush)', online: false,
-    preview: 'That article on sleep completely changed how I think about rest',
-    time: 'Mon', unread: 0,
+    preview: 'Der Artikel über Schlaf hat komplett verändert, wie ich über Erholung denke',
+    time: 'Mo', unread: 0,
     messages: [
-      { from: 'them', text: 'That article on sleep completely changed how I think about rest', time: 'Mon' },
-      { from: 'me',   text: 'Which one? The one about sleep debt?', time: 'Mon' },
-      { from: 'them', text: 'Yes! I had no idea you can\'t actually catch up on sleep like that.', time: 'Mon' },
+      { from: 'them', text: 'Der Artikel über Schlaf hat komplett verändert, wie ich über Erholung denke', time: 'Mo' },
+      { from: 'me',   text: 'Welcher? Der über Schlafschulden?', time: 'Mo' },
+      { from: 'them', text: 'Ja, genau der. Ich wusste nicht, dass sich Schlaf gar nicht einfach so nachholen lässt.', time: 'Mo' },
     ]
   },
 ];
@@ -434,7 +435,7 @@ function openConv(id) {
 
   document.getElementById('chatAvatar').style.background = conv.grad;
   document.getElementById('chatName').textContent = conv.name;
-  document.getElementById('chatOnline').textContent = conv.online ? 'Online now' : 'Last seen recently';
+  document.getElementById('chatOnline').textContent = conv.online ? 'Gerade online' : 'Zuletzt vor Kurzem aktiv';
   document.getElementById('typingAvatar').style.background = conv.grad;
 
   renderMessages(conv);
@@ -447,7 +448,7 @@ function renderMessages(conv) {
 
   let lastDate = '';
   conv.messages.forEach((m, i) => {
-    if (m.time !== lastDate && ['Yesterday', 'Mon', 'Tue', 'Wed'].includes(m.time)) {
+    if (m.time !== lastDate && ['Gestern', 'Mo', 'Di', 'Mi'].includes(m.time)) {
       const div = document.createElement('div');
       div.className = 'msg-date-divider';
       div.textContent = m.time;
@@ -487,7 +488,7 @@ function sendMsg() {
 
   conv.messages.push({ from: 'me', text, time: timeStr });
   conv.preview = text;
-  conv.time = 'now';
+  conv.time = 'jetzt';
   input.value = '';
   input.style.height = '';
   renderMessages(conv);
@@ -500,11 +501,11 @@ function sendMsg() {
     autoReplyTimers[conv.id] = setTimeout(() => {
       showTyping(false);
       const replies = [
-        'That makes a lot of sense.',
-        'I really appreciate you sharing that.',
-        'I\'ve been thinking about something similar lately.',
-        'How long have you felt that way?',
-        'That\'s a really helpful perspective, thank you.',
+        'Das ergibt total Sinn.',
+        'Danke, dass du das mit mir teilst.',
+        'Ich habe in letzter Zeit über etwas Ähnliches nachgedacht.',
+        'Wie lange fühlst du dich schon so?',
+        'Das ist eine wirklich hilfreiche Perspektive, danke dir.',
       ];
       const reply = replies[Math.floor(Math.random() * replies.length)];
       conv.messages.push({ from: 'them', text: reply, time: timeStr });
@@ -528,9 +529,9 @@ function autoResize(el) {
 function filterConvs(val) { renderConvList(val); }
 
 function openNewMsg() {
-  const name = prompt('Send a message to (enter a name):');
+  const name = prompt('Wem möchtest du schreiben? (Name eingeben)');
   if (!name) return;
-  alert(`In a real app, you'd search for "${name}" here.`);
+  alert(`In einer echten App würdest du hier nach „${name}“ suchen.`);
 }
 
 renderConvList();
