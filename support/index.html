@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="So erreichst du den Support für die Aftersummer-App bei Fragen, technischen Problemen oder Rückmeldungen.">
+  <title>Support für die Aftersummer-App</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --background: #f7f6fa;
+      --surface: #fff;
+      --text: #242137;
+      --muted: #534d66;
+      --line: #ddd7e8;
+      --action: #463568;
+      --action-hover: #362651;
+      --action-text: #fff;
+      --focus: #7155a6;
+      font-family: Inter, system-ui, sans-serif;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --background: #161424;
+        --surface: #211d33;
+        --text: #f3edf9;
+        --muted: #d0c6df;
+        --line: #423853;
+        --action: #ded0ff;
+        --action-hover: #efe6ff;
+        --action-text: #29203e;
+        --focus: #c5aaff;
+      }
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--background); color: var(--text); }
+    main { width: min(100% - 2rem, 38rem); margin: clamp(2rem, 9vw, 6rem) auto; }
+    h1 {
+      margin: 0 0 1rem;
+      font: 500 clamp(2.25rem, 8vw, 3.9rem)/1.06 "EB Garamond", Georgia, serif;
+      letter-spacing: -.025em;
+      text-wrap: balance;
+    }
+    h2 { margin: 0 0 .65rem; font-size: 1.125rem; line-height: 1.4; }
+    p { margin: 0; color: var(--muted); line-height: 1.65; }
+    .contact {
+      margin: 1.75rem 0;
+      padding: clamp(1.15rem, 4vw, 1.6rem);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 1.25rem;
+    }
+    .email {
+      display: inline-block;
+      padding: .75rem 1rem;
+      border-radius: .75rem;
+      background: var(--action);
+      color: var(--action-text);
+      font-weight: 650;
+      line-height: 1.5;
+      text-decoration: none;
+      overflow-wrap: anywhere;
+    }
+    .email:hover { background: var(--action-hover); text-decoration: underline; }
+    .email:focus-visible { outline: 3px solid var(--focus); outline-offset: 4px; }
+    .note { margin-top: 1rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Support für die Aftersummer-App</h1>
+    <p>Schreib uns, wenn du eine Frage zur App hast, ein Fehler auftritt oder du eine Rückmeldung geben möchtest.</p>
+
+    <section class="contact" aria-labelledby="kontakt">
+      <h2 id="kontakt">Kontakt per E-Mail</h2>
+      <a class="email" href="mailto:support@aftersummer.de?subject=Aftersummer%20Support">support@aftersummer.de</a>
+    </section>
+
+    <section aria-labelledby="fehler">
+      <h2 id="fehler">Einen Fehler melden</h2>
+      <p>Beschreib kurz, was du in der App gemacht hast und was danach passiert ist. Wenn du kannst, nenne dein iPhone-Modell, die iOS-Version und die App-Version.</p>
+      <p class="note">Lass persönliche Einträge und Passwörter weg. Wenn du einen Screenshot mitschickst, verdecke persönliche Angaben.</p>
+    </section>
+  </main>
+</body>
+</html>
